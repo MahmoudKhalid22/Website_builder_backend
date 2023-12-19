@@ -15,9 +15,9 @@ const createUser = async (req, res) => {
     sendVerificationEmail(req.body.email, token);
     res.status(201).json({
       message: "User created successfully. Check your email for verification.",
-      user,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -27,7 +27,7 @@ const verifyEmail = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded._id;
-    
+
     const user = await User.findByIdAndUpdate(
       userId,
       { verified: true },
@@ -43,4 +43,27 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-export { createUser, verifyEmail };
+const loginUser = async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    const token = await user.generateAuthToken();
+    res.send({ user, token });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    await User.deleteOne({ _id: req.user._id }, { new: true });
+    res.send({ message: "User has been deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export { createUser, verifyEmail, loginUser, deleteUser };

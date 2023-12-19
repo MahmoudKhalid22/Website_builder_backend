@@ -1,29 +1,125 @@
 /**
  * @swagger
- *
- *
- *
+ *  components:
+ *   schemas:
+ *      User:
+ *          type: object
+ *          properties:
+ *              name:
+ *                  type: string
+ *                  description: the name of the user
+ *              email:
+ *                  type: string
+ *                  description: the email of the user must be the valid and true email
+ *              password:
+ *                  type: string
+ *                  description: the password of the user the minimum characters must be 6
+ *              verified:
+ *                  type: boolean
+ *                  description: the email of the user is true or not
+ *              tokens:
+ *                  type: array
+ *                  description: tokens of the user
+ *      Register:
+ *          type: object
+ *          properties:
+ *              name:
+ *                  type: string
+ *                  description: the name of the user
+ *              email:
+ *                  type: string
+ *                  description: the email of the user must be the valid and true email
+ *              password:
+ *                  type: string
+ *                  description: the password of the user the minimum characters must be 6
+ *      Login:
+ *          type: object
+ *          properties:
+ *              email:
+ *                  type: string
+ *                  description: the email of the user that he registered
+ *              password:
+ *                  type: string
+ *                  description: the password of the user
  */
 /**
  * @swagger
  *  /user:
  *      post:
- *          tag:
- *              - create a new usser
+ *          tags:
+ *              - Create a new user
  *          requestBody:
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: "#component/schemas/User"
- *
- *
+ *                          $ref: "#/components/schemas/Register"
+ *          responses:
+ *              "201":
+ *                 description: create user in database with not verified
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: string
+ *                          example: check your email to verify your account
+ */
+/**
+ * @swagger
+ *  /user/login:
+ *      post:
+ *          tags:
+ *              - login the user
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#/components/schemas/Login"
+ *          responses:
+ *              "200":
+ *                 description: response of login
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          $ref: '#/components/schemas/User'
+ */
+/**
+ * @swagger
+ *  /user/delete:
+ *      delete:
+ *          tags:
+ *              - delete the user account
+ *          parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *          responses:
+ *              "200":
+ *                 description: response of deleting user
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: string
+ *                          example: the user has been deleted
  */
 
 import { Router } from "express";
 const router = Router();
-import { createUser, verifyEmail } from "../controller/user.js";
+import {
+  createUser,
+  verifyEmail,
+  loginUser,
+  deleteUser,
+} from "../controller/user.js";
+import { auth } from "../middleware/auth.js";
 
-router.post("/users", createUser);
+router.post("/user", createUser);
 router.get("/verify/:token", verifyEmail);
+
+router.post("/user/login", loginUser);
+
+router.delete("/user/delete", auth, deleteUser);
 
 export { router as userRouter };
