@@ -11,8 +11,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
+    "@sendgrid/mail": "^8.1.0",
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.1",
+    "morgan": "^1.10.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "validator": "^13.11.0"
+=======
     "express": "^4.18.2",
     "uuid": "^9.0.1"
+>>>>>>> 414eda6ad99ea4614f1eaa4276c9cac4efc46838
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
