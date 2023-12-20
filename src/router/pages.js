@@ -1,9 +1,48 @@
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *
+ *
+ *
+ *
+ */
+
 import { Router } from "express";
 const router = Router();
-import { newContent, page } from "../controller/page.js";
+import { newProject, page } from "../controller/page.js";
+import { auth } from "../middleware/auth.js";
+import multer from "multer";
 
-router.post("/content", newContent);
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage, limits: { fileSize: 3000000 } });
+
+router.post(
+  "/page",
+  upload.fields([
+    { name: "navBar.imgUrl", maxCount: 1 },
+    { name: "hero.imgUrl", maxCount: 1 },
+    { name: "hero.icon", maxCount: 1 },
+    { name: "services.blocks.icon", maxCount: 1 },
+    { name: "feature.icons", maxCount: 2 },
+    { name: "feature.imgUrl", maxCount: 1 },
+    { name: "testimonial.cards.imgUrl", maxCount: 3 },
+    { name: "logos.companies.imgUrl", maxCount: 5 },
+    { name: "projects.cards.imgUrl", maxCount: 4 },
+    { name: "projects.cards.icon", maxCount: 4 },
+    { name: "statistic.statistics.icon", maxCount: 4 },
+    { name: "items.cards.imgUrl", maxCount: 3 },
+    { name: "items.cards.icon", maxCount: 3 },
+    { name: "team.cards.imgUrl", maxCount: 4 },
+    { name: "team.cards.mediaIcons.icon", maxCount: 4 },
+    { name: "footer.imgUrl", maxCount: 1 },
+    { name: "footer.mediaIcons.icon", maxCount: 4 },
+    { name: "footer.items.links.imgUrl", maxCount: 1 },
+  ]),
+  auth,
+  newProject
+);
 
 router.get("/page", page);
 
-export { router };
+export { router as pageRouter };

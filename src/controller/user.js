@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../model/user.js";
 import { sendVerificationEmail } from "../email/verificationEmail.js";
+import sharp from "sharp";
 
 const createUser = async (req, res) => {
   try {
@@ -66,4 +67,19 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export { createUser, verifyEmail, loginUser, deleteUser };
+const uploadUser = async (req, res) => {
+  try {
+    const buffer = await sharp(req.file.buffer)
+      .resize({ width: 300, height: 300 })
+      .png()
+      .toBuffer();
+    console.log(buffer);
+    req.user.avatar = buffer;
+    await req.user.save();
+    res.send("avatar has been added");
+  } catch (err) {
+    res.status(500).send();
+  }
+};
+
+export { createUser, verifyEmail, loginUser, deleteUser, uploadUser };

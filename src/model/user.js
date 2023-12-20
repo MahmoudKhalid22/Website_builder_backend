@@ -2,6 +2,7 @@ import { mongoose, Schema, model } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Page } from "./page.js";
 
 const userSchema = new Schema(
   {
@@ -30,6 +31,9 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    avatar: {
+      type: Buffer,
+    },
     tokens: [
       {
         token: {
@@ -41,8 +45,15 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
   }
 );
+
+userSchema.virtual("pages", {
+  ref: "Page",
+  localField: "_id",
+  foreignField: "owner",
+});
 
 userSchema.methods.toJSON = function () {
   const user = this;
