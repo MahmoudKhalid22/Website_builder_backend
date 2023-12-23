@@ -2,7 +2,7 @@ import { mongoose, Schema, model } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Page } from "./page.js";
+import { Page } from "./pageModel.js";
 
 const userSchema = new Schema(
   {

@@ -1,4 +1,4 @@
-import { Page } from "../model/page.js";
+import { Page } from "../model/pageModel.js";
 
 const newProject = async (req, res) => {
   const page = new Page({ ...req.body, owner: req.user._id });

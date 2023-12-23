@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../model/user.js";
+import { User } from "../model/userModel.js";
 import { sendVerificationEmail } from "../email/verificationEmail.js";
 import sharp from "sharp";
 
