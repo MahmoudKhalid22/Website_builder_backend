@@ -74,7 +74,7 @@ const forgetPassword = async (req, res) => {
   sendResetPassworEmail(req.body.email, resetToken);
 
   res.send(
-    "email has been sent to you, check your email to reset your password"
+    "email has been sent to you, check your email to reset your Password"
   );
 };
 
