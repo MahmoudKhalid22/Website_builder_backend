@@ -54,6 +54,51 @@
  */
 /**
  * @swagger
+ *  /user/forget-password:
+ *      post:
+ *          summary: login for user
+ *          description: login for user to the website
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              email: user@example.com
+ *          responses:
+ *              "200":
+ *                 description: response of login
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: string
+ *                          example: email has been sent to your email, check your email to reset your password
+ *
+ */
+/**
+ * @swagger
+ *  /user/reset-password/{token}:
+ *      post:
+ *          summary: login for user
+ *          description: login for user to the website
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              password: mmm123!
+ *          responses:
+ *              "200":
+ *                 description: response of password
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: string
+ *                          example: password has been updated
+ */
+/**
+ * @swagger
  *  /user/delete:
  *      delete:
  *          summary: delete the user account
