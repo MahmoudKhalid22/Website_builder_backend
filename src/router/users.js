@@ -1,5 +1,3 @@
-
-
 import { Router } from "express";
 const router = Router();
 import {
@@ -8,6 +6,8 @@ import {
   loginUser,
   deleteUser,
   uploadUser,
+  forgetPassword,
+  resetPassword,
 } from "../controller/user.js";
 import { auth } from "../middleware/auth.js";
 import multer from "multer";
@@ -16,6 +16,9 @@ router.post("/user", createUser);
 router.get("/verify/:token", verifyEmail);
 
 router.post("/user/login", loginUser);
+router.post("/user/forget-password", forgetPassword);
+
+router.post("/user/reset-password/:token", resetPassword);
 
 router.delete("/user/delete", auth, deleteUser);
 
