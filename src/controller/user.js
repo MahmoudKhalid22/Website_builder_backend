@@ -81,5 +81,16 @@ const uploadUser = async (req, res) => {
     res.status(500).send();
   }
 };
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id,req.body,{new:true});
 
-export { createUser, verifyEmail, loginUser, deleteUser, uploadUser };
+    res.send(user);
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+
+export { createUser, verifyEmail, loginUser, deleteUser, uploadUser,updateUser };

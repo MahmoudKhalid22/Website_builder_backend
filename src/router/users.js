@@ -113,6 +113,7 @@ import {
   loginUser,
   deleteUser,
   uploadUser,
+  updateUser,
 } from "../controller/user.js";
 import { auth } from "../middleware/auth.js";
 import multer from "multer";
@@ -123,6 +124,7 @@ router.get("/verify/:token", verifyEmail);
 router.post("/user/login", loginUser);
 
 router.delete("/user/delete", auth, deleteUser);
+router.patch("/user/:id", updateUser);
 
 const upload = multer({
   limits: {
