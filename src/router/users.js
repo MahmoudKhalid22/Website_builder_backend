@@ -8,6 +8,7 @@ import {
   uploadUser,
   forgetPassword,
   resetPassword,
+  updateUser,
 } from "../controller/user.js";
 import { auth } from "../middleware/auth.js";
 import multer from "multer";
@@ -21,6 +22,7 @@ router.post("/user/forget-password", forgetPassword);
 router.post("/user/reset-password/:token", resetPassword);
 
 router.delete("/user/delete", auth, deleteUser);
+router.put("/user/update-username",auth, updateUser);
 
 const upload = multer({
   limits: {
