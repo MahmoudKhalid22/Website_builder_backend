@@ -1,13 +1,3 @@
-/**
- * @swagger
- * components:
- *  schemas:
- *
- *
- *
- *
- */
-
 import { Router } from "express";
 const router = Router();
 import { newProject, page } from "../controller/page.js";

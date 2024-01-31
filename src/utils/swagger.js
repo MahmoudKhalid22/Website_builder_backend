@@ -16,7 +16,7 @@ const options = {
     },
     server: [{ url: `http://localhost:${process.env.PORT}` }],
   },
-  apis: ["./src/router/*.js", "./src/model/*.js"],
+  apis: ["./src/utils/*.js", "./src/model/*.js"],
 };
 
 const spacs = swaggerJSDoc(options);
