@@ -58,8 +58,9 @@ const loginUser = async (req, res) => {
     if (!user.verified) {
       return res.send("you must verify your email first");
     }
-    const token = await user.generateAuthToken();
-    res.send({ user, token });
+    const accessToken = await user.generateAuthToken();
+    const refreshToken = await user.generateRefreshToken();
+    res.send({ user, accessToken, refreshToken });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -124,13 +125,41 @@ const uploadUser = async (req, res) => {
     res.status(500).send();
   }
 };
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      { name: req.body.name },
+      { new: true }
+    );
+
+    res.send(user);
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+const refreshToken = async (req, res) => {
+  try {
+    const user = req.user;
+    const accessToken = await user.generateAuthToken();
+    res.send({ accessToken });
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
 
 export {
   createUser,
   verifyEmail,
-  loginUser,
   forgetPassword,
   resetPassword,
+  loginUser,
   deleteUser,
   uploadUser,
+  updateUser,
+  refreshToken,
 };
