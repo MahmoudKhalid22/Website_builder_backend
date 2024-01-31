@@ -127,7 +127,10 @@ const uploadUser = async (req, res) => {
 };
 const updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate({ _id: req.user._id }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      { new: true }
+    );
 
     res.send(user);
   } catch (err) {
@@ -136,17 +139,26 @@ const updateUser = async (req, res) => {
     });
   }
 };
-const refreshToken = async (req,res) => {
+const refreshToken = async (req, res) => {
   try {
-    const user = req.user[0]
-    const accessToken = await user.generateAuthToken()
-    res.send({accessToken})
-  }
-  catch (err) {
+    const user = req.user;
+    const accessToken = await user.generateAuthToken();
+    res.send({ accessToken });
+  } catch (err) {
     res.status(500).json({
       error: "Internal server error",
     });
   }
-}
+};
 
-export { createUser, verifyEmail, forgetPassword,resetPassword,loginUser, deleteUser, uploadUser,updateUser,refreshToken };
+export {
+  createUser,
+  verifyEmail,
+  forgetPassword,
+  resetPassword,
+  loginUser,
+  deleteUser,
+  uploadUser,
+  updateUser,
+  refreshToken,
+};
