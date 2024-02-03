@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport, { Passport } from 'passport';
 const router = Router();
 import {
   createUser,
@@ -49,5 +50,26 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
+
+//routes
+router.get('/login/google', passport.authenticate('google', {scope:['profile email']}));
+router.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
+
+router.get('/google', passport.authenticate('google'),(req,res)=>{
+    res.redirect('/');
+})
+router.get('/facebook', passport.authenticate('facebook'),(req,res)=>{
+    res.redirect('/');
+})
+
+router.get('/logout', (req,res)=>{
+    req.logout();
+    res.redirect('/');
+});
+
+router.get('/',(req,res)=>{
+
+    res.send(req.user? req.user: 'Not logged in, login with Google or facebook');
+})
 
 export { router as userRouter };
