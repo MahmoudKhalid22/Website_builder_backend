@@ -138,3 +138,43 @@
  *
  *
  */
+/**
+ * @swagger
+ *  /refresh-token:
+ *      get:
+ *          summary: Refresh user access token
+ *          description: Use a refresh token to get a new access token.
+ *          parameters:
+ *            - in: query
+ *              name: refreshToken
+ *              schema:
+ *                type: string
+ *              required: true
+ *              description: The user's refresh token.
+ *          responses:
+ *              "200":
+ *                 description: New access token generated successfully.
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          properties:
+ *                              accessToken:
+ *                                  type: string
+ *                                  description: The new access token.
+ *                          example:
+ *                              accessToken: "new_access_token_here"
+ *              "401":
+ *                 description: Invalid or expired refresh token.
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  description: Error message.
+ *                          example:
+ *                              error: "Invalid refresh token"
+ */
+
