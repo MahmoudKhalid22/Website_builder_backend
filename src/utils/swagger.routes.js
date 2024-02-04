@@ -138,3 +138,19 @@
  *
  *
  */
+/**
+ * @swagger
+ * /user/update-username:
+ *   put:
+ *     summary: Update a user
+ *     tags:
+ *       - User
+ *     responses:
+ *       200:
+ *         description: Successfully updated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *
+ */
