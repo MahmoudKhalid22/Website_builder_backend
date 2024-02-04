@@ -284,3 +284,37 @@
  *                          type: string
  *                          example: the user has been deleted
  */
+/**
+ * @swagger
+ * /upload:
+ *  post:
+ *      summary: upload the picture for the user
+ *      descripition: if the user wants to upload a picture for the account
+ *      parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *      requestFile:
+ *
+ *
+ */
+/**
+ * @swagger
+ * /user/update-username:
+ *   put:
+ *     summary: Update a user
+ *     tags:
+ *       - User
+ *     responses:
+ *       200:
+ *         description: Successfully updated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *
+ */
