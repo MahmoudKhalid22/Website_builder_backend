@@ -4,6 +4,7 @@ import { User } from "../model/userModel.js";
 import { sendVerificationEmail } from "../email/verificationEmail.js";
 import sharp from "sharp";
 import { sendResetPassworEmail } from "../email/resetPasswordEmail.js";
+import validator from "validator";
 
 const createUser = async (req, res) => {
   try {
@@ -198,6 +199,49 @@ const updatePassword = async (req, res) => {
   }
 };
 
+let updatedEmail = "";
+const updateEmail = async (req, res) => {
+  updatedEmail = req.body.email;
+  validator.isEmail(updateEmail);
+  if (!validator)
+    return res.status(400).send({ error: "the email provided is not correct" });
+  const user = req.user;
+  try {
+    const token = await jwt.sign(
+      { id: user._id.toString() },
+      process.env.EMAIL_VERIFICATION_TOKEN,
+      { expiresIn: "1h" }
+    );
+    sendVerificationEmail(email, token);
+    res.send({
+      message: "email has been sent to you, please verify your new email",
+    });
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+};
+
+const updateEmailAfterVerification = async (req, res) => {
+  const token = req.params.token;
+  try {
+    const decoded = await jwt.verify(
+      token,
+      process.env.EMAIL_VERIFICATION_TOKEN
+    );
+    if (!decoded) {
+      return res.status(400).send({ error: "token has been expired" });
+    }
+    await User.updateOne(
+      { id: decoded._id },
+      { email: updateEmail },
+      { new: true }
+    );
+    res.send({ message: "Email has been updated" });
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+};
+
 export {
   createUser,
   verifyEmail,
@@ -211,4 +255,6 @@ export {
   getUser,
   logoutUser,
   updatePassword,
+  updateEmail,
+  updateEmailAfterVerification,
 };
