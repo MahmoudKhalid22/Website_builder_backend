@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { findByEmail } from "../quiries/quiries.js";
 import { User } from "../model/userModel.js";
 import { sendVerificationEmail } from "../email/verificationEmail.js";
 import sharp from "sharp";
@@ -129,6 +128,7 @@ const updateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       { _id: req.user._id },
+      { name: req.body.name },
       { new: true }
     );
 
@@ -151,6 +151,53 @@ const refreshToken = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  try {
+    const user = req.user;
+    res.send({ user });
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+};
+
+const logoutUser = async (req, res) => {
+  try {
+    if (req.user) {
+      req.user.tokens = req.user?.tokens.filter(
+        (token) => token.token !== req.token
+      );
+
+      await req.user.save();
+      return res.send({ message: "You logged out" });
+    }
+
+    res.send("the user is not found");
+  } catch (err) {
+    res.status(500).json({ err });
+  }
+};
+
+const updatePassword = async (req, res) => {
+  try {
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+    const user = req.user;
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch)
+      return res.status(400).send({ error: "password is not correct" });
+    const hashedPassword = await bcrypt.hash(newPassword, 8);
+    await User.updateOne(
+      { _id: user._id },
+      { password: hashedPassword },
+      { new: true }
+    );
+    res.send({ message: "password has been updated successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ err });
+  }
+};
+
 export {
   createUser,
   verifyEmail,
@@ -161,4 +208,7 @@ export {
   uploadUser,
   updateUser,
   refreshToken,
+  getUser,
+  logoutUser,
+  updatePassword,
 };

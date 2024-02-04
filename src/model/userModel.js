@@ -62,20 +62,27 @@ userSchema.methods.toJSON = function () {
   delete userObject.password;
   delete userObject.tokens;
   delete userObject.verified;
+  delete userObject.__v;
 
   return userObject;
 };
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET,{expiresIn:"1h"});
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
 };
 userSchema.methods.generateRefreshToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, process.env.REFRESH_TOKEN_SECRET_KEY,{expiresIn:"30d"});
+  const token = jwt.sign(
+    { _id: user._id.toString() },
+    process.env.REFRESH_TOKEN_SECRET_KEY,
+    { expiresIn: "30d" }
+  );
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
