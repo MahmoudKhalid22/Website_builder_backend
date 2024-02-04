@@ -22,8 +22,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(userRouter);
-app.use(pageRouter);
+app.use("/user", userRouter);
+app.use("/page", pageRouter);
 
 const PORT = process.env.PORT;
 
