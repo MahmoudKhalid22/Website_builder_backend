@@ -1,49 +1,5 @@
 /**
  * @swagger
- *  components:
- *   schemas:
- *      User:
- *          type: object
- *          properties:
- *              name:
- *                  type: string
- *                  description: the name of the user
- *              email:
- *                  type: string
- *                  description: the email of the user must be the valid and true email
- *              password:
- *                  type: string
- *                  description: the password of the user the minimum characters must be 6
- *              verified:
- *                  type: boolean
- *                  description: the email of the user is true or not
- *              tokens:
- *                  type: array
- *                  description: tokens of the user
- *      Register:
- *          type: object
- *          properties:
- *              name:
- *                  type: string
- *                  description: the name of the user
- *              email:
- *                  type: string
- *                  description: the email of the user must be the valid and true email
- *              password:
- *                  type: string
- *                  description: the password of the user the minimum characters must be 6
- *      Login:
- *          type: object
- *          properties:
- *              email:
- *                  type: string
- *                  description: the email of the user that he registered
- *              password:
- *                  type: string
- *                  description: the password of the user
- */
-/**
- * @swagger
  *  /user:
  *      post:
  *          summary: create a new user
@@ -95,6 +51,51 @@
  *                      application/json:
  *                         schema:
  *                          $ref: '#/components/schemas/User'
+ */
+/**
+ * @swagger
+ *  /user/forget-password:
+ *      post:
+ *          summary: login for user
+ *          description: login for user to the website
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              email: user@example.com
+ *          responses:
+ *              "200":
+ *                 description: response of login
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: string
+ *                          example: email has been sent to your email, check your email to reset your password
+ *
+ */
+/**
+ * @swagger
+ *  /user/reset-password/{token}:
+ *      post:
+ *          summary: login for user
+ *          description: login for user to the website
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              password: mmm123!
+ *          responses:
+ *              "200":
+ *                 description: response of password
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: string
+ *                          example: password has been updated
  */
 /**
  * @swagger

@@ -1,6 +1,5 @@
-
-
 import { Router } from "express";
+import passport, { Passport } from 'passport';
 const router = Router();
 import {
   createUser,
@@ -8,17 +7,25 @@ import {
   loginUser,
   deleteUser,
   uploadUser,
+  forgetPassword,
+  resetPassword,
+  updateUser,
+  refreshToken
 } from "../controller/user.js";
-import { auth } from "../middleware/auth.js";
+import { auth,authRefreshToken } from "../middleware/auth.js";
 import multer from "multer";
 
 router.post("/user", createUser);
 router.get("/verify/:token", verifyEmail);
 
 router.post("/user/login", loginUser);
+router.post("/user/forget-password", forgetPassword);
+
+router.post("/user/reset-password/:token", resetPassword);
 
 router.delete("/user/delete", auth, deleteUser);
-
+router.put("/user/update-username",auth, updateUser);
+router.get("/user/refresh-token",authRefreshToken,refreshToken);
 const upload = multer({
   limits: {
     fileSize: 1500000,
@@ -43,5 +50,26 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
+
+//routes
+router.get('/login/google', passport.authenticate('google', {scope:['profile email']}));
+router.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
+
+router.get('/google', passport.authenticate('google'),(req,res)=>{
+    res.redirect('/');
+})
+router.get('/facebook', passport.authenticate('facebook'),(req,res)=>{
+    res.redirect('/');
+})
+
+router.get('/logout', (req,res)=>{
+    req.logout();
+    res.redirect('/');
+});
+
+router.get('/',(req,res)=>{
+
+    res.send(req.user? req.user: 'Not logged in, login with Google or facebook');
+})
 
 export { router as userRouter };
