@@ -1,17 +1,29 @@
 import express from "express";
 import dotenv from "dotenv";
+import passport from "passport";
+import session from "express-session";
+dotenv.config();
 import { connection } from "./db/dbConnection.js";
-// import { router as pageRouter } from "./router/pages.js";
 import { userRouter } from "./router/users.js";
 import { pageRouter } from "./router/pages.js";
 import { docs } from "./utils/swagger.js";
+import "./controller/OAUTH.js";
 
-dotenv.config();
 const app = express();
-app.use(express.json());
 
-app.use(userRouter);
-app.use(pageRouter);
+app.use(express.json());
+app.use(
+  session({
+    secret: process.env.EXPRESS_SESSION_SECRET_KEY,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/user", userRouter);
+app.use("/page", pageRouter);
 
 const PORT = process.env.PORT;
 
