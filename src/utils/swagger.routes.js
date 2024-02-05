@@ -22,7 +22,7 @@
  */
 /**
  * @swagger
- * /verify/{token}:
+ * /user/verify/{token}:
  *  get:
  *      tags:
  *              - User
@@ -238,12 +238,12 @@
  */
 /**
  * @swagger
- *  /user/delete:
- *      delete:
+ *  /user/update-email:
+ *      post:
  *          tags:
  *              - User
- *          summary: delete the user account
- *          description: if the user wants to delete his account from this endpoint
+ *          summary: update the user email
+ *          description: if the user wants to update his account email
  *          parameters:
  *                - in: header
  *                  name: Authorization
@@ -252,14 +252,45 @@
  *                  required: true
  *                  description: Bearer token for user authentication
  *                  example: "Bearer abcxyz123456"
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              email: user@example.com
+ *
  *          responses:
  *              "200":
  *                 description: response of deleting user
  *                 content:
  *                      application/json:
  *                         schema:
- *                          type: string
- *                          example: the user has been deleted
+ *                          type: object
+ *                          example:
+ *                              {message: email has been sent to you, please verify your new email }
+ */
+/**
+ * @swagger
+ * /user/verify-new-email/{token}:
+ *  get:
+ *      tags:
+ *              - User
+ *      summary: verify new email of the user
+ *      description: we want to check if the user's email is true or not
+ *      responses:
+ *          "200":
+ *              description: response of the verified email
+ *              content:
+ *                  application/json:
+ *                      type: object
+ *                      example: {message: email has been updated}
+ *          "400":
+ *              description: if the token expired or the token isn't true
+ *              content:
+ *                  application/json:
+ *                      type: object
+ *                      example: {error: the token has been expired}
  */
 /**
  * @swagger
@@ -283,4 +314,38 @@
  *                         schema:
  *                          type: string
  *                          example: the user has been deleted
+ */
+/**
+ * @swagger
+ * /upload:
+ *  post:
+ *      summary: upload the picture for the user
+ *      descripition: if the user wants to upload a picture for the account
+ *      parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *      requestFile:
+ *
+ *
+ */
+/**
+ * @swagger
+ * /user/update-username:
+ *   put:
+ *     summary: Update a user
+ *     tags:
+ *       - User
+ *     responses:
+ *       200:
+ *         description: Successfully updated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *
  */
