@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { findByEmail } from "../quiries/quiries.js";
 import { User } from "../model/userModel.js";
 import { sendVerificationEmail } from "../email/verificationEmail.js";
 import sharp from "sharp";
 import { sendResetPassworEmail } from "../email/resetPasswordEmail.js";
+import validator from "validator";
 
 const createUser = async (req, res) => {
   try {
@@ -152,6 +152,96 @@ const refreshToken = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  try {
+    const user = req.user;
+    res.send({ user });
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+};
+
+const logoutUser = async (req, res) => {
+  try {
+    if (req.user) {
+      req.user.tokens = req.user?.tokens.filter(
+        (token) => token.token !== req.token
+      );
+
+      await req.user.save();
+      return res.send({ message: "You logged out" });
+    }
+
+    res.send("the user is not found");
+  } catch (err) {
+    res.status(500).json({ err });
+  }
+};
+
+const updatePassword = async (req, res) => {
+  try {
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+    const user = req.user;
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch)
+      return res.status(400).send({ error: "password is not correct" });
+    const hashedPassword = await bcrypt.hash(newPassword, 8);
+    await User.updateOne(
+      { _id: user._id },
+      { password: hashedPassword },
+      { new: true }
+    );
+    res.send({ message: "password has been updated successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ err });
+  }
+};
+
+let updatedEmail = "";
+const updateEmail = async (req, res) => {
+  updatedEmail = req.body.email;
+  validator.isEmail(updateEmail);
+  if (!validator)
+    return res.status(400).send({ error: "the email provided is not correct" });
+  const user = req.user;
+  try {
+    const token = await jwt.sign(
+      { id: user._id.toString() },
+      process.env.EMAIL_VERIFICATION_TOKEN,
+      { expiresIn: "1h" }
+    );
+    sendVerificationEmail(email, token);
+    res.send({
+      message: "email has been sent to you, please verify your new email",
+    });
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+};
+
+const updateEmailAfterVerification = async (req, res) => {
+  const token = req.params.token;
+  try {
+    const decoded = await jwt.verify(
+      token,
+      process.env.EMAIL_VERIFICATION_TOKEN
+    );
+    if (!decoded) {
+      return res.status(400).send({ error: "token has been expired" });
+    }
+    await User.updateOne(
+      { id: decoded._id },
+      { email: updateEmail },
+      { new: true }
+    );
+    res.send({ message: "Email has been updated" });
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+};
+
 export {
   createUser,
   verifyEmail,
@@ -162,4 +252,9 @@ export {
   uploadUser,
   updateUser,
   refreshToken,
+  getUser,
+  logoutUser,
+  updatePassword,
+  updateEmail,
+  updateEmailAfterVerification,
 };

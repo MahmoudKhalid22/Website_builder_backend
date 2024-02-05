@@ -2,6 +2,8 @@
  * @swagger
  *  /user:
  *      post:
+ *          tags:
+ *              - User
  *          summary: create a new user
  *          description: signup for the user for the first time
  *          requestBody:
@@ -20,8 +22,10 @@
  */
 /**
  * @swagger
- * /verify/{token}:
+ * /user/verify/{token}:
  *  get:
+ *      tags:
+ *              - User
  *      summary: verify email of the user
  *      description: we want to check if the user's email is true or not
  *      responses:
@@ -37,6 +41,8 @@
  * @swagger
  *  /user/login:
  *      post:
+ *          tags:
+ *              - User
  *          summary: login for user
  *          description: login for user to the website
  *          requestBody:
@@ -56,6 +62,8 @@
  * @swagger
  *  /user/forget-password:
  *      post:
+ *          tags:
+ *              - User
  *          summary: login for user
  *          description: login for user to the website
  *          requestBody:
@@ -79,6 +87,8 @@
  * @swagger
  *  /user/reset-password/{token}:
  *      post:
+ *          tags:
+ *              - User
  *          summary: login for user
  *          description: login for user to the website
  *          requestBody:
@@ -96,6 +106,191 @@
  *                         schema:
  *                          type: string
  *                          example: password has been updated
+ */
+/**
+ * @swagger
+ *  /user/delete:
+ *      delete:
+ *          tags:
+ *              - User
+ *          summary: delete the user account
+ *          description: if the user wants to delete his account from this endpoint
+ *          parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *          responses:
+ *              "200":
+ *                 description: response of deleting user
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: string
+ *                          example: the user has been deleted
+ */
+/**
+ * @swagger
+ * /upload:
+ *  post:
+ *      tags:
+ *              - User
+ *      summary: upload the picture for the user
+ *      descripition: if the user wants to upload a picture for the account
+ *      parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *      requestFile:
+ *
+ *
+ */
+/**
+ * @swagger
+ *  /user/me:
+ *      get:
+ *          tags:
+ *              - User
+ *          summary: get user information from database
+ *          description: get user information
+ *          parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *          responses:
+ *              "200":
+ *                 description: response of login
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          $ref: '#/components/schemas/Me'
+ */
+/**
+ * @swagger
+ *  /user/logout-user:
+ *      get:
+ *          tags:
+ *              - User
+ *          summary: logout the user from the account
+ *          description: logout the user and delete his token from database
+ *          parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *          responses:
+ *              "200":
+ *                 description: response of deleting user
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          example:
+ *                              {message: you logged out}
+ */
+/**
+ * @swagger
+ *  /user/update-password:
+ *      post:
+ *          tags:
+ *              - User
+ *          summary: update password of the user account
+ *          description: if the user wants to update his account password. old password must be correct to update and create the new password
+ *          parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              oldPassword: aaa123!
+ *                              newPassword: mmm123!
+ *          responses:
+ *              "200":
+ *                 description: updating user in database and sending the response
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          example:
+ *                              {message: password has been updated}
+ */
+/**
+ * @swagger
+ *  /user/update-email:
+ *      post:
+ *          tags:
+ *              - User
+ *          summary: update the user email
+ *          description: if the user wants to update his account email
+ *          parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              email: user@example.com
+ *
+ *          responses:
+ *              "200":
+ *                 description: response of deleting user
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          example:
+ *                              {message: email has been sent to you, please verify your new email }
+ */
+/**
+ * @swagger
+ * /user/verify-new-email/{token}:
+ *  get:
+ *      tags:
+ *              - User
+ *      summary: verify new email of the user
+ *      description: we want to check if the user's email is true or not
+ *      responses:
+ *          "200":
+ *              description: response of the verified email
+ *              content:
+ *                  application/json:
+ *                      type: object
+ *                      example: {message: email has been updated}
+ *          "400":
+ *              description: if the token expired or the token isn't true
+ *              content:
+ *                  application/json:
+ *                      type: object
+ *                      example: {error: the token has been expired}
  */
 /**
  * @swagger
@@ -138,10 +333,13 @@
  *
  *
  */
+
 /**
  * @swagger
  *  /refresh-token:
  *      get:
+ *          tags:
+ *                  - User
  *          summary: Refresh user access token
  *          description: Use a refresh token to get a new access token.
  *          parameters:
@@ -177,4 +375,3 @@
  *                          example:
  *                              error: "Invalid refresh token"
  */
-
