@@ -2,6 +2,18 @@
  * @swagger
  *  components:
  *   schemas:
+ *      user:
+ *          type: object
+ *          properties:
+ *              _id:
+ *                  type: string
+ *                  description: the unique id for the user
+ *              name:
+ *                  type: string
+ *                  description: the name of the user
+ *              email:
+ *                  type: string
+ *                  description: the email of the user must be the valid and true email   
  *      User:
  *          type: object
  *          properties:

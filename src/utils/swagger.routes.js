@@ -305,8 +305,16 @@
 /**
  * @swagger
  * /user/update-username:
- *   put:
+*   put:
  *     summary: Update a user
+ *     parameters:
+ *           - in: header
+ *             name: Authorization
+ *             schema:
+ *             type: string
+ *             required: true
+ *             description: access token for update-user 
+ *             example: "Bearer abcxyz123456"
  *     tags:
  *       - User
  *     responses:
@@ -315,6 +323,11 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
- *
+ *               $ref: '#/components/schemas/user'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Internal server error
  */
