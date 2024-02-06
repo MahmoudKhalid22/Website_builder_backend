@@ -22,7 +22,7 @@
  */
 /**
  * @swagger
- * /verify/{token}:
+ * /user/verify/{token}:
  *  get:
  *      tags:
  *              - User
@@ -238,12 +238,12 @@
  */
 /**
  * @swagger
- *  /user/delete:
- *      delete:
+ *  /user/update-email:
+ *      post:
  *          tags:
  *              - User
- *          summary: delete the user account
- *          description: if the user wants to delete his account from this endpoint
+ *          summary: update the user email
+ *          description: if the user wants to update his account email
  *          parameters:
  *                - in: header
  *                  name: Authorization
@@ -252,14 +252,45 @@
  *                  required: true
  *                  description: Bearer token for user authentication
  *                  example: "Bearer abcxyz123456"
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              email: user@example.com
+ *
  *          responses:
  *              "200":
  *                 description: response of deleting user
  *                 content:
  *                      application/json:
  *                         schema:
- *                          type: string
- *                          example: the user has been deleted
+ *                          type: object
+ *                          example:
+ *                              {message: email has been sent to you, please verify your new email }
+ */
+/**
+ * @swagger
+ * /user/verify-new-email/{token}:
+ *  get:
+ *      tags:
+ *              - User
+ *      summary: verify new email of the user
+ *      description: we want to check if the user's email is true or not
+ *      responses:
+ *          "200":
+ *              description: response of the verified email
+ *              content:
+ *                  application/json:
+ *                      type: object
+ *                      example: {message: email has been updated}
+ *          "400":
+ *              description: if the token expired or the token isn't true
+ *              content:
+ *                  application/json:
+ *                      type: object
+ *                      example: {error: the token has been expired}
  */
 /**
  * @swagger
@@ -331,3 +362,46 @@
  *             example:
  *               error: Internal server error
  */
+/**
+ * @swagger
+ *  /user/refresh-token:
+ *      get:
+ *          tags:
+ *              - User
+ *          summary: Refresh user access token
+ *          description: Use a refresh token to get a new access token.
+ *          parameters:
+ *            - in: header
+ *              name: Authorization
+ *              schema:
+ *                type: string
+ *              required: true
+ *              description: The user's refresh token. 
+ *              example: Bearer abcxyz123456
+ *          responses:
+ *              "200":
+ *                 description: New access token generated successfully.
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          properties:
+ *                              accessToken:
+ *                                  type: string
+ *                                  description: The new access token.
+ *                          example:
+ *                              accessToken: "new_access_token_here"
+ *              "401":
+ *                 description: Invalid or expired refresh token.
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  description: Error message.
+ *                          example:
+ *                              error: "Invalid refresh token"
+ */
+
