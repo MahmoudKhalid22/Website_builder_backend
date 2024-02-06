@@ -5,10 +5,12 @@ import { sendVerificationEmail } from "../email/verificationEmail.js";
 import sharp from "sharp";
 import { sendResetPassworEmail } from "../email/resetPasswordEmail.js";
 import validator from "validator";
+import { createImageFromName } from "./image-from-name.js";
 
 const createUser = async (req, res) => {
   try {
     const user = await new User(req.body);
+    await createImageFromName(req.body.name);
     await user.save();
     const token = jwt.sign(
       { _id: user._id.toString() },
