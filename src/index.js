@@ -14,17 +14,17 @@ app.use(express.json());
 import Session from 'express-session';
 
 app.use(Session({
-  secret: process.env.EXPRESS_SESSION_SECRET_KEY,
-  resave: true,
+  secret: '123554jckfkkkk',
+  resave: false,
   saveUninitialized: true
-}))
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(userRouter);
 app.use(pageRouter);
-
+  
 const PORT = 5000;
 
 docs(app);

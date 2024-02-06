@@ -51,7 +51,7 @@ router.post(
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
 
-//routes
+//routes Oauth
 router.get('/login/google', passport.authenticate('google', {scope:['profile email']}));
 router.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
 
