@@ -57,19 +57,23 @@ router.post(
 );
 
 router.get(
-  "/login/google",
-  passport.authenticate("google", { scope: ["profile email"] })
+  "/auth/google",
+  passport.authenticate("google", { scope: ['email','profile'] })
 );
 router.get(
-  "/login/facebook",
+  "/auth/facebook",
   passport.authenticate("facebook", { scope: ["email"] })
 );
 
-router.get("/google", passport.authenticate("google"), (req, res) => {
-  res.redirect("/");
+router.get("/welcome",(req,res)=>{
+  res.send("your auth success")
 });
+router.get("/auth/google/callback", passport.authenticate('google',{
+  successRedirect: '/user/welcome',
+  failureRedirect: '/'
+}));
 router.get("/facebook", passport.authenticate("facebook"), (req, res) => {
-  res.redirect("/");
+  res.redirect("/user/welcome");
 });
 
 router.get("/logout", (req, res) => {
