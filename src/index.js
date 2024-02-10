@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import passport from "passport";
 import session from "express-session";
-dotenv.config();
 import { connection } from "./db/dbConnection.js";
 import { userRouter } from "./router/users.js";
 import { pageRouter } from "./router/pages.js";
