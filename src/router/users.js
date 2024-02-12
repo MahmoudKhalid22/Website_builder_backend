@@ -55,19 +55,20 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
-
+// oauth with google
 router.get(
   "/login/google",
   passport.authenticate("google", { scope: ["profile email"] })
-);
-router.get(
-  "/login/facebook",
-  passport.authenticate("facebook", { scope: ["email"] })
 );
 
 router.get("/google", passport.authenticate("google"), (req, res) => {
   res.redirect("/");
 });
+
+router.get(
+  "/login/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
 router.get("/facebook", passport.authenticate("facebook"), (req, res) => {
   res.redirect("/");
 });
