@@ -4,7 +4,7 @@ async function createImageFromName(name) {
   const canvas = createCanvas(100, 100);
   const ctx = canvas.getContext("2d");
 
-  ctx.fillStyle("#ececec");
+  ctx.fillStyle = "#ececec";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.font = "bold 32px Arial";
   ctx.fillStyle = "#000";

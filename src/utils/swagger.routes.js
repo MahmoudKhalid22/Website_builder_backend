@@ -405,3 +405,36 @@
  *                              error: "Invalid refresh token"
  */
 
+/**
+ * @swagger
+ * /user/login/google:
+ *   get:
+ *     tags:
+ *       - OAuth2
+ *     summary: Authorize
+ *     description: Redirects the user to Google's OAuth2 consent screen to authorize the application.
+ *     parameters:
+ *       - name: client_id
+ *         in: query
+ *         description: The client ID provided by Google Developers Console.
+ *         required: true
+ *         type: string
+ *       - name: redirect_uri
+ *         in: query
+ *         description: The URI to redirect the user back to after authorization.
+ *         required: true
+ *         type: string
+ *       - name: response_type
+ *         in: query
+ *         description: Indicates the type of response Google expects.
+ *         required: true
+ *         type: string
+ *       - name: scope
+ *         in: query
+ *         description: The scope of the access request.
+ *         required: true
+ *         type: string
+ *     responses:
+ *       "302":
+ *         description: Redirect to Google's OAuth2 consent screen.
+ */
