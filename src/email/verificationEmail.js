@@ -5,7 +5,7 @@ dotenv.config();
 async function sendVerificationEmail(email, token) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-  const verificationLink = `http://localhost:${process.env.PORT}/verify/${token}`;
+  const verificationLink = `https://zweb.onrender.com/user/verify/${token}`;
 
   const msg = {
     to: email,
