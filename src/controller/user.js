@@ -23,8 +23,7 @@ const createUser = async (req, res) => {
       message: "User created successfully. Check your email for verification.",
     });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -98,8 +97,7 @@ const resetPassword = async (req, res) => {
     }
     res.send("password has been updated");
   } catch (err) {
-    console.log(err);
-    res.status(500).send({ err });
+    res.status(500).send({ err: err.message });
   }
 };
 
@@ -108,7 +106,6 @@ const deleteUser = async (req, res) => {
     await User.deleteOne({ _id: req.user._id }, { new: true });
     res.send({ message: "User has been deleted" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -119,7 +116,6 @@ const uploadUser = async (req, res) => {
       .resize({ width: 300, height: 300 })
       .png()
       .toBuffer();
-    console.log(buffer);
     req.user.avatar = buffer;
     await req.user.save();
     res.send("avatar has been added");
@@ -196,8 +192,7 @@ const updatePassword = async (req, res) => {
     );
     res.send({ message: "password has been updated successfully" });
   } catch (err) {
-    console.log(err);
-    res.status(500).send({ err });
+    res.status(500).send({ err: err.message });
   }
 };
 

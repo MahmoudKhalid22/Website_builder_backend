@@ -55,23 +55,27 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
-
+// oauth with google
 router.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ['email','profile'] })
+  passport.authenticate("google", { scope: ["email", "profile"] })
 );
 router.get(
   "/auth/facebook",
   passport.authenticate("facebook", { scope: ["email"] })
 );
 
-router.get("/welcome",(req,res)=>{
-  res.send("your auth success")
+router.get("/welcome", (req, res) => {
+  res.send("your auth success");
 });
-router.get("/auth/google/callback", passport.authenticate('google',{
-  successRedirect: '/user/welcome',
-  failureRedirect: '/'
-}));
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/user/welcome",
+    failureRedirect: "/",
+  })
+);
 router.get("/facebook", passport.authenticate("facebook"), (req, res) => {
   res.redirect("/user/welcome");
 });
