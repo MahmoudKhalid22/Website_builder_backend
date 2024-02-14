@@ -5,7 +5,7 @@ dotenv.config();
 async function sendResetPassworEmail(email, token) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-  const resetPasswordLink = `http://localhost:${process.env.PORT}/reset-password/${token}`;
+  const resetPasswordLink = `https://zweb.onrender.com/user/reset-password/${token}`;
 
   const msg = {
     to: email,

@@ -4,10 +4,13 @@ import { User } from "../model/userModel.js";
 import { sendVerificationEmail } from "../email/verificationEmail.js";
 import sharp from "sharp";
 import { sendResetPassworEmail } from "../email/resetPasswordEmail.js";
+import validator from "validator";
+import { createImageFromName } from "./image-from-name.js";
 
 const createUser = async (req, res) => {
   try {
     const user = await new User(req.body);
+    await createImageFromName(req.body.name);
     await user.save();
     const token = jwt.sign(
       { _id: user._id.toString() },
@@ -20,8 +23,7 @@ const createUser = async (req, res) => {
       message: "User created successfully. Check your email for verification.",
     });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -95,8 +97,7 @@ const resetPassword = async (req, res) => {
     }
     res.send("password has been updated");
   } catch (err) {
-    console.log(err);
-    res.status(500).send({ err });
+    res.status(500).send({ err: err.message });
   }
 };
 
@@ -105,7 +106,6 @@ const deleteUser = async (req, res) => {
     await User.deleteOne({ _id: req.user._id }, { new: true });
     res.send({ message: "User has been deleted" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -116,7 +116,6 @@ const uploadUser = async (req, res) => {
       .resize({ width: 300, height: 300 })
       .png()
       .toBuffer();
-    console.log(buffer);
     req.user.avatar = buffer;
     await req.user.save();
     res.send("avatar has been added");
@@ -193,7 +192,49 @@ const updatePassword = async (req, res) => {
     );
     res.send({ message: "password has been updated successfully" });
   } catch (err) {
-    console.log(err);
+    res.status(500).send({ err: err.message });
+  }
+};
+
+let updatedEmail = "";
+const updateEmail = async (req, res) => {
+  updatedEmail = req.body.email;
+  validator.isEmail(updateEmail);
+  if (!validator)
+    return res.status(400).send({ error: "the email provided is not correct" });
+  const user = req.user;
+  try {
+    const token = await jwt.sign(
+      { id: user._id.toString() },
+      process.env.EMAIL_VERIFICATION_TOKEN,
+      { expiresIn: "1h" }
+    );
+    sendVerificationEmail(email, token);
+    res.send({
+      message: "email has been sent to you, please verify your new email",
+    });
+  } catch (err) {
+    res.status(500).send({ err });
+  }
+};
+
+const updateEmailAfterVerification = async (req, res) => {
+  const token = req.params.token;
+  try {
+    const decoded = await jwt.verify(
+      token,
+      process.env.EMAIL_VERIFICATION_TOKEN
+    );
+    if (!decoded) {
+      return res.status(400).send({ error: "token has been expired" });
+    }
+    await User.updateOne(
+      { id: decoded._id },
+      { email: updateEmail },
+      { new: true }
+    );
+    res.send({ message: "Email has been updated" });
+  } catch (err) {
     res.status(500).send({ err });
   }
 };
@@ -211,4 +252,6 @@ export {
   getUser,
   logoutUser,
   updatePassword,
+  updateEmail,
+  updateEmailAfterVerification,
 };

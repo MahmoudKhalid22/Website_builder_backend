@@ -12,7 +12,9 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
+      required: function(){
+        return (!this.facebookId)
+      },
       unique: true,
       validate: {
         validator: function (value) {
@@ -24,7 +26,9 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: function(){
+        return (!this.googleId && !this.facebookId)
+      },
       min: 6,
     },
     verified: {
@@ -33,6 +37,12 @@ const userSchema = new Schema(
     },
     avatar: {
       type: Buffer,
+    },
+    googleId: {
+      type: String,
+    },
+    facebookId: {
+      type: String,
     },
     tokens: [
       {

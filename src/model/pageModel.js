@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const pageSchema = new mongoose.Schema({
   navBar: {
     imgUrl: {
-      type: Buffer,
+      type: String,
     },
     links: {
       type: Array,
@@ -13,7 +13,7 @@ const pageSchema = new mongoose.Schema({
     title: { type: String },
     description: { type: String },
     icon: { type: Buffer },
-    imgUrl: { type: Buffer },
+    imgUrl: { type: String },
     buttonText: { type: String },
   },
   services: {
@@ -48,27 +48,27 @@ const pageSchema = new mongoose.Schema({
         icon: { type: Buffer },
       },
     ],
-    imgUrl: { type: Buffer },
+    imgUrl: { type: String },
   },
   testimonial: {
     title: { type: String },
     cards: [
       {
+        imgUrl: { type: Buffer },
         name: { type: String },
         location: { type: String },
-        imgUrl: { type: Buffer },
         opinion: { type: String },
       },
       {
+        imgUrl: { type: Buffer },
         name: { type: String },
         location: { type: String },
-        imgUrl: { type: Buffer },
         opinion: { type: String },
       },
       {
+        imgUrl: { type: Buffer },
         name: { type: String },
         location: { type: String },
-        imgUrl: { type: Buffer },
         opinion: { type: String },
       },
     ],

@@ -14,6 +14,8 @@ import {
   getUser,
   logoutUser,
   updatePassword,
+  updateEmail,
+  updateEmailAfterVerification,
 } from "../controller/user.js";
 import { auth, authRefreshToken } from "../middleware/auth.js";
 import multer from "multer";
@@ -53,21 +55,29 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
-
+// oauth with google
 router.get(
-  "/login/google",
-  passport.authenticate("google", { scope: ["profile email"] })
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
 );
 router.get(
-  "/login/facebook",
+  "/auth/facebook",
   passport.authenticate("facebook", { scope: ["email"] })
 );
 
-router.get("/google", passport.authenticate("google"), (req, res) => {
-  res.redirect("/");
+router.get("/welcome", (req, res) => {
+  res.send("your auth success");
 });
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/user/welcome",
+    failureRedirect: "/",
+  })
+);
 router.get("/facebook", passport.authenticate("facebook"), (req, res) => {
-  res.redirect("/");
+  res.redirect("/user/welcome");
 });
 
 router.get("/logout", (req, res) => {
@@ -86,5 +96,9 @@ router.get("/me", auth, getUser);
 router.get("/logout-user", auth, logoutUser);
 
 router.post("/update-password", auth, updatePassword);
+
+router.post("/update-email", auth, updateEmail);
+
+router.get("/verify-new-email/:token", updateEmailAfterVerification);
 
 export { router as userRouter };
