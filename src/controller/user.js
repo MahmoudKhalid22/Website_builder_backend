@@ -200,9 +200,15 @@ const updatePassword = async (req, res) => {
 let updatedEmail = "";
 const updateEmail = async (req, res) => {
   updatedEmail = req.body.email;
+
   const isValidEmail = validator.isEmail(updatedEmail);
+
   if (!isValidEmail)
     return res.status(400).send({ error: "the email provided is not correct" });
+
+  const isFound = await User.findOne({ email: updatedEmail });
+  if (isFound)
+    return res.send({ error: "this email is found, try another email" });
   const user = req.user;
   try {
     const token = await jwt.sign(
