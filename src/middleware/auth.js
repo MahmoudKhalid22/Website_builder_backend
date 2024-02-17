@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
 
     next();
   } catch (e) {
-    res.status(500).send("please Authenticate");
+    res.status(500).send({ message: "please Authenticate" });
   }
 };
 const secretKey = process.env.secretKey;
@@ -43,6 +43,4 @@ const authRefreshToken = async (req, res, next) => {
   }
 };
 
-
-
-export { auth,authRefreshToken };
+export { auth, authRefreshToken };

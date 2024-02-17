@@ -6,6 +6,7 @@ import sharp from "sharp";
 import { sendResetPassworEmail } from "../email/resetPasswordEmail.js";
 import validator from "validator";
 import { createImageFromName } from "./image-from-name.js";
+import { sendVerificationUpdatedEmail } from "../email/verificationUpdatedEmail.js";
 
 const createUser = async (req, res) => {
   try {
@@ -209,7 +210,7 @@ const updateEmail = async (req, res) => {
       process.env.EMAIL_VERIFICATION_TOKEN,
       { expiresIn: "10m" }
     );
-    sendVerificationEmail(updatedEmail, token);
+    sendVerificationUpdatedEmail(updatedEmail, token);
     res.send({
       message: "email has been sent to you, please verify your new email",
     });
@@ -235,7 +236,7 @@ const updateEmailAfterVerification = async (req, res) => {
     );
     res.send({ message: "Email has been updated" });
   } catch (err) {
-    res.status(500).send({ err });
+    res.status(500).send({ err: err.message });
   }
 };
 
