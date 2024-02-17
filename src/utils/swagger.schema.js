@@ -2,36 +2,27 @@
  * @swagger
  *  components:
  *   schemas:
- *      user:
- *          type: object
- *          properties:
- *              _id:
- *                  type: string
- *                  description: the unique id for the user
- *              name:
- *                  type: string
- *                  description: the name of the user
- *              email:
- *                  type: string
- *                  description: the email of the user must be the valid and true email   
  *      User:
  *          type: object
  *          properties:
- *              _id:
- *                  type: string
- *                  description: the unique id for the user
- *              name:
- *                  type: string
- *                  description: the name of the user
- *              email:
- *                  type: string
- *                  description: the email of the user must be the valid and true email
+ *              user:
+ *                  type: object
+ *                  properties:
+ *                      _id:
+ *                          type: string
+ *                          description: the unique id for the user
+ *                      name:
+ *                          type: string
+ *                          description: the name of the user
+ *                      email:
+ *                          type: string
+ *                          description: the email of the user must be the valid and true email
  *              accessToken:
- *                  type: string
- *                  description: tokens of the user
+ *                          type: string
+ *                          description: tokens of the user
  *              refreshToken:
- *                  type: string
- *                  description: tokens of the user
+ *                          type: string
+ *                          description: tokens of the user
  *
  *      Register:
  *          type: object
@@ -57,21 +48,24 @@
  *      Me:
  *          type: object
  *          properties:
- *              _id:
- *                  type: string
- *                  description: the unique id for this user
- *              name:
- *                  type: string
- *                  description: the name of this user *
- *              email:
- *                  type: string
- *                  description: the email of the user that he registered
- *              createAt:
- *                  type: string
- *                  description: the date of creating the account
- *              updateAt:
- *                  type: string
- *                  description: the date of updating the account
+ *              user:
+ *                  type: object
+ *                  properties:
+ *                      _id:
+ *                          type: string
+ *                          description: the unique id for this user
+ *                      name:
+ *                          type: string
+ *                          description: the name of this user *
+ *                      email:
+ *                          type: string
+ *                          description: the email of the user that he registered
+ *                      createdAt:
+ *                          type: string
+ *                          description: the date of creating the account
+ *                      updatedAt:
+ *                          type: string
+ *                          description: the date of updating the account
  */
 /**
  * @swagger

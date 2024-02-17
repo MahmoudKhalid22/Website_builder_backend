@@ -12,6 +12,7 @@ import { docs } from "./utils/swagger.js";
 import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
 import { testReq } from "./utils/testRequest.js";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.json());
+app.use(cors());
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET_KEY,

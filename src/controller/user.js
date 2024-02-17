@@ -199,15 +199,15 @@ const updatePassword = async (req, res) => {
 let updatedEmail = "";
 const updateEmail = async (req, res) => {
   updatedEmail = req.body.email;
-  validator.isEmail(updateEmail);
-  if (!validator)
+  const isValidEmail = validator.isEmail(updateEmail);
+  if (!isValidEmail)
     return res.status(400).send({ error: "the email provided is not correct" });
   const user = req.user;
   try {
     const token = await jwt.sign(
       { id: user._id.toString() },
       process.env.EMAIL_VERIFICATION_TOKEN,
-      { expiresIn: "1h" }
+      { expiresIn: "10m" }
     );
     sendVerificationEmail(email, token);
     res.send({
