@@ -199,7 +199,7 @@ const updatePassword = async (req, res) => {
 let updatedEmail = "";
 const updateEmail = async (req, res) => {
   updatedEmail = req.body.email;
-  const isValidEmail = validator.isEmail(updateEmail);
+  const isValidEmail = validator.isEmail(updatedEmail);
   if (!isValidEmail)
     return res.status(400).send({ error: "the email provided is not correct" });
   const user = req.user;
@@ -209,12 +209,12 @@ const updateEmail = async (req, res) => {
       process.env.EMAIL_VERIFICATION_TOKEN,
       { expiresIn: "10m" }
     );
-    sendVerificationEmail(email, token);
+    sendVerificationEmail(updatedEmail, token);
     res.send({
       message: "email has been sent to you, please verify your new email",
     });
   } catch (err) {
-    res.status(500).send({ err });
+    res.status(500).send({ err: err.message });
   }
 };
 
