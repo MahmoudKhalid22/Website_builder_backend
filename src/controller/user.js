@@ -199,9 +199,10 @@ const updatePassword = async (req, res) => {
 let updatedEmail = "";
 const updateEmail = async (req, res) => {
   updatedEmail = req.body.email;
-  validator.isEmail(updateEmail);
-  if (!validator)
+  // Check if the email is valid
+  if (!validator.isEmail(updatedEmail)) {
     return res.status(400).send({ error: "the email provided is not correct" });
+  }
   const user = req.user;
   try {
     const token = await jwt.sign(
@@ -209,7 +210,8 @@ const updateEmail = async (req, res) => {
       process.env.EMAIL_VERIFICATION_TOKEN,
       { expiresIn: "1h" }
     );
-    sendVerificationEmail(email, token);
+    // Use updatedEmail instead of email
+    sendVerificationEmail(updatedEmail, token);
     res.send({
       message: "email has been sent to you, please verify your new email",
     });
@@ -217,6 +219,7 @@ const updateEmail = async (req, res) => {
     res.status(500).send({ err });
   }
 };
+
 
 const updateEmailAfterVerification = async (req, res) => {
   const token = req.params.token;
