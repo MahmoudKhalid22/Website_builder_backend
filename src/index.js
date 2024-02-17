@@ -11,6 +11,7 @@ import { pageRouter } from "./router/pages.js";
 import { docs } from "./utils/swagger.js";
 import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
+import { testReq } from "./utils/testRequest.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,6 +38,7 @@ const PORT = process.env.PORT;
 
 docs(app);
 connection();
+testReq();
 
 app.get("/test", (req, res) => {
   res.json({ message: "test" });
