@@ -7,10 +7,24 @@ import { sendResetPassworEmail } from "../email/resetPasswordEmail.js";
 import validator from "validator";
 import { createImageFromName } from "./image-from-name.js";
 import { sendVerificationUpdatedEmail } from "../email/verificationUpdatedEmail.js";
+import {
+  createUserValidation,
+  loginValidation,
+  forgetPasswordValication,
+  resetPasswordValidation,
+  tokenValidation,
+  nameValidation,
+} from "../middleware/user.model.validation.js";
 
 const createUser = async (req, res) => {
   try {
-    const user = await new User(req.body);
+    const result = await createUserValidation.validateAsync(req.body);
+
+    const isExisting = await User.findOne({ email: result.email });
+    if (isExisting) throw new Error("Email address already in use");
+
+    const user = await new User(result);
+
     await createImageFromName(req.body.name);
     await user.save();
     const token = jwt.sign(
@@ -24,7 +38,7 @@ const createUser = async (req, res) => {
       message: "User created successfully. Check your email for verification.",
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -69,7 +83,8 @@ const loginUser = async (req, res) => {
 };
 
 const forgetPassword = async (req, res) => {
-  const user = await User.findByEmail({ email: req.body.email });
+  const email = await forgetPasswordValication.validateAsync(req.body.email);
+  const user = await User.findByEmail({ email });
   if (!user) {
     return res.status(400).send("user isn't found");
   }
@@ -84,19 +99,23 @@ const forgetPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
   try {
     const token = req.params.token;
-
-    const decoded = await jwt.verify(token, process.env.PASSWORD_TOKEN);
+    const result = await resetPasswordValidation.validateAsync(
+      token,
+      req.body.password
+    );
+    const decoded = await jwt.verify(result.token, process.env.PASSWORD_TOKEN);
+    if (!decoded) throw new Error({ error: "Token has been expired" });
     const userId = decoded._id;
-    const hashedPassword = await bcrypt.hash(req.body.password, 8);
+    const hashedPassword = await bcrypt.hash(result.password, 8);
     const user = await User.findByIdAndUpdate(
       userId,
       { password: hashedPassword },
       { new: true }
     );
     if (!user) {
-      return res.status(404).send("user is not found");
+      return res.status(404).send({ error: "user is not found" });
     }
-    res.send("password has been updated");
+    res.send({ message: "password has been updated" });
   } catch (err) {
     res.status(500).send({ err: err.message });
   }
@@ -104,7 +123,8 @@ const resetPassword = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    await User.deleteOne({ _id: req.user._id }, { new: true });
+    const result = await tokenValidation.validateAsync(req.user._id);
+    await User.deleteOne({ _id: result }, { new: true });
     res.send({ message: "User has been deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -126,16 +146,19 @@ const uploadUser = async (req, res) => {
 };
 const updateUser = async (req, res) => {
   try {
+    const result = await tokenValidation.validateAsync(req.user._id);
+    const name = await nameValidation.validateAsync(req.body);
+    console.log(name);
     const user = await User.findByIdAndUpdate(
-      { _id: req.user._id },
-      { name: req.body.name },
+      { _id: result },
+      { name: name.name },
       { new: true }
     );
 
     res.send(user);
   } catch (err) {
     res.status(500).json({
-      error: "Internal server error",
+      error: err.message,
     });
   }
 };
