@@ -9,11 +9,12 @@ const userSchema = new Schema(
     name: {
       type: String,
       required: true,
+      min: 3,
     },
     email: {
       type: String,
-      required: function(){
-        return (!this.facebookId)
+      required: function () {
+        return !this.facebookId;
       },
       unique: true,
       validate: {
@@ -26,8 +27,8 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: function(){
-        return (!this.googleId && !this.facebookId)
+      required: function () {
+        return !this.googleId && !this.facebookId;
       },
       min: 6,
     },
