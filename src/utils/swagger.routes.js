@@ -17,8 +17,8 @@
  *                 content:
  *                      application/json:
  *                         schema:
- *                          type: string
- *                          example: check your email to verify your account
+ *                          type: objtct
+ *                          example: {message: User created successfully. Check your email for verification.}
  */
 /**
  * @swagger
@@ -336,7 +336,7 @@
 /**
  * @swagger
  * /user/update-username:
-*   put:
+ *   put:
  *     summary: Update a user
  *     parameters:
  *           - in: header
@@ -344,7 +344,7 @@
  *             schema:
  *             type: string
  *             required: true
- *             description: access token for update-user 
+ *             description: access token for update-user
  *             example: "Bearer abcxyz123456"
  *     tags:
  *       - User
@@ -354,7 +354,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/user'
+ *               $ref: '#/components/schemas/Me/properties/user'
  *       500:
  *         description: Internal server error
  *         content:
@@ -376,7 +376,7 @@
  *              schema:
  *                type: string
  *              required: true
- *              description: The user's refresh token. 
+ *              description: The user's refresh token.
  *              example: Bearer abcxyz123456
  *          responses:
  *              "200":

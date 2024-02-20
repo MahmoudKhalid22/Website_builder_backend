@@ -9,11 +9,12 @@ const userSchema = new Schema(
     name: {
       type: String,
       required: true,
+      min: 3,
     },
     email: {
       type: String,
-      required: function(){
-        return (!this.facebookId)
+      required: function () {
+        return !this.facebookId;
       },
       unique: true,
       validate: {
@@ -26,8 +27,8 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: function(){
-        return (!this.googleId && !this.facebookId)
+      required: function () {
+        return !this.googleId && !this.facebookId;
       },
       min: 6,
     },
@@ -116,10 +117,10 @@ userSchema.statics.findByEmail = async function ({ email }) {
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
 
-  if (!user) throw new Error("Email is not found");
+  if (!user) throw new Error("No valid credentials");
   if (!user.verified) throw new Error("You must verify your account");
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) throw new Error("No valid password");
+  if (!isMatch) throw new Error("No valid credentials");
   return user;
 };
 
