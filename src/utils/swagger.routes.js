@@ -17,8 +17,8 @@
  *                 content:
  *                      application/json:
  *                         schema:
- *                          type: string
- *                          example: check your email to verify your account
+ *                          type: objtct
+ *                          example: {message: User created successfully. Check your email for verification.}
  */
 /**
  * @swagger
