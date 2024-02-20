@@ -14,6 +14,8 @@ import {
   resetPasswordValidation,
   tokenValidation,
   nameValidation,
+  updatePasswordValidation,
+  emailValidation,
 } from "../middleware/user.model.validation.js";
 
 const createUser = async (req, res) => {
@@ -132,8 +134,7 @@ const resetPassword = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const result = await tokenValidation.validateAsync(req.user);
-    await User.deleteOne({ _id: result }, { new: true });
+    await User.deleteOne({ _id: req.user._id }, { new: true });
     res.send({ message: "User has been deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -150,14 +151,12 @@ const uploadUser = async (req, res) => {
     await req.user.save();
     res.send("avatar has been added");
   } catch (err) {
-    res.status(500).send();
+    res.status(500).send({ err: err.message });
   }
 };
 const updateUser = async (req, res) => {
   try {
-    const result = await tokenValidation.validateAsync(req.user._id);
     const name = await nameValidation.validateAsync(req.body);
-    console.log(name);
     const user = await User.findByIdAndUpdate(
       { _id: result },
       { name: name.name },
@@ -178,7 +177,7 @@ const refreshToken = async (req, res) => {
     res.send({ accessToken });
   } catch (err) {
     res.status(500).json({
-      error: "Internal server error",
+      error: err.message,
     });
   }
 };
@@ -188,7 +187,7 @@ const getUser = async (req, res) => {
     const user = req.user;
     res.send({ user });
   } catch (err) {
-    res.status(500).send({ err });
+    res.status(500).send({ err: err.message });
   }
 };
 
@@ -203,16 +202,17 @@ const logoutUser = async (req, res) => {
       return res.send({ message: "You logged out" });
     }
 
-    res.send("the user is not found");
+    res.send({ message: "the user is not found" });
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err: err.message });
   }
 };
 
 const updatePassword = async (req, res) => {
   try {
-    const oldPassword = req.body.oldPassword;
-    const newPassword = req.body.newPassword;
+    const { oldPassword, newPassword } =
+      await updatePasswordValidation.validateAsync(req.body);
+
     const user = req.user;
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch)
@@ -229,26 +229,31 @@ const updatePassword = async (req, res) => {
   }
 };
 
-let updatedEmail = "";
+let newEmail = "";
 const updateEmail = async (req, res) => {
-  updatedEmail = req.body.email;
-
-  const isValidEmail = validator.isEmail(updatedEmail);
-
-  if (!isValidEmail)
-    return res.status(400).send({ error: "the email provided is not correct" });
-
-  const isFound = await User.findOne({ email: updatedEmail });
-  if (isFound)
-    return res.send({ error: "this email is found, try another email" });
-  const user = req.user;
   try {
+    const email = await emailValidation.validateAsync(req.body);
+
+    newEmail = email.newEmail;
+
+    const isValidEmail = validator.isEmail(newEmail);
+
+    if (!isValidEmail)
+      return res
+        .status(400)
+        .send({ error: "the email provided is not correct" });
+
+    const isFound = await User.findOne({ email: newEmail });
+    if (isFound)
+      return res.send({ error: "this email is found, try another email" });
+    const user = req.user;
+
     const token = await jwt.sign(
       { id: user._id.toString() },
       process.env.EMAIL_VERIFICATION_TOKEN,
       { expiresIn: "10m" }
     );
-    sendVerificationUpdatedEmail(updatedEmail, token);
+    sendVerificationUpdatedEmail(newEmail, token);
     res.send({
       message: "email has been sent to you, please verify your new email",
     });
@@ -258,7 +263,8 @@ const updateEmail = async (req, res) => {
 };
 
 const updateEmailAfterVerification = async (req, res) => {
-  const token = req.params.token;
+  const validatedToken = req.params.token;
+  const token = tokenValidation.validateAsync({ token: validatedToken });
   try {
     const decoded = await jwt.verify(
       token,

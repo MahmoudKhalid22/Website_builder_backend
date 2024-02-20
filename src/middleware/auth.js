@@ -1,9 +1,17 @@
 import jwt from "jsonwebtoken";
 import { User } from "../model/userModel.js";
+import { tokenValidation } from "./user.model.validation.js";
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.header("Authorization").replace("Bearer ", "");
+    const tokenBeforeValidation = req
+      .header("Authorization")
+      .replace("Bearer ", "");
+
+    const { token } = await tokenValidation.validateAsync({
+      token: tokenBeforeValidation,
+    });
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({
       _id: decoded._id,
@@ -25,7 +33,14 @@ const expiresIn = process.env.expiresIn;
 const refreshExpiresIn = process.env.refreshExpiresIn;
 const authRefreshToken = async (req, res, next) => {
   try {
-    const token = req.header("Authorization").replace("Bearer ", "");
+    const tokenBeforeValidation = req
+      .header("Authorization")
+      .replace("Bearer ", "");
+
+    const { token } = await tokenValidation.validateAsync({
+      token: tokenBeforeValidation,
+    });
+
     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET_KEY);
     const user = await User.findOne({
       _id: decoded._id,
