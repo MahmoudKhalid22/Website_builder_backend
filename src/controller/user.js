@@ -262,6 +262,7 @@ const updateEmail = async (req, res) => {
   }
 };
 
+
 const updateEmailAfterVerification = async (req, res) => {
   const validatedToken = req.params.token;
   const token = tokenValidation.validateAsync({ token: validatedToken });
