@@ -62,11 +62,20 @@ const resetPasswordValidation = Joi.object({
 });
 
 const tokenValidation = Joi.object({
-  token: Joi.string(),
+  token: Joi.string().required(),
 });
 
 const nameValidation = Joi.object({
   name: Joi.string().min(3).max(30).required(),
+});
+
+const updatePasswordValidation = Joi.object({
+  oldPassword: Joi.string().min(6).required(),
+  newPassword: Joi.string().min(6).required(),
+});
+
+const emailValidation = Joi.object({
+  newEmail: Joi.string().email().required(),
 });
 
 export {
@@ -76,4 +85,6 @@ export {
   resetPasswordValidation,
   tokenValidation,
   nameValidation,
+  updatePasswordValidation,
+  emailValidation,
 };
