@@ -40,7 +40,7 @@ const PORT = process.env.PORT;
 
 docs(app);
 connection();
-testReq();
+// testReq();
 
 app.get("/test", (req, res) => {
   res.json({ message: "test" });

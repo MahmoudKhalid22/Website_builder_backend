@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+// import fetch from "node-fetch";
 const testReq = async () => {
   try {
     await fetch("https://zweb.onrender.com/test");
