@@ -13,14 +13,16 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/user/auth/google/callback",
+      callbackURL: "https://zweb.nqfq.onrender.com/user/auth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
       try {
         const existingUser = await User.findOne({ googleId: profile.id });
         if (existingUser) {
-          return done(null, existingUser);
+          const accessToken = await user.generateAuthToken();
+          const refreshToken = await user.generateRefreshToken();
+          return done(null,{ existingUser, accessToken, refreshToken});
         }
         const user = new User({
           name: profile.displayName,
@@ -29,9 +31,10 @@ passport.use(
           verified: true,
         });
         await user.save();
-        done(null, user);
+        const accessToken = await user.generateAuthToken();
+        const refreshToken = await user.generateRefreshToken();
+        return done(null,{ existingUser, accessToken, refreshToken});
       } catch (err) {
-        console.log(err);
         done(err);
       }
     }
@@ -52,7 +55,9 @@ passport.use(
       try {
         const existingUser = await User.findOne({ facebookId: profile.id });
         if (existingUser) {
-          return cb(null, existingUser);
+          const accessToken = await user.generateAuthToken();
+          const refreshToken = await user.generateRefreshToken();
+          return cb(null,{ existingUser, accessToken, refreshToken});
         }
         const user = new User({
           name: profile.name.givenName + " " + profile.name.familyName,
@@ -60,9 +65,10 @@ passport.use(
           verified: true,
         });
         await user.save();
-        cb(null, user);
+        const accessToken = await user.generateAuthToken();
+        const refreshToken = await user.generateRefreshToken();
+        return cb(null,{ existingUser, accessToken, refreshToken});
       } catch (err) {
-        console.log(err);
         cb(err);
       }
     }
