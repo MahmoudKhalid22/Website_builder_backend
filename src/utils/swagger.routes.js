@@ -413,12 +413,6 @@
  *       - OAuth2
  *     summary: Authorize
  *     description: Redirects the user to Google's OAuth2 consent screen to authorize the application.
- *     parameters:
- *       - name: redirect_uri
- *         in: query
- *         description: The URI to redirect the user back to after authorization.
- *         required: true
- *         type: string
  *     responses:
  *       "302":
  *         description: Redirect to Google's OAuth2 consent screen.
@@ -431,12 +425,6 @@
  *       - OAuth2
  *     summary: Authorize
  *     description: Redirects the user to Facebook's OAuth2 consent screen to authorize the application.
- *     parameters:
- *       - name: redirect_uri
- *         in: query
- *         description: The URI to redirect the user back to after authorization.
- *         required: true
- *         type: string
  *     responses:
  *       "302":
  *         description: Redirect to Facebook's OAuth2 consent screen.
