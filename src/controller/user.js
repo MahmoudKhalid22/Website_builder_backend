@@ -43,7 +43,7 @@ const createUser = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  const token = req.params.token;
+  const token = await tokenValidation.validateAsync(req.params.token);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded._id;
@@ -67,10 +67,9 @@ const verifyEmail = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const user = await User.findByCredentials(
-      req.body.email,
-      req.body.password
-    );
+    const result = await loginValidation.validateAsync(req.body);
+
+    const user = await User.findByCredentials(result.email, result.password);
     if (!user.verified) {
       return res.send("you must verify your email first");
     }
@@ -83,26 +82,36 @@ const loginUser = async (req, res) => {
 };
 
 const forgetPassword = async (req, res) => {
-  const email = await forgetPasswordValication.validateAsync(req.body.email);
-  const user = await User.findByEmail({ email });
-  if (!user) {
-    return res.status(400).send("user isn't found");
-  }
-  const resetToken = await user.generateResetPasswordToken();
-  sendResetPassworEmail(req.body.email, resetToken);
+  try {
+    const email = await forgetPasswordValication.validateAsync(req.body);
+    if (!req.body.email)
+      return res.status(400).send({ error: "email is required" });
+    const user = await User.findOne({ email: email.email });
 
-  res.send(
-    "email has been sent to you, check your email to reset your Password"
-  );
+    if (!user) {
+      return res.status(404).send({ error: "user isn't found" });
+    }
+    const resetToken = await user.generateResetPasswordToken();
+    sendResetPassworEmail(req.body.email, resetToken);
+
+    res.send({
+      message:
+        "email has been sent to you, check your email to reset your Password",
+    });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 };
 
 const resetPassword = async (req, res) => {
   try {
     const token = req.params.token;
-    const result = await resetPasswordValidation.validateAsync(
-      token,
-      req.body.password
-    );
+    const result = await resetPasswordValidation.validateAsync({
+      token: token,
+      ...req.body,
+    });
+
+    console.log(result);
     const decoded = await jwt.verify(result.token, process.env.PASSWORD_TOKEN);
     if (!decoded) throw new Error({ error: "Token has been expired" });
     const userId = decoded._id;
@@ -123,7 +132,7 @@ const resetPassword = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const result = await tokenValidation.validateAsync(req.user._id);
+    const result = await tokenValidation.validateAsync(req.user);
     await User.deleteOne({ _id: result }, { new: true });
     res.send({ message: "User has been deleted" });
   } catch (err) {

@@ -34,16 +34,31 @@ const createUserValidation = Joi.object({
 }).xor("password", "googleId", "facebookId");
 
 const loginValidation = Joi.object({
-  email: Joi.string().email(),
+  email: Joi.string().email().when("facebookId", {
+    is: Joi.exist(),
+    then: Joi.optional(),
+    otherwise: Joi.required(),
+  }),
+  password: Joi.string()
+    .min(6)
+    .when("googleId", {
+      is: Joi.exist().not(null),
+      then: Joi.optional(),
+      otherwise: Joi.when("facebookId", {
+        is: Joi.exist().not(null),
+        then: Joi.optional(),
+        otherwise: Joi.required(),
+      }),
+    }),
 });
 
 const forgetPasswordValication = Joi.object({
-  email: Joi.string().email(),
+  email: Joi.string().email().required(),
 });
 
 const resetPasswordValidation = Joi.object({
-  token: Joi.string(),
-  newPassword: Joi.string().min(6),
+  token: Joi.string().required(),
+  password: Joi.string().min(6).required(),
 });
 
 const tokenValidation = Joi.object({

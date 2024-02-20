@@ -14,7 +14,7 @@ const options = {
         email: "zagwebeasybuilder@gmail.com",
       },
     },
-    servers: [{ url: `https://zweb.onrender.com` }],
+    servers: [{ url: `https://zweb-nqfq.onrender.com/` }],
   },
   apis: ["./src/utils/*.js", "./src/model/*.js"],
 };
