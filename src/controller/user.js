@@ -32,12 +32,13 @@ const createUser = async (req, res) => {
     const token = jwt.sign(
       { _id: user._id.toString() },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "10m" }
     );
 
     sendVerificationEmail(req.body.email, token);
     res.status(201).json({
       message: "User created successfully. Check your email for verification.",
+      _id: user._id,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -64,6 +65,27 @@ const verifyEmail = async (req, res) => {
       .json({ message: "Your email has been verified, go back to login." });
   } catch (err) {
     res.status(400).json({ error: "Invalid or expired token." });
+  }
+};
+
+const resendEmail = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const user = await User.findOne({ _id: id });
+    const email = user.email;
+    const token = jwt.sign(
+      { _id: user._id.toString() },
+      process.env.JWT_SECRET,
+      { expiresIn: "10m" }
+    );
+
+    sendVerificationEmail(email, token);
+    res.status(201).json({
+      message: "new email has been sent",
+      _id: user._id,
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 };
 
@@ -299,4 +321,5 @@ export {
   updatePassword,
   updateEmail,
   updateEmailAfterVerification,
+  resendEmail,
 };
