@@ -45,9 +45,9 @@ const createUser = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  const token = await tokenValidation.validateAsync(req.params.token);
+  const token = await tokenValidation.validateAsync(req.params);
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token.token, process.env.JWT_SECRET);
     const userId = decoded._id;
 
     const user = await User.findByIdAndUpdate(
