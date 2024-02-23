@@ -13,6 +13,7 @@ import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
 import { testReq } from "./utils/testRequest.js";
 import cors from "cors";
+// import MongoDBStore from "connect-mongodb-session";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,11 +24,17 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.json());
 app.use(cors());
+
+// const store = new MongoDBStore({
+//   uri: process.env.MONGODB_URL,
+// });
+
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET_KEY,
     resave: true,
     saveUninitialized: true,
+    // store: store,
   })
 );
 app.use(passport.initialize());
@@ -40,7 +47,7 @@ const PORT = process.env.PORT;
 
 docs(app);
 connection();
-// testReq();
+testReq();
 
 app.get("/test", (req, res) => {
   res.json({ message: "test" });
