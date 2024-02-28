@@ -1,52 +1,39 @@
 import { Page } from "../model/pageModel.js";
 
-const newProject = async (req, res) => {
-  const page = new Page({ ...req.body, owner: req.user._id });
+const newPage = async (req, res) => {
   try {
-    // if (req.files) {
-    //   // Iterate over the fields containing images and update the document
-    //   for (const field in req.files) {
-    //     if (req.files.hasOwnProperty(field)) {
-    //       const images = Array.isArray(req.files[field])
-    //         ? req.files[field]
-    //         : [req.files[field]];
-
-    //       // Validate image size
-    //       const validImages = images.filter((file) => file.size <= maxSize);
-
-    //       if (validImages.length !== images.length) {
-    //         return res
-    //           .status(400)
-    //           .json({ error: "Some images exceed the size limit" });
-    //       }
-
-    //       page[field] = validImages.map((file) => ({ buffer: file.buffer }));
-    //     }
-    //   }
-    // }
-    console.log(req.body);
-    console.log(req.files);
-
-    // Attach user information to the page document
-
-    await page.save();
-
-    res.json({ message: "Page created successfully" });
+    const page = new Page({ ...req.body, owner: req.user._id });
+    const savedPage = await page.save();
+    res.json({ message: "Page created successfully", savedPage });
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-const page = async (req, res) => {
+const getPage = async (req, res) => {
+  const pageId = req.params.id;
+  const userId = req.user;
   try {
-    const page = await Page.find({});
+    const page = await Page.findOne({ _id: pageId, owner: userId });
     res.send(page);
   } catch (err) {
+    res.json({ error: err.message });
+  }
+};
+
+const getPages = async (req, res) => {
+  const userId = req.user;
+  try {
+    const { _id } = userId;
+    const pages = await Page.find({ owner: _id });
+
+    res.send(pages);
+  } catch (err) {
     res.json({
-      error: err,
+      error: err.message,
     });
   }
 };
 
-export { page, newProject };
+export { newPage, getPages, getPage };
