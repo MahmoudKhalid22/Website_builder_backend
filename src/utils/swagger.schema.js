@@ -66,4 +66,19 @@
  *                      updatedAt:
  *                          type: string
  *                          description: the date of updating the account
+ *
+ *      Pages:
+ *          type: object
+ *          properties:
+ *              navbar:
+ *                  type: object
+ *                  properties:
+ *                      imgUrl: string
+ *                      links:
+ *                           type: object
+ *
+ *
+ *
+ *
+ *
  */
