@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { getPage, getPages, newPage } from "../controller/page.js";
+import { getPage, getPages, newPage, updatePage } from "../controller/page.js";
 import { auth } from "../middleware/auth.js";
 // import multer from "multer";
 
@@ -38,5 +38,7 @@ router.post("/", auth, newPage);
 router.get("/pages", auth, getPages);
 
 router.get("/:id", auth, getPage);
+
+router.put("/update/:id", auth, updatePage);
 
 export { router as pageRouter };
