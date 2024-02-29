@@ -404,6 +404,36 @@
  *                          example:
  *                              error: "Invalid refresh token"
  */
+/**
+ * @swagger
+ * /resend-email-verification:
+ *   post:
+ *     tags:
+ *       - User
+ *     summary: Resend email verification
+ *     description: Resend email verification to the user with the provided ID.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The unique identifier of the user to whom the verification email will be resent.
+ *             required:
+ *               - id
+ *     responses:
+ *       '200':
+ *         description: Email verification resent successfully.
+ *       '400':
+ *         description: Bad request. Invalid ID format provided.
+ *       '404':
+ *         description: User not found. The provided ID does not correspond to any user.
+ *       '500':
+ *         description: Internal server error. Failed to resend email verification.
+ */
 
 /**
  * @swagger
