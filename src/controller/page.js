@@ -36,4 +36,42 @@ const getPages = async (req, res) => {
   }
 };
 
-export { newPage, getPages, getPage };
+const updatePage = async (req, res) => {
+  try {
+    const { pageId } = req.params;
+    const userId = req.user._id;
+
+    const fieldsToUpdate = [
+      'navBar', 'hero', 'services', 'feature', 'testimonial', 'logos', 
+      'projects', 'statistic', 'items', 'team', 'pricing', 'cta', 'footer'
+    ];
+
+    const updateObject = {};
+    fieldsToUpdate.forEach(field => {
+      if (req.body.hasOwnProperty(field)) {
+        updateObject[field] = req.body[field];
+      }
+    });
+
+    console.log(updateObject);
+
+    const updatedPage = await Page.updateOne(
+      { _id: pageId, owner: userId }, 
+      {$set:{updateObject}}, 
+      { new: true }
+    );
+
+    if (!updatedPage) {
+      return res.status(404).json({ error: 'Page not found or unauthorized access' });
+    }
+    
+    res.json({ message: 'Page updated successfully', updatedPage });
+    console.log(updatedPage);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+export { newPage, getPages, getPage , updatePage };
