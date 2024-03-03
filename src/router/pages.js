@@ -1,8 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { getPage, getPages, newPage } from "../controller/page.js";
-import { auth } from "../middleware/auth.js";
-// import multer from "multer";
+import { getPage, getPages, newPage, deletePage } from "../controller/page.js"; 
+import { auth } from "../middleware/auth.js";// import multer from "multer";
 
 // const storage = multer.memoryStorage();
 // const upload = multer({ storage: storage, limits: { fileSize: 3000000 } });
@@ -38,5 +37,6 @@ router.post("/", auth, newPage);
 router.get("/pages", auth, getPages);
 
 router.get("/:id", auth, getPage);
+router.delete("/:id", auth, deletePage);
 
 export { router as pageRouter };
