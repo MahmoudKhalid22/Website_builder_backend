@@ -48,6 +48,42 @@ const deletePage = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
   }
+}
+const updatePage = async (req, res) => {
+  try {
+    const { pageId } = req.params;
+    const userId = req.user._id;
+
+    const fieldsToUpdate = [
+      'navBar', 'hero', 'services', 'feature', 'testimonial', 'logos', 
+      'projects', 'statistic', 'items', 'team', 'pricing', 'cta', 'footer'
+    ];
+
+    const updateObject = {};
+    fieldsToUpdate.forEach(field => {
+      if (req.body.hasOwnProperty(field)) {
+        updateObject[field] = req.body[field];
+      }
+    });
+
+    console.log(updateObject);
+
+    const updatedPage = await Page.updateOne(
+      { _id: pageId, owner: userId }, 
+      {$set:{updateObject}}, 
+      { new: true }
+    );
+
+    if (!updatedPage) {
+      return res.status(404).json({ error: 'Page not found or unauthorized access' });
+    }
+    
+    res.json({ message: 'Page updated successfully', updatedPage });
+    console.log(updatedPage);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 
@@ -56,9 +92,8 @@ const deleteUserPages = async (userId) => {
     await Page.deleteMany({ owner: userId });
     console.log("User's pages deleted successfully");
   } catch (err) {
-    console.error("Error deleting user's pages:", err.message);
-    throw err; 
+    console.error("Error deleting user's pages:", err.message); 
   }
 };
 
-export { newPage, getPages, getPage, deletePage, deleteUserPages};
+export { newPage, getPages, getPage , updatePage, deletePage, deleteUserPages };
