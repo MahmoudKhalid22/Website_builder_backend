@@ -41,37 +41,47 @@ const updatePage = async (req, res) => {
     const { pageId } = req.params;
     const userId = req.user._id;
 
+    const updates = Object.keys(req.body);
     const fieldsToUpdate = [
-      'navBar', 'hero', 'services', 'feature', 'testimonial', 'logos', 
-      'projects', 'statistic', 'items', 'team', 'pricing', 'cta', 'footer'
+      "navBar",
+      "hero",
+      "services",
+      "feature",
+      "testimonial",
+      "logos",
+      "projects",
+      "statistic",
+      "items",
+      "team",
+      "pricing",
+      "cta",
+      "footer",
     ];
 
-    const updateObject = {};
-    fieldsToUpdate.forEach(field => {
-      if (req.body.hasOwnProperty(field)) {
-        updateObject[field] = req.body[field];
-      }
+    const isValidUpdates = udpates.every((update) => {
+      fieldsToUpdate.includes(update);
     });
 
-    console.log(updateObject);
-
-    const updatedPage = await Page.updateOne(
-      { _id: pageId, owner: userId }, 
-      {$set:{updateObject}}, 
-      { new: true }
-    );
-
-    if (!updatedPage) {
-      return res.status(404).json({ error: 'Page not found or unauthorized access' });
+    if (!isValidUpdates) {
+      res.status(400).send({ error: "No valid updates" });
     }
-    
-    res.json({ message: 'Page updated successfully', updatedPage });
-    console.log(updatedPage);
+
+    const page = await Page.findOne({
+      _id: pageId,
+      owner: userId,
+    });
+    if (!page) {
+      res.status(404).send({ error: "the page is not found" });
+    }
+
+    updates.forEach((update) => {
+      page[update] = req.body[update];
+    });
+    await page.save();
+    res.send({ message: "page has been updated sucessfully", page });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: error.message });
   }
 };
 
-
-export { newPage, getPages, getPage , updatePage };
+export { newPage, getPages, getPage, updatePage };
