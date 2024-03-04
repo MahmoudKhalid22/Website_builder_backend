@@ -197,8 +197,101 @@
  *                                  type: string
  *                              caption:
  *                                  type: string
+ *              team:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                      cards:
+ *                          type: array
+ *                          properties:
+ *                              name:
+ *                                  type: string
+ *                              location:
+ *                                  type: string
+ *                              imgUrl:
+ *                                  type: string
+ *                              mediaIcons:
+ *                                  type: array
+ *                                  properties:
+ *                                          icon:
+ *                                                  type: string
+ *                                          url:
+ *                                              type: string
+ *                              email:
+ *                                      type: string
+ *              pricing:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                      description:
+ *                          type: string
+ *                      blocks:
+ *                          type: array
+ *                          properties:
+ *                              plan:
+ *                                  type: string
+ *                              price:
+ *                                  type: number
+ *                                  default: 10
+ *                              timeUnit:
+ *                                  type: string
+ *                              moneyUnit:
+ *                                  type: string
+ *                              features:
+ *                                  type: array
+ *                              buttonText:
+ *                                  type: string
+ *                              icon:
+ *                                  type: string
  *
+ *              cta:
+ *                 type: object
+ *                 properties:
+ *                  title:
+ *                              type: string
+ *                  description:
+ *                          type: string
+ *                  buttonText:
+ *                                  type: string
+ *                  icon:
+ *                      type: string
+ *              footer:
+ *                  type: object
+ *                  properties:
+ *                      imgUrl:
+ *                                      type: string
+ *                      description:
+ *                          type: string
  *
+ *                      mediaIcons:
+ *                                  type: array
+ *                                  properties:
+ *                                          icon:
+ *                                                  type: string
+ *                                          url:
+ *                                              type: string
+ *
+ *                      items:
+ *                          type: array
+ *                          properties:
+ *                              title:
+ *                                          type: string
+ *                              links:
+ *                                      type: array
+ *                                      example: [hero, about, testimonial, contact]
+ *                      contact:
+ *                          type: object
+ *                          properties:
+ *                              title:
+ *                                      type: string
+ *                              location:
+ *                                      type: string
+ *                              email:
+ *                                      type: string
+ *                              phone:
+ *                                      type: string
  *
  *
  */
