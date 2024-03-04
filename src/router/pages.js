@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 
 
-import { getPage, getPages, newPage, updatePage, deletePage } from "../controller/page.js";
+import { getPage, getPages, newPage, updatePage, deletePage, deleteUserPages } from "../controller/page.js";
 import { auth } from "../middleware/auth.js";
 // import multer from "multer";
 // const storage = multer.memoryStorage();
@@ -40,6 +40,7 @@ router.get("/pages", auth, getPages);
 
 router.get("/:id", auth, getPage);
 router.delete("/:id", auth, deletePage);
+router.delete("/:id", auth, deleteUserPages);
 
 router.put("/update/:id", auth, updatePage);
 

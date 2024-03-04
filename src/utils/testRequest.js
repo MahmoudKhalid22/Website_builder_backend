@@ -8,5 +8,14 @@ const testReq = async () => {
     setTimeout(testReq, 600000);
   }
 };
+const testReqDev = async () => {
+  try {
+    await fetch("https://zweb.onrender.com/test");
+  } catch (error) {
+    console.log("Error fetching data:", error);
+  } finally {
+    setTimeout(testReq, 600000);
+  }
+};
 
-export { testReq };
+export { testReq, testReqDev };
