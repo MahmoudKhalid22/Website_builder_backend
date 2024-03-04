@@ -17,10 +17,10 @@
  *                      email:
  *                          type: string
  *                          description: the email of the user must be the valid and true email
- *              accessToken:
+ *                      accessToken:
  *                          type: string
  *                          description: tokens of the user
- *              refreshToken:
+ *                      refreshToken:
  *                          type: string
  *                          description: tokens of the user
  *
@@ -67,16 +67,136 @@
  *                          type: string
  *                          description: the date of updating the account
  *
- *      Pages:
+ *      Page:
  *          type: object
  *          properties:
  *              navbar:
  *                  type: object
  *                  properties:
- *                      imgUrl: string
+ *                      imgUrl:
+ *                          type: string
  *                      links:
- *                           type: object
+ *                           type: array
+ *                           example: [hero, about, testimonial, contact]
+ *              hero:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                      description:
+ *                          type: string
+ *                      icon:
+ *                          type: string
+ *                      imgUrl:
+ *                          type: string
+ *                      buttonText:
+ *                          type: string
+ *              services:
+ *                  type: object
+ *                  properties:
+ *                      blocks:
+ *                          type: array
+ *                          properties:
+ *                              icon:
+ *                                  type: string
+ *                              title:
+ *                                  type: string
+ *                              description:
+ *                                  type: string
+ *              features:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                      description:
+ *                          type: string
+ *                      phone:
+ *                          type: string
+ *                      buttonText:
+ *                          type: string
+ *                      icons:
+ *                          type: array
+ *                          properties:
+ *                              icon:
+ *                                  type: string
  *
+ *                      imgUrl:
+ *                          type: string
+ *
+ *              testimonial:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                      cards:
+ *                          type: array
+ *                          properties:
+ *                              imgUrl:
+ *                                  type: string
+ *                              name:
+ *                                  type: string
+ *                              location:
+ *                                  type: string
+ *                              opinion:
+ *                                  type: string
+ *              logos:
+ *                  type: object
+ *                  properties:
+ *                      companies:
+ *                          type: array
+ *                          properties:
+ *                              imgUrl:
+ *                                 type: string
+ *
+ *              projects:
+ *                   type: object
+ *                   properties:
+ *                      title:
+ *                          type: string
+ *                      description:
+ *                          type: string
+ *                      cards:
+ *                          type: array
+ *                          properties:
+ *                              imgUrl:
+ *                                  type: string
+ *                              title:
+ *                                  type: string
+ *                              description:
+ *                                  type: string
+ *                              icon:
+ *                                  type: string
+ *
+ *              statistics:
+ *                  type: object
+ *                  properties:
+ *                      statistics:
+ *                          type: array
+ *                          properties:
+ *                              title:
+ *                                  type: string
+ *                              value:
+ *                                  type: string
+ *              items:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                      description:
+ *                          type: string
+ *                      cards:
+ *                          type: array
+ *                          properties:
+ *                              title:
+ *                                  type: string
+ *                              description:
+ *                                  type: string
+ *                              imgUrl:
+ *                                  type: string
+ *                              icon:
+ *                                  type: string
+ *                              caption:
+ *                                  type: string
  *
  *
  *
