@@ -37,18 +37,20 @@
 /**
  * @swagger
  * /page/update:
- *   put:
- *     summary: Update page data
- *     parameters:
- *       - in: header
- *         name: authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Access token for update-page
- *           example: "Bearer abcxyz123456"
- *     tags:
- *       - Page
+ *     put:
+ *          description: user update his page 
+ *          tags:
+ *              - Page
+ *          parameters:
+ *              - in: header
+ *                name: Authorization
+ *                description: Access token of the user to update-page
+ *                example: Bearer abcxyz123
+ *          requestBody:
+ *                content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Page'
  *     responses:
  *       '200':
  *         description: Successfully updated page
