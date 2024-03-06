@@ -7,6 +7,7 @@ import { sendResetPassworEmail } from "../email/resetPasswordEmail.js";
 import validator from "validator";
 import { createImageFromName } from "./image-from-name.js";
 import { sendVerificationUpdatedEmail } from "../email/verificationUpdatedEmail.js";
+import { deleteUserPages } from "./page.js";
 import {
   createUserValidation,
   loginValidation,
@@ -156,8 +157,13 @@ const resetPassword = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    await User.deleteOne({ _id: req.user._id }, { new: true });
-    res.send({ message: "User has been deleted" });
+   
+    await User.deleteOne({ _id: req.user._id });  // this to delete the user
+
+    
+    await deleteUserPages(req.user._id); // to user's pages
+
+    res.send({ message: "User and associated pages have been deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

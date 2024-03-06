@@ -27,15 +27,28 @@ const getPages = async (req, res) => {
   try {
     const { _id } = userId;
     const pages = await Page.find({ owner: _id });
-
     res.send(pages);
   } catch (err) {
-    res.json({
-      error: err.message,
-    });
+    res.json({ error: err.message });
   }
 };
 
+const deletePage = async (req, res) => {
+  const pageId = req.params.id;
+  const userId = req.user._id; 
+
+  try {
+    const deletedPage = await Page.findOneAndDelete({ _id: pageId, owner: userId });
+
+    if (!deletedPage) {
+      return res.status(404).json({ error: "Page not found or you are not authorized to delete it." });
+    }
+
+    res.json({ message: "Page deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 const updatePage = async (req, res) => {
   try {
     const { pageId } = req.params;
@@ -84,4 +97,17 @@ const updatePage = async (req, res) => {
   }
 };
 
-export { newPage, getPages, getPage, updatePage };
+
+const deleteUserPages = async (userId, res) => {
+  try {
+    await Page.deleteMany({ owner: userId });
+    console.log("User's pages deleted successfully");
+    res.json({ message: "User's pages deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting user's pages:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+export { newPage, getPages, getPage , updatePage, deletePage, deleteUserPages };
