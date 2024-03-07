@@ -42,6 +42,6 @@ router.get("/:id", auth, getPage);
 router.delete("/:id", auth, deletePage);
 router.delete("/:id", auth, deleteUserPages);
 
-router.put("/update/:id", auth, updatePage);
+router.put("/update/:pageId", auth, updatePage);
 
 export { router as pageRouter };

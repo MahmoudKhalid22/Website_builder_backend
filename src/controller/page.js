@@ -51,51 +51,61 @@ const deletePage = async (req, res) => {
 }
 const updatePage = async (req, res) => {
   try {
+    // Validate pageId, userId, and request body data
+    // const { error } = validateUpdateRequest(req.body);
+    // if (error) return res.status(400).json({ error: error.message });
+
     const { pageId } = req.params;
     const userId = req.user._id;
 
-    const updates = Object.keys(req.body);
+    const updateObject = { $set: {} };
     const fieldsToUpdate = [
-      "navBar",
-      "hero",
-      "services",
-      "feature",
-      "testimonial",
-      "logos",
-      "projects",
-      "statistic",
-      "items",
-      "team",
-      "pricing",
-      "cta",
-      "footer",
-    ];
+      'navBar',
+      'hero',
+      'services',
+      'feature',
+      'testimonial',
+      'logos',
+      'projects',
+      'statistic',
+      'items',
+      'team',
+      'pricing',
+      'cta',
+      'footer'];
 
-    const isValidUpdates = udpates.every((update) => {
-      fieldsToUpdate.includes(update);
+    fieldsToUpdate.forEach(field => {
+      if (req.body.hasOwnProperty(field)) {
+        updateObject.$set[field] = sanitizeData(req.body[field]); // Clean user-provided data
+      }
     });
 
-    if (!isValidUpdates) {
-      res.status(400).send({ error: "No valid updates" });
+    const updatedPage = await Page.findOneAndUpdate(
+      { _id: pageId, owner: userId },
+      updateObject,
+      { new: true }
+    );
+
+    if (!updatedPage) {
+      return res.status(404).json({ error: 'Page not found or unauthorized access' });
     }
 
-    const page = await Page.findOne({
-      _id: pageId,
-      owner: userId,
-    });
-    if (!page) {
-      res.status(404).send({ error: "the page is not found" });
-    }
-
-    updates.forEach((update) => {
-      page[update] = req.body[update];
-    });
-    await page.save();
-    res.send({ message: "page has been updated sucessfully", page });
+    res.json({ message: 'Page updated successfully', updatedPage });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// // Implement validation function (replace with your validation logic)
+// function validateUpdateRequest(requestBody) {
+//   // ... validation logic ...
+// }
+
+// Implement data sanitization function (replace with your sanitization logic)
+function sanitizeData(data) {
+  // ... data cleaning logic ...
+}
 
 
 const deleteUserPages = async (userId, res) => {
