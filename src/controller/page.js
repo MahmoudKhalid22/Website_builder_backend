@@ -76,15 +76,17 @@ const updatePage = async (req, res) => {
 
     fieldsToUpdate.forEach(field => {
       if (req.body.hasOwnProperty(field)) {
-        updateObject.$set[field] = sanitizeData(req.body[field]); // Clean user-provided data
+        updateObject.$set[field] = req.body[field]; // Clean user-provided data
       }
     });
+    console.log(updateObject);
 
-    const updatedPage = await Page.findOneAndUpdate(
+    const updatedPage = await Page.findByIdAndUpdate(
       { _id: pageId, owner: userId },
       updateObject,
       { new: true }
     );
+    console.log(updatePage);
 
     if (!updatedPage) {
       return res.status(404).json({ error: 'Page not found or unauthorized access' });
@@ -102,10 +104,10 @@ const updatePage = async (req, res) => {
 //   // ... validation logic ...
 // }
 
-// Implement data sanitization function (replace with your sanitization logic)
-function sanitizeData(data) {
-  // ... data cleaning logic ...
-}
+// // Implement data sanitization function (replace with your sanitization logic)
+// function sanitizeData(data) {
+//   // ... data cleaning logic ...
+// }
 
 
 const deleteUserPages = async (userId, res) => {
