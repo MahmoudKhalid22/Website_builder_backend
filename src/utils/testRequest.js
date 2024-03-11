@@ -14,7 +14,7 @@ const testReqDev = async () => {
   } catch (error) {
     console.log("Error fetching data:", error);
   } finally {
-    setTimeout(testReq, 600000);
+    setTimeout(testReqDev, 600000);
   }
 };
 const eduTestReq = async () => {
@@ -23,7 +23,7 @@ const eduTestReq = async () => {
   } catch (error) {
     console.log("Error fetching data:", error);
   } finally {
-    setTimeout(testReq, 600000);
+    setTimeout(eduTestReq, 600000);
   }
 };
 
