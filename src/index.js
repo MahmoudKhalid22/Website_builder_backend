@@ -11,7 +11,7 @@ import { pageRouter } from "./router/pages.js";
 import { docs } from "./utils/swagger.js";
 import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
-import { testReq, testReqDev } from "./utils/testRequest.js";
+import { testReq, testReqDev, eduTestReq } from "./utils/testRequest.js";
 import cors from "cors";
 // import MongoDBStore from "connect-mongodb-session";
 
@@ -49,6 +49,7 @@ docs(app);
 connection();
 testReq();
 testReqDev();
+eduTestReq();
 
 app.get("/test", (req, res) => {
   res.json({ message: "test" });
