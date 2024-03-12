@@ -12,24 +12,24 @@ const pageSchema = new mongoose.Schema({
   hero: {
     title: { type: String },
     description: { type: String },
-    icon: { type: Buffer },
+    icon: { type: String },
     imgUrl: { type: String },
     buttonText: { type: String },
   },
   services: {
     blocks: [
       {
-        icon: { type: Buffer },
+        icon: { type: String },
         title: { type: String },
         description: { type: String },
       },
       {
-        icon: { type: Buffer },
+        icon: { type: String },
         title: { type: String },
         description: { type: String },
       },
       {
-        icon: { type: Buffer },
+        icon: { type: String },
         title: { type: String },
         description: { type: String },
       },
@@ -42,10 +42,10 @@ const pageSchema = new mongoose.Schema({
     buttonText: { type: String },
     icons: [
       {
-        icon: { type: Buffer },
+        icon: { type: String },
       },
       {
-        icon: { type: Buffer },
+        icon: { type: String },
       },
     ],
     imgUrl: { type: String },
@@ -54,19 +54,19 @@ const pageSchema = new mongoose.Schema({
     title: { type: String },
     cards: [
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         name: { type: String },
         location: { type: String },
         opinion: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         name: { type: String },
         location: { type: String },
         opinion: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         name: { type: String },
         location: { type: String },
         opinion: { type: String },
@@ -76,19 +76,19 @@ const pageSchema = new mongoose.Schema({
   logos: {
     companies: [
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
       },
     ],
   },
@@ -97,28 +97,28 @@ const pageSchema = new mongoose.Schema({
     description: { type: String },
     cards: [
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         title: { type: String },
         description: { type: String },
-        icon: { type: Buffer },
+        icon: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         title: { type: String },
         description: { type: String },
-        icon: { type: Buffer },
+        icon: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         title: { type: String },
         description: { type: String },
-        icon: { type: Buffer },
+        icon: { type: String },
       },
       {
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         title: { type: String },
         description: { type: String },
-        icon: { type: Buffer },
+        icon: { type: String },
       },
     ],
   },
@@ -149,22 +149,22 @@ const pageSchema = new mongoose.Schema({
       {
         title: { type: String },
         description: { type: String },
-        imgUrl: { type: Buffer },
-        icon: { type: Buffer },
+        imgUrl: { type: String },
+        icon: { type: String },
         caption: { type: String },
       },
       {
         title: { type: String },
         description: { type: String },
-        imgUrl: { type: Buffer },
-        icon: { type: Buffer },
+        imgUrl: { type: String },
+        icon: { type: String },
         caption: { type: String },
       },
       {
         title: { type: String },
         description: { type: String },
-        imgUrl: { type: Buffer },
-        icon: { type: Buffer },
+        imgUrl: { type: String },
+        icon: { type: String },
         caption: { type: String },
       },
     ],
@@ -175,22 +175,22 @@ const pageSchema = new mongoose.Schema({
       {
         name: { type: String },
         location: { type: String },
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         mediaIcons: [
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
         ],
@@ -199,22 +199,22 @@ const pageSchema = new mongoose.Schema({
       {
         name: { type: String },
         location: { type: String },
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         mediaIcons: [
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
         ],
@@ -223,22 +223,22 @@ const pageSchema = new mongoose.Schema({
       {
         name: { type: String },
         location: { type: String },
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         mediaIcons: [
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
         ],
@@ -247,22 +247,22 @@ const pageSchema = new mongoose.Schema({
       {
         name: { type: String },
         location: { type: String },
-        imgUrl: { type: Buffer },
+        imgUrl: { type: String },
         mediaIcons: [
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
           {
-            icon: { type: Buffer },
+            icon: { type: String },
             url: { type: String },
           },
         ],
@@ -281,7 +281,7 @@ const pageSchema = new mongoose.Schema({
         moneyUnit: { type: String },
         features: { type: Array },
         buttonText: { type: String },
-        icon: { type: Buffer },
+        icon: { type: String },
       },
       {
         plan: { type: String },
@@ -290,7 +290,7 @@ const pageSchema = new mongoose.Schema({
         moneyUnit: { type: String },
         features: { type: Array },
         buttonText: { type: String },
-        icon: { type: Buffer },
+        icon: { type: String },
       },
       {
         plan: { type: String },
@@ -299,7 +299,7 @@ const pageSchema = new mongoose.Schema({
         moneyUnit: { type: String },
         features: { type: Array },
         buttonText: { type: String },
-        icon: { type: Buffer },
+        icon: { type: String },
       },
     ],
   },
@@ -307,27 +307,27 @@ const pageSchema = new mongoose.Schema({
     title: { type: String },
     description: { type: String },
     buttonText: { type: String },
-    icon: { type: Buffer },
+    icon: { type: String },
   },
   footer: {
-    imgUrl: { type: Buffer },
+    imgUrl: { type: String },
     description: { type: String },
 
     mediaIcons: [
       {
-        icon: { type: Buffer },
+        icon: { type: String },
         url: { type: String },
       },
       {
-        icon: { type: Buffer },
+        icon: { type: String },
         url: { type: String },
       },
       {
-        icon: { type: Buffer },
+        icon: { type: String },
         url: { type: String },
       },
       {
-        icon: { type: Buffer },
+        icon: { type: String },
         url: { type: String },
       },
     ],

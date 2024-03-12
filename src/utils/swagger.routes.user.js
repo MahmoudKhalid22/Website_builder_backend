@@ -459,3 +459,36 @@
  *       "302":
  *         description: Redirect to Facebook's OAuth2 consent screen.
  */
+/**
+ * @swagger
+ * /user/pages/delete:
+ *   delete:
+ *     summary: Delete all user pages
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: Access token for authorization
+ *           example: "Bearer abcxyz123456"
+ *     responses:
+ *       '200':
+ *         description: User's pages deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User's pages deleted successfully
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Internal Server Error
+ */
