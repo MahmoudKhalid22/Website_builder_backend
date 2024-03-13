@@ -39,7 +39,6 @@ const createUser = async (req, res) => {
     sendVerificationEmail(req.body.email, token);
     res.status(201).json({
       message: "User created successfully. Check your email for verification.",
-      _id: user._id,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -157,10 +156,8 @@ const resetPassword = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-   
-    await User.deleteOne({ _id: req.user._id });  // this to delete the user
+    await User.deleteOne({ _id: req.user._id }); // this to delete the user
 
-    
     await deleteUserPages(req.user._id); // to user's pages
 
     res.send({ message: "User and associated pages have been deleted" });
@@ -289,7 +286,6 @@ const updateEmail = async (req, res) => {
     res.status(500).send({ err: err.message });
   }
 };
-
 
 const updateEmailAfterVerification = async (req, res) => {
   const validatedToken = req.params.token;

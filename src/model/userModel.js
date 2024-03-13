@@ -39,6 +39,11 @@ const userSchema = new Schema(
     avatar: {
       type: Buffer,
     },
+    role: {
+      type: String,
+      enum: ["user", "admin", "premium"],
+      default: "user",
+    },
     googleId: {
       type: String,
     },

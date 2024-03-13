@@ -8,11 +8,13 @@ import path, { dirname } from "path";
 import { connection } from "./db/dbConnection.js";
 import { userRouter } from "./router/users.js";
 import { pageRouter } from "./router/pages.js";
+import { messageRouter } from "./router/message.js";
 import { docs } from "./utils/swagger.js";
 import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
 import { testReq, testReqDev, eduTestReq } from "./utils/testRequest.js";
 import cors from "cors";
+
 // import MongoDBStore from "connect-mongodb-session";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -42,6 +44,7 @@ app.use(passport.session());
 
 app.use("/user", userRouter);
 app.use("/page", pageRouter);
+app.use("/message", messageRouter);
 
 const PORT = process.env.PORT;
 
