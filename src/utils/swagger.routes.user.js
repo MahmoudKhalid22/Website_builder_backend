@@ -492,3 +492,18 @@
  *             example:
  *               error: Internal Server Error
  */
+/**
+ * @swagger
+ *  /message:
+ *      get:
+ *          summary: admin get messages of users
+ *          tags:
+ *              - Admin
+ *          parameters:
+ *              - in: headers
+ *                name: Authorization
+ *                example: Bearer abc123
+ *          response:
+ *           '200':
+ *              description: the array of messages
+ */
