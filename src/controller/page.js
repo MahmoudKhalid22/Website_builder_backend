@@ -35,81 +35,73 @@ const getPages = async (req, res) => {
 
 const deletePage = async (req, res) => {
   const pageId = req.params.id;
-  const userId = req.user._id; 
+  const userId = req.user._id;
 
   try {
-    const deletedPage = await Page.findOneAndDelete({ _id: pageId, owner: userId });
+    const deletedPage = await Page.findOneAndDelete({
+      _id: pageId,
+      owner: userId,
+    });
 
     if (!deletedPage) {
-      return res.status(404).json({ error: "Page not found or you are not authorized to delete it." });
+      return res.status(404).json({
+        error: "Page not found or you are not authorized to delete it.",
+      });
     }
 
     res.json({ message: "Page deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 const updatePage = async (req, res) => {
   try {
-    // Validate pageId, userId, and request body data
-    // const { error } = validateUpdateRequest(req.body);
-    // if (error) return res.status(400).json({ error: error.message });
-
-    const { pageId } = req.params;
+    const pageId = req.params.id;
     const userId = req.user._id;
 
     const updateObject = { $set: {} };
     const fieldsToUpdate = [
-      'navBar',
-      'hero',
-      'services',
-      'feature',
-      'testimonial',
-      'logos',
-      'projects',
-      'statistic',
-      'items',
-      'team',
-      'pricing',
-      'cta',
-      'footer'
-                ];
+      "navBar",
+      "hero",
+      "services",
+      "feature",
+      "testimonial",
+      "logos",
+      "projects",
+      "statistic",
+      "items",
+      "team",
+      "pricing",
+      "cta",
+      "footer",
+    ];
 
-    fieldsToUpdate.forEach(field => {
-      if (req.body.hasOwnProperty(field)) {
-        updateObject.$set[field] = req.body[field]; // Clean user-provided data
-      }
-    });
-    console.log(updateObject);
-
-    const updatedPage = await Page.findByIdAndUpdate(
-      { _id: pageId, owner: userId },
-      updateObject,
-      { new: true }
+    const isValidUpdates = updates.every((update) =>
+      fieldsToUpdate.includes(update)
     );
-    console.log(updatePage);
 
-    if (!updatedPage) {
-      return res.status(404).json({ error: 'Page not found or unauthorized access' });
+    if (!isValidUpdates) {
+      res.status(400).send({ error: "No valid updates" });
     }
 
-    res.json({ message: 'Page updated successfully', updatedPage });
+    const page = await Page.findOne({
+      _id: pageId,
+      owner: userId,
+    });
+    if (!page) {
+      res.status(404).send({ error: "the page is not found" });
+    }
+
+    updates.forEach((update) => {
+      page[update] = req.body[update];
+    });
+    await page.save();
+    res.send({ message: "page has been updated sucessfully", page });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-// // Implement validation function (replace with your validation logic)
-// function validateUpdateRequest(requestBody) {
-//   // ... validation logic ...
-// }
-
-// // Implement data sanitization function (replace with your sanitization logic)
-// function sanitizeData(data) {
-//   // ... data cleaning logic ...
-// }
-
 
 const deleteUserPages = async (userId, res) => {
   try {
@@ -122,5 +114,4 @@ const deleteUserPages = async (userId, res) => {
   }
 };
 
-
-export { newPage, getPages, getPage , updatePage, deletePage, deleteUserPages };
+export { newPage, getPages, getPage, updatePage, deletePage, deleteUserPages };

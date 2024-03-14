@@ -30,6 +30,7 @@ const createUserValidation = Joi.object({
     }),
 
   verified: Joi.boolean().default(false),
+  role: Joi.string().valid("user", "admin", "premium").default("user"),
   //   avatar: Joi.
 }).xor("password", "googleId", "facebookId");
 

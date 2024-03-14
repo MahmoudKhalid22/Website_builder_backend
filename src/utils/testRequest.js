@@ -14,8 +14,17 @@ const testReqDev = async () => {
   } catch (error) {
     console.log("Error fetching data:", error);
   } finally {
-    setTimeout(testReq, 600000);
+    setTimeout(testReqDev, 600000);
+  }
+};
+const eduTestReq = async () => {
+  try {
+    await fetch("https://tahfeeth-system.onrender.com/user/test");
+  } catch (error) {
+    console.log("Error fetching data:", error);
+  } finally {
+    setTimeout(eduTestReq, 600000);
   }
 };
 
-export { testReq, testReqDev };
+export { testReq, testReqDev, eduTestReq };
