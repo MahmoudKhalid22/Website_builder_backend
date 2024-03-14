@@ -72,7 +72,8 @@ const updatePage = async (req, res) => {
       'team',
       'pricing',
       'cta',
-      'footer'];
+      'footer'
+                ];
 
     fieldsToUpdate.forEach(field => {
       if (req.body.hasOwnProperty(field)) {

@@ -17,6 +17,7 @@ import {
   updateEmail,
   updateEmailAfterVerification,
   resendEmail,
+  getAllUsers,
 } from "../controller/user.js";
 import { auth, authRefreshToken } from "../middleware/auth.js";
 import multer from "multer";
@@ -103,5 +104,7 @@ router.post("/update-email", auth, updateEmail);
 router.get("/verify-new-email/:token", updateEmailAfterVerification);
 
 router.post("/resend-email", resendEmail);
+
+router.get("/getAllUsers" , getAllUsers);
 
 export { router as userRouter };

@@ -329,4 +329,5 @@ export {
   updateEmail,
   updateEmailAfterVerification,
   resendEmail,
+  getAllUsers,
 };
