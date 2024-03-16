@@ -44,6 +44,10 @@ const userSchema = new Schema(
       enum: ["user", "admin", "premium"],
       default: "user",
     },
+    blocked:{ 
+    type: Boolean,
+    default: false
+    },
     googleId: {
       type: String,
     },

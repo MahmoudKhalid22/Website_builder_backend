@@ -8,6 +8,7 @@ import validator from "validator";
 import { createImageFromName } from "./image-from-name.js";
 import { sendVerificationUpdatedEmail } from "../email/verificationUpdatedEmail.js";
 import { deleteUserPages } from "./page.js";
+import { sendMessage } from "../controller/message.js";
 import {
   createUserValidation,
   loginValidation,
@@ -309,6 +310,111 @@ const updateEmailAfterVerification = async (req, res) => {
   }
 };
 
+const adminGetUsers = async (req, res) => {
+  try {
+    const user = req.user;
+      if(user.role != admin){
+        response.send('you are not allowed to');
+      }
+      const users = await User.find({}).sort({ role: premium }).toArray();
+      res.json(users);
+  } catch (error) {
+      console.error('Error fetching users:', error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
+const adminCreateUser = (req, res) => {
+try {
+  const user = req.user;
+  if(user.role != admin){
+      response.send('you are not allowed to');
+    }
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role,
+    });
+    newUser
+    .save()
+    .then((user) => res.json(user))
+    .catch((err) => res.status(500).send(err));
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).send('Internal Server Error');
+  }};
+
+  const adminGetPage = (req, res) => {
+    
+    const userId = req.params.userId;
+  
+ 
+    const user = User.find(user => user.id === userId);
+  
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+  
+    res.send(user.page);
+  };
+
+  const adminSendMsg = (req, res) => {
+
+    const isAdmin = req.user && req.user.role === 'admin';
+  
+    if (!isAdmin) {
+      return res.status(403).send("Unauthorized"); 
+    }
+    
+    const userId = req.params.userId;
+  
+  res.redirect("/message");
+
+    // Here you would implement the logic to send a message to the user with the given userId
+    // Example: Send message to user with ID userId
+    // sendMessageToUser(userId, req.body.message);
+    res.send("Message sent to user"); 
+  };
+  const adminSendAlert = (req, res) => {
+    
+    const isAdmin = req.user && req.user.role === 'admin';
+  
+    if (!isAdmin) {
+      return res.status(403).send("Unauthorized"); 
+    }
+  
+    const userId = req.params.userId;
+    // const userId = req.body.userId;
+  
+    // Here you would implement the logic to send an alert to the user with the given userId
+    // Example: Send alert to user with ID userId
+    // sendAlertToUser(userId, req.body.alertMessage);
+  
+    res.send("Alert sent to user"); // Send a response indicating that the alert was sent
+  };
+
+  const adminBlockUser = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+    
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+      
+        user.blocked = true;
+        await user.save();
+
+        res.json({ message: 'User blocked successfully' });
+    } catch (error) {
+        console.error('Error blocking user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
 export {
   createUser,
   verifyEmail,
@@ -325,5 +431,10 @@ export {
   updateEmail,
   updateEmailAfterVerification,
   resendEmail,
-  getAllUsers,
+  adminGetUsers,
+  adminCreateUser,
+  adminGetPage,
+  adminBlockUser,
+  adminSendMsg,
+  adminSendAlert,
 };

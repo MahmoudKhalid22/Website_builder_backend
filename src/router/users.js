@@ -17,7 +17,12 @@ import {
   updateEmail,
   updateEmailAfterVerification,
   resendEmail,
-  getAllUsers,
+  adminGetUsers,
+  adminCreateUser,
+  adminBlockUser,
+  adminSendMsg,
+  adminSendAlert,
+  adminGetPage,
 } from "../controller/user.js";
 import { auth, authRefreshToken } from "../middleware/auth.js";
 import multer from "multer";
@@ -105,6 +110,16 @@ router.get("/verify-new-email/:token", updateEmailAfterVerification);
 
 router.post("/resend-email", resendEmail);
 
-router.get("/getAllUsers" , getAllUsers);
+router.get("/adminGetUsers" , auth, adminGetUsers);
+
+router.post("/adminCreateUser", adminCreateUser);
+
+router.get('/:userId/page', adminGetPage );
+
+router.put('/:userId/block', adminBlockUser);
+
+router.post('/:userId/send-message', adminSendMsg);
+
+router.post('/:userId/send-alert', adminSendAlert);
 
 export { router as userRouter };
