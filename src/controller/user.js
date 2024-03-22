@@ -8,6 +8,9 @@ import validator from "validator";
 import { createImageFromName } from "./image-from-name.js";
 import { sendVerificationUpdatedEmail } from "../email/verificationUpdatedEmail.js";
 import { deleteUserPages } from "./page.js";
+import SubscriptionPlan from '../model/subPlan.js';
+import Message from "../model/message.js";
+import { Page } from "../model/pageModel.js"
 import { sendMessage } from "../controller/message.js";
 import {
   createUserValidation,
@@ -312,56 +315,56 @@ const updateEmailAfterVerification = async (req, res) => {
 
 const adminGetUsers = async (req, res) => {
   try {
-    const user = req.user;
-      if(user.role != admin){
-        response.send('you are not allowed to');
-      }
-      const users = await User.find({}).sort({ role: premium }).toArray();
-      res.json(users);
-  } catch (error) {
-      console.error('Error fetching users:', error);
-      res.status(500).send('Internal Server Error');
-  }
-};
+    const users = await User.find({}).sort({ role: { 
+      $cond: { 
+          if: { $eq: ["$role", "premium"] }, 
+          then: 0, 
+          else: { $cond: { if: { $eq: ["$role", "admin"] }, then: 1, else: 2 } } 
+      } 
+  }  });
+    res.json(users);
+} catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+}};
 
-const adminCreateUser = (req, res) => {
-try {
-  const user = req.user;
-  if(user.role != admin){
-      response.send('you are not allowed to');
-    }
+const adminCreateUser = async (req, res) => {
+
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
       role: req.body.role,
+      verified: true, 
     });
     newUser
     .save()
     .then((user) => res.json(user))
-    .catch((err) => res.status(500).send(err));
-  } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).send('Internal Server Error');
-  }};
+    .catch((err) => res.status(500).send(err))};
 
-  const adminGetPage = (req, res) => {
+  const adminGetPage = async (req, res) => {
     
-    const userId = req.params.userId;
+    const pageId = req.params.pageId;
+    const page = await Page.findById(pageId);
+    try {
+      const user = await User.findById(page.owner);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
   
- 
-    const user = User.find(user => user.id === userId);
-  
-    if (!user) {
-      return res.status(404).send("User not found");
+      if (user.role !== 'admin') {
+        return res.status(403).send("Unauthorized access");
+      }
+      res.send (page);
+    } catch (error) {
+      console.log({error: "Error fetching user"});
+      res.status(500).send("Server Error");
     }
-  
-    res.send(user.page);
   };
 
   const adminSendMsg = (req, res) => {
 
-    const isAdmin = req.user && req.user.role === 'admin';
+    const isAdmin = req.user.role === 'admin';
   
     if (!isAdmin) {
       return res.status(403).send("Unauthorized"); 
@@ -376,6 +379,7 @@ try {
     // sendMessageToUser(userId, req.body.message);
     res.send("Message sent to user"); 
   };
+
   const adminSendAlert = (req, res) => {
     
     const isAdmin = req.user && req.user.role === 'admin';
@@ -403,15 +407,84 @@ try {
             return res.status(404).json({ error: 'User not found' });
         }
 
-      
         user.blocked = true;
         await user.save();
 
         res.json({ message: 'User blocked successfully' });
-    } catch (error) {
-        console.error('Error blocking user:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    } catch (err) {
+        res.status(500).json({ err: 'Internal Server Error' });
     }
+};
+
+//SUBSCRIPTION PLAN
+
+
+// Create a new subscription plan
+const newPlan = async (req, res) => {
+    try {
+        const plan = await SubscriptionPlan.create(req.body);
+        res.status(201).json(plan);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+
+// Get all subscription plans
+const getAllPlans = async (req, res) => {
+    try {
+        const plans = await SubscriptionPlan.find();
+        res.json(plans);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Update a subscription plan
+const updatePlan = async (req, res) => {
+    try {
+        const plan = await SubscriptionPlan.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(plan);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+
+// Delete a subscription plan
+const deletePlan = async (req, res) => {
+    try {
+        await SubscriptionPlan.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Subscription plan deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
+//ADMIN GET ALL MESSAGES
+
+const getAllMessages = async (req, res) => {
+  // const user = req.User;
+  // console.log(user);
+  // if (user.role !== "admin") {
+  //   res.send("you are not allowed");
+  // }
+  const messages = await Message.find({});
+  res.json(messages);
+}
+
+const getDailymessages = async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); 
+
+  try {
+      const messages = await Message.find({
+          timestamp: { $gte: today } 
+      });
+      res.json(messages);
+  } catch (error) {
+      console.send({err: "can't get messages"});
+      res.status(500).json({ message: 'Server Error' });
+  }
 };
 
 
@@ -437,4 +510,10 @@ export {
   adminBlockUser,
   adminSendMsg,
   adminSendAlert,
+  newPlan,
+  getAllPlans,
+  updatePlan,
+  deletePlan,
+  getAllMessages,
+  getDailymessages,
 };

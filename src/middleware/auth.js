@@ -58,4 +58,15 @@ const authRefreshToken = async (req, res, next) => {
   }
 };
 
-export { auth, authRefreshToken };
+const isAdmin = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (user.role !== "admin") {
+      res.status(400).send({ error: "you're not an admin" });
+    }
+    next();
+  }catch (err) {
+      res.status(500).send({ error: "internal server error" });
+    }};
+
+export { auth, authRefreshToken, isAdmin };

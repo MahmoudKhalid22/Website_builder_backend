@@ -23,8 +23,14 @@ import {
   adminSendMsg,
   adminSendAlert,
   adminGetPage,
+  newPlan,
+  getAllPlans,
+  updatePlan,
+  deletePlan,
+  getAllMessages,
+  getDailymessages
 } from "../controller/user.js";
-import { auth, authRefreshToken } from "../middleware/auth.js";
+import { auth, authRefreshToken, isAdmin } from "../middleware/auth.js";
 import multer from "multer";
 
 router.post("/", createUser);
@@ -110,16 +116,35 @@ router.get("/verify-new-email/:token", updateEmailAfterVerification);
 
 router.post("/resend-email", resendEmail);
 
-router.get("/adminGetUsers" , auth, adminGetUsers);
+//FOR ADMIN ONLY
 
-router.post("/adminCreateUser", adminCreateUser);
+router.get("/admin-get-users" , auth, isAdmin, adminGetUsers);
 
-router.get('/:userId/page', adminGetPage );
+router.post("/admin-create-user", auth, isAdmin, adminCreateUser);
 
-router.put('/:userId/block', adminBlockUser);
+router.get('/page/:pageId', isAdmin, adminGetPage );
 
-router.post('/:userId/send-message', adminSendMsg);
+router.put('/block/:userId', auth, isAdmin, adminBlockUser);
 
-router.post('/:userId/send-alert', adminSendAlert);
+router.post('/send-message/:userId', auth, isAdmin, adminSendMsg);
+
+router.post('/send-alert/:userId', auth, isAdmin, adminSendAlert);
+
+//SUBSCIPTION PLAN
+
+router.post('/new-plan', auth, isAdmin, newPlan);
+
+router.get('/all-plans', getAllPlans);
+
+router.patch('/:id', auth, isAdmin, updatePlan);
+
+router.delete('/:id', auth, isAdmin, deletePlan);
+
+//GET ALL MESSAGES
+
+router.get('/all-users-messages', auth, isAdmin, getAllMessages);
+
+router.get('/messages/daily', auth, isAdmin, getDailymessages);
+
 
 export { router as userRouter };
