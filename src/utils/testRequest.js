@@ -5,7 +5,7 @@ const testReq = async () => {
   } catch (error) {
     console.log("Error fetching data:", error);
   } finally {
-    setTimeout(testReq, 600000);
+    setTimeout(testReq, 1500000);
   }
 };
 const testReqDev = async () => {
