@@ -59,7 +59,7 @@ const updatePage = async (req, res) => {
     const pageId = req.params.id;
     const userId = req.user._id;
 
-    const updates = Object.keys(req.body);
+    const updateObject = { $set: {} };
     const fieldsToUpdate = [
       "navBar",
       "hero",
@@ -98,7 +98,8 @@ const updatePage = async (req, res) => {
     await page.save();
     res.send({ message: "page has been updated sucessfully", page });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
