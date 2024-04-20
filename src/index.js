@@ -11,7 +11,7 @@ import { adminRouter } from "./router/admin.js";
 import { pageRouter } from "./router/pages.js";
 import { messageRouter } from "./router/message.js";
 import { docs } from "./utils/swagger.js";
-import "./controller/OAUTH.js";
+// import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
 import { testReq, testReqDev, eduTestReq } from "./utils/testRequest.js";
 import cors from "cors";
