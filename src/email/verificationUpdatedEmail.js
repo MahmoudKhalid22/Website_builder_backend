@@ -5,7 +5,7 @@ dotenv.config();
 async function sendVerificationUpdatedEmail(email, token) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-  const verificationLink = `https://zweb-nqfq.onrender.com/user/verify-new-email/${token}`;
+  const verificationLink = `https://zweb.up.railway.app/user/verify-new-email/${token}`;
 
   const msg = {
     to: email,

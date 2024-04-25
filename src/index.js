@@ -13,7 +13,6 @@ import { messageRouter } from "./router/message.js";
 import { docs } from "./utils/swagger.js";
 // import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
-import { testReq, testReqDev, eduTestReq } from "./utils/testRequest.js";
 import cors from "cors";
 import hpp from "hpp";
 // import MongoDBStore from "connect-mongodb-session";
@@ -53,9 +52,6 @@ const PORT = process.env.PORT;
 
 docs(app);
 connection();
-testReq();
-testReqDev();
-eduTestReq();
 
 app.get("/test", (req, res) => {
   res.json({ message: "test" });
