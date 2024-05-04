@@ -1,4 +1,3 @@
-import { string } from "joi";
 import mongoose from "mongoose";
 
 const pageSchema = new mongoose.Schema({
@@ -9,28 +8,28 @@ const pageSchema = new mongoose.Schema({
     links: {
       type: [
         {
-          title: string,
-          url: string,
+          title: String,
+          url: String,
         },
         {
-          title: string,
-          url: string,
+          title: String,
+          url: String,
         },
         {
-          title: string,
-          url: string,
+          title: String,
+          url: String,
         },
         {
-          title: string,
-          url: string,
+          title: String,
+          url: String,
         },
         {
-          title: string,
-          url: string,
+          title: String,
+          url: String,
         },
         {
-          title: string,
-          url: string,
+          title: String,
+          url: String,
         },
       ],
     },
