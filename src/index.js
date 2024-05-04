@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import passport from "passport";
 import session from "express-session";
-import ejs from "ejs";
 import path, { dirname } from "path";
 import { connection } from "./db/dbConnection.js";
 import { userRouter } from "./router/users.js";
