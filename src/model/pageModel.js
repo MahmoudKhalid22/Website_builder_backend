@@ -1,3 +1,4 @@
+import { string } from "joi";
 import mongoose from "mongoose";
 
 const pageSchema = new mongoose.Schema({
@@ -6,22 +7,47 @@ const pageSchema = new mongoose.Schema({
       type: String,
     },
     links: {
-      type: Array,
+      type: [
+        {
+          title: string,
+          url: string,
+        },
+        {
+          title: string,
+          url: string,
+        },
+        {
+          title: string,
+          url: string,
+        },
+        {
+          title: string,
+          url: string,
+        },
+        {
+          title: string,
+          url: string,
+        },
+        {
+          title: string,
+          url: string,
+        },
+      ],
     },
   },
   hero: {
     title: { type: String },
     description: { type: String },
+    buttonText: { type: String },
     icon: { type: String },
     imgUrl: { type: String },
-    buttonText: { type: String },
   },
   services: {
-    blocks: [
+    services: [
       {
-        icon: { type: String },
         title: { type: String },
         description: { type: String },
+        icon: { type: String },
       },
       {
         icon: { type: String },
@@ -50,9 +76,9 @@ const pageSchema = new mongoose.Schema({
     ],
     imgUrl: { type: String },
   },
-  testimonial: {
+  testimonials: {
     title: { type: String },
-    cards: [
+    testimonials: [
       {
         imgUrl: { type: String },
         name: { type: String },
@@ -77,25 +103,30 @@ const pageSchema = new mongoose.Schema({
     companies: [
       {
         imgUrl: { type: String },
+        url: { type: String },
       },
       {
         imgUrl: { type: String },
+        url: { type: String },
       },
       {
         imgUrl: { type: String },
+        url: { type: String },
       },
       {
         imgUrl: { type: String },
+        url: { type: String },
       },
       {
         imgUrl: { type: String },
+        url: { type: String },
       },
     ],
   },
   projects: {
     title: { type: String },
     description: { type: String },
-    cards: [
+    projects: [
       {
         imgUrl: { type: String },
         title: { type: String },
@@ -145,9 +176,10 @@ const pageSchema = new mongoose.Schema({
   items: {
     title: { type: String },
     description: { type: String },
-    cards: [
+    items: [
       {
         title: { type: String },
+        subtitle: { type: String },
         description: { type: String },
         imgUrl: { type: String },
         icon: { type: String },
@@ -155,6 +187,7 @@ const pageSchema = new mongoose.Schema({
       },
       {
         title: { type: String },
+        subtitle: { type: String },
         description: { type: String },
         imgUrl: { type: String },
         icon: { type: String },
@@ -162,6 +195,7 @@ const pageSchema = new mongoose.Schema({
       },
       {
         title: { type: String },
+        subtitle: { type: String },
         description: { type: String },
         imgUrl: { type: String },
         icon: { type: String },
@@ -171,12 +205,13 @@ const pageSchema = new mongoose.Schema({
   },
   team: {
     title: { type: String },
-    cards: [
+    members: [
       {
         name: { type: String },
+        email: { type: String },
         location: { type: String },
         imgUrl: { type: String },
-        mediaIcons: [
+        medias: [
           {
             icon: { type: String },
             url: { type: String },
@@ -273,9 +308,9 @@ const pageSchema = new mongoose.Schema({
   pricing: {
     title: { type: String },
     description: { type: String },
-    blocks: [
+    plans: [
       {
-        plan: { type: String },
+        title: { type: String },
         price: { type: Number },
         timeUnit: { type: String },
         moneyUnit: { type: String },
@@ -313,7 +348,7 @@ const pageSchema = new mongoose.Schema({
     imgUrl: { type: String },
     description: { type: String },
 
-    mediaIcons: [
+    medias: [
       {
         icon: { type: String },
         url: { type: String },
@@ -341,11 +376,19 @@ const pageSchema = new mongoose.Schema({
         links: { type: Array },
       },
     ],
-    contact: {
-      title: { type: String },
-      location: { type: String },
-      email: { type: String },
-      phone: { type: String },
+    contacts: [
+      {
+        value: { type: String },
+      },
+      {
+        value: { type: String },
+      },
+      {
+        value: { type: String },
+      },
+    ],
+    colors: {
+      templateColors: { type: Array },
     },
   },
   owner: {

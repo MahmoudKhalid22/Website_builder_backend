@@ -65,7 +65,7 @@ const updatePage = async (req, res) => {
       "hero",
       "services",
       "feature",
-      "testimonial",
+      "testimonials",
       "logos",
       "projects",
       "statistic",
@@ -74,6 +74,7 @@ const updatePage = async (req, res) => {
       "pricing",
       "cta",
       "footer",
+      "colors",
     ];
 
     const isValidUpdates = updates.every((update) =>
@@ -99,7 +100,7 @@ const updatePage = async (req, res) => {
     res.send({ message: "page has been updated sucessfully", page });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
