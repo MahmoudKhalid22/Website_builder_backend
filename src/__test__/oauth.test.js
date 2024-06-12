@@ -1,133 +1,232 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
-import { User } from "../model/userModel.js";
+import { User } from "../model/userModel";
 
-jest.mock("passport");
-jest.mock("../model/userModel.js");
+jest.mock("../model/userModel");
 
 describe("Passport Strategies", () => {
-    const mockGoogleProfile = {
-        id: "google123",
-        displayName: "Google User",
-        emails: [{ value: "googleuser@example.com" }],
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe("Google Strategy", () => {
+    const googleStrategyOptions = {
+      clientID: "google-client-id",
+      clientSecret: "google-client-secret",
+      callbackURL: "https://zweb.nqfq.onrender.com/user/auth/google/callback",
+      passReqToCallback: true,
     };
 
-    const mockFacebookProfile = {
-        id: "facebook123",
-        name: { givenName: "Facebook", familyName: "User" },
+    test("should create a new user if not found", async () => {
+      const profile = {
+        id: "google-user-id",
+        displayName: "John Doe",
+        emails: [{ value: "john@example.com" }],
+      };
+
+      User.findOne.mockResolvedValue(null);
+      const mockSave = jest.fn().mockResolvedValueOnce();
+      User.mockReturnValueOnce({ save: mockSave });
+
+      const done = jest.fn((error, user) => {
+        if (error) throw error;
+        return user;
+      });
+
+      const googleStrategy = new GoogleStrategy(googleStrategyOptions, async (_, __, ___, profile, done) => {
+        try {
+          const existingUser = await User.findOne({ googleId: profile.id });
+          if (existingUser) {
+            const accessToken = await existingUser.generateAuthToken();
+            const refreshToken = await existingUser.generateRefreshToken();
+            return done(null, { existingUser, accessToken, refreshToken });
+          }
+          const user = new User({
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            googleId: profile.id,
+            verified: true,
+          });
+          await user.save();
+          const accessToken = await user.generateAuthToken();
+          const refreshToken = await user.generateRefreshToken();
+          return done(null, { user, accessToken, refreshToken });
+        } catch (err) {
+          done(err);
+        }
+      });
+
+      await googleStrategy._verify(null, null, null, profile, done);
+      const result = done.mock.calls[0][1];
+
+      expect(result.user).toEqual(expect.objectContaining({ name: "John Doe", email: "john@example.com", googleId: "google-user-id", verified: true }));
+      expect(result.accessToken).toBe("access-token");
+      expect(result.refreshToken).toBe("refresh-token");
+    });
+
+    test("should return an existing user if found", async () => {
+      const profile = {
+        id: "google-user-id",
+        displayName: "John Doe",
+        emails: [{ value: "john@example.com" }],
+      };
+
+      const existingUser = {
+        _id: "user-id",
+        name: "John Doe",
+        email: "john@example.com",
+        googleId: "google-user-id",
+        verified: true,
+        generateAuthToken: jest.fn().mockResolvedValue("access-token"),
+        generateRefreshToken: jest.fn().mockResolvedValue("refresh-token"),
+      };
+      User.findOne.mockResolvedValue(existingUser);
+
+      const done = jest.fn((error, user) => {
+        if (error) throw error;
+        return user;
+      });
+
+      const googleStrategy = new GoogleStrategy(googleStrategyOptions, async (_, __, ___, profile, done) => {
+        try {
+          const existingUser = await User.findOne({ googleId: profile.id });
+          if (existingUser) {
+            const accessToken = await existingUser.generateAuthToken();
+            const refreshToken = await existingUser.generateRefreshToken();
+            return done(null, { existingUser, accessToken, refreshToken });
+          }
+          const user = new User({
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            googleId: profile.id,
+            verified: true,
+          });
+          await user.save();
+          const accessToken = await user.generateAuthToken();
+          const refreshToken = await user.generateRefreshToken();
+          return done(null, { user, accessToken, refreshToken });
+        } catch (err) {
+          done(err);
+        }
+      });
+
+      await googleStrategy._verify(null, null, null, profile, done);
+      const result = done.mock.calls[0][1];
+
+      expect(result.existingUser).toEqual(expect.objectContaining(existingUser));
+      expect(result.accessToken).toBe("access-token");
+      expect(result.refreshToken).toBe("refresh-token");
+    });
+  });
+
+  describe("Facebook Strategy", () => {
+    const facebookStrategyOptions = {
+      clientID: "facebook-client-id",
+      clientSecret: "facebook-client-secret",
+      callbackURL: "/user/facebook",
+      profileFields: ["name", "picture"],
     };
 
-    beforeAll(() => {
-        passport.use = jest.fn();
-        passport.serializeUser = jest.fn();
-        passport.deserializeUser = jest.fn();
+    test("should create a new user if not found", async () => {
+      const profile = {
+        id: "facebook-user-id",
+        name: {
+          givenName: "John",
+          familyName: "Doe",
+        },
+      };
+
+      User.findOne.mockResolvedValue(null);
+      const mockSave = jest.fn().mockResolvedValueOnce();
+      User.mockReturnValueOnce({ save: mockSave });
+
+      const done = jest.fn((error, user) => {
+        if (error) throw error;
+        return user;
+      });
+      const facebookStrategy = new FacebookStrategy(facebookStrategyOptions, async (_, __, profile, done) => {
+        try {
+          const existingUser = await User.findOne({ facebookId: profile.id });
+          if (existingUser) {
+            const accessToken = await existingUser.generateAuthToken();
+            const refreshToken = await existingUser.generateRefreshToken();
+            return done(null, { existingUser, accessToken, refreshToken });
+          }
+          const user = new User({
+            name: profile.name.givenName + " " + profile.name.familyName,
+            facebookId: profile.id,
+            verified: true,
+          });
+          await user.save();
+          const accessToken = await user.generateAuthToken();
+          const refreshToken = await user.generateRefreshToken();
+          return done(null, { user, accessToken, refreshToken });
+        } catch (err) {
+          done(err);
+        }
+      });
+
+      await facebookStrategy._verify(null, null, profile, done);
+      const result = done.mock.calls[0][1];
+
+      expect(result.user).toEqual(expect.objectContaining({ name: "John Doe", facebookId: "facebook-user-id", verified: true }));
+      expect(result.accessToken).toBe("access-token");
+      expect(result.refreshToken).toBe("refresh-token");
     });
 
-    afterEach(() => {
-        jest.clearAllMocks();
+    test("should return an existing user if found", async () => {
+      const profile = {
+        id: "facebook-user-id",
+        name: {
+          givenName: "John",
+          familyName: "Doe",
+        },
+      };
+
+      const existingUser = {
+        _id: "user-id",
+        name: "John Doe",
+        facebookId: "facebook-user-id",
+        verified: true,
+        generateAuthToken: jest.fn().mockResolvedValue("access-token"),
+        generateRefreshToken: jest.fn().mockResolvedValue("refresh-token"),
+      };
+      User.findOne.mockResolvedValue(existingUser);
+
+      const done = jest.fn((error, user) => {
+        if (error) throw error;
+        return user;
+      });
+
+      const facebookStrategy = new FacebookStrategy(facebookStrategyOptions, async (_, __, profile, done) => {
+        try {
+          const existingUser = await User.findOne({ facebookId: profile.id });
+          if (existingUser) {
+            const accessToken = await existingUser.generateAuthToken();
+            const refreshToken = await existingUser.generateRefreshToken();
+            return done(null, { existingUser, accessToken, refreshToken });
+          }
+          const user = new User({
+            name: profile.name.givenName + " " + profile.name.familyName,
+            facebookId: profile.id,
+            verified: true,
+          });
+          await user.save();
+          const accessToken = await user.generateAuthToken();
+          const refreshToken = await user.generateRefreshToken();
+          return done(null, { user, accessToken, refreshToken });
+        } catch (err) {
+          done(err);
+        }
+      });
+
+      await facebookStrategy._verify(null, null, profile, done);
+      const result = done.mock.calls[0][1];
+
+      expect(result.existingUser).toEqual(expect.objectContaining(existingUser));
+      expect(result.accessToken).toBe("access-token");
+      expect(result.refreshToken).toBe("refresh-token");
     });
-
-    describe("Google Strategy", () => {
-        it("should authenticate with Google and return user with tokens", async () => {
-            User.findOne.mockResolvedValueOnce(null);
-            const mockSave = jest.fn().mockResolvedValueOnce({
-                generateAuthToken: jest.fn().mockResolvedValueOnce("accessToken123"),
-                generateRefreshToken: jest.fn().mockResolvedValueOnce("refreshToken123"),
-            });
-            User.mockImplementation(() => ({
-                save: mockSave,
-            }));
-
-            const done = jest.fn();
-            const strategy = new GoogleStrategy(
-                {
-                    clientID: "GOOGLE_CLIENT_ID",
-                    clientSecret: "GOOGLE_CLIENT_SECRET",
-                    callbackURL: "https://zweb.nqfq.onrender.com/user/auth/google/callback",
-                    passReqToCallback: true,
-                },
-                async (request, accessToken, refreshToken, profile, done) => {
-                    try {
-                        const existingUser = await User.findOne({ googleId: profile.id });
-                        if (existingUser) {
-                            const accessToken = await user.generateAuthToken();
-                            const refreshToken = await user.generateRefreshToken();
-                            return done(null, { existingUser, accessToken, refreshToken });
-                        }
-                        const user = new User({
-                            name: profile.displayName,
-                            email: profile.emails[0].value,
-                            googleId: profile.id,
-                            verified: true,
-                        });
-                        await user.save();
-                        const accessToken = await user.generateAuthToken();
-                        const refreshToken = await user.generateRefreshToken();
-                        return done(null, { existingUser, accessToken, refreshToken });
-                    } catch (err) {
-                        done(err);
-                    }
-                }
-            );
-
-            await strategy._verify(null, null, null, mockGoogleProfile, done);
-            expect(done).toHaveBeenCalledWith(null, {
-                existingUser: undefined,
-                accessToken: "accessToken123",
-                refreshToken: "refreshToken123",
-            });
-        });
-    });
-
-    describe("Facebook Strategy", () => {
-        it("should authenticate with Facebook and return user with tokens", async () => {
-            User.findOne.mockResolvedValueOnce(null);
-            const mockSave = jest.fn().mockResolvedValueOnce({
-                generateAuthToken: jest.fn().mockResolvedValueOnce("accessToken123"),
-                generateRefreshToken: jest.fn().mockResolvedValueOnce("refreshToken123"),
-            });
-            User.mockImplementation(() => ({
-                save: mockSave,
-            }));
-
-            const cb = jest.fn();
-            const strategy = new FacebookStrategy(
-                {
-                    clientID: "FACEBOOK_CLIENT_ID",
-                    clientSecret: "FACEBOOK_CLIENT_SECRET",
-                    callbackURL: "/user/facebook",
-                    profileFields: ["name", "picture"],
-                },
-                async (accessToken, refreshToken, profile, cb) => {
-                    try {
-                        const existingUser = await User.findOne({ facebookId: profile.id });
-                        if (existingUser) {
-                            const accessToken = await user.generateAuthToken();
-                            const refreshToken = await user.generateRefreshToken();
-                            return cb(null, { existingUser, accessToken, refreshToken });
-                        }
-                        const user = new User({
-                            name: profile.name.givenName + " " + profile.name.familyName,
-                            facebookId: profile.id,
-                            verified: true,
-                        });
-                        await user.save();
-                        const accessToken = await user.generateAuthToken();
-                        const refreshToken = await user.generateRefreshToken();
-                        return cb(null, { existingUser, accessToken, refreshToken });
-                    } catch (err) {
-                        cb(err);
-                    }
-                }
-            );
-
-            await strategy._verify(null, null, null, mockFacebookProfile, cb);
-            expect(cb).toHaveBeenCalledWith(null, {
-                existingUser: undefined,
-                accessToken: "accessToken123",
-                refreshToken: "refreshToken123",
-            });
-        });
-    });
+  });
 });
