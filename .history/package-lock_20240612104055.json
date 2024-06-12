@@ -43,12 +43,6 @@
         "nodemon": "^3.0.2"
       }
     },
-    "jest": {
-      "extraneous": true,
-      "transform": {
-        "^.+\\.jsx?$": "babel-jest"
-      }
-    },
     "node_modules/@ampproject/remapping": {
       "version": "2.3.0",
       "resolved": "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.3.0.tgz",

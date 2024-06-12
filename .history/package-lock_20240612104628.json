@@ -44,7 +44,6 @@
       }
     },
     "jest": {
-      "extraneous": true,
       "transform": {
         "^.+\\.jsx?$": "babel-jest"
       }
