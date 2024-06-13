@@ -68,10 +68,14 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
-// oauth with google
+
+// oauth with google and facebook
 router.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passport.authenticate("google", { scope: ["email", "profile"] },()=>{
+    console.log(profile,accessToken,refreshToken,request);
+  })
+  
 );
 router.get(
   "/auth/facebook",
@@ -122,13 +126,23 @@ router.get("/admin-get-users" , auth, isAdmin, adminGetUsers);
 
 router.post("/admin-create-user", auth, isAdmin, adminCreateUser);
 
-router.get('/page/:pageId', isAdmin, adminGetPage );
+router.get('/page/:pageId', auth, isAdmin, adminGetPage );
 
 router.put('/block/:userId', auth, isAdmin, adminBlockUser);
 
 router.post('/send-message/:userId', auth, isAdmin, adminSendMsg);
 
 router.post('/send-alert/:userId', auth, isAdmin, adminSendAlert);
+
+
+//FOR PREMIUM USER 
+
+// router.get("",);
+
+
+
+
+
 
 //SUBSCIPTION PLAN
 
