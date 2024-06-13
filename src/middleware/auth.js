@@ -61,12 +61,13 @@ const authRefreshToken = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
   try {
     const user = req.user;
-    if (user.role !== "admin") {
-      res.status(400).send({ error: "you're not an admin" });
+    if (user.role === "admin" || user.role === "super-admin") {
+      return next();
     }
-    next();
-  }catch (err) {
-      res.status(500).send({ error: "internal server error" });
-    }};
+    res.status(400).send({ error: "you're not an admin" });
+  } catch (err) {
+    res.status(500).send({ error: "internal server error" });
+  }
+};
 
 export { auth, authRefreshToken, isAdmin };
