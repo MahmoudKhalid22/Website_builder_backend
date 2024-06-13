@@ -66,7 +66,7 @@ const isAdmin = async (req, res, next) => {
     }
     res.status(400).send({ error: "you're not an admin" });
   } catch (err) {
-    res.status(500).send({ error: "internal server error" });
+    res.status(500).send({ error: err.message });
   }
 };
 

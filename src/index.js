@@ -9,6 +9,8 @@ import { userRouter } from "./router/users.js";
 import { adminRouter } from "./router/admin.js";
 import { pageRouter } from "./router/pages.js";
 import { messageRouter } from "./router/message.js";
+import { planRouter } from "./router/plan.js";
+
 import { docs } from "./utils/swagger.js";
 // import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
@@ -45,6 +47,7 @@ app.use(passport.session());
 app.use("/user", userRouter);
 app.use("/page", pageRouter);
 app.use("/message", messageRouter);
+app.use("/plan", planRouter);
 // app.use("/admin", adminRouter , userRouter);
 
 const PORT = process.env.PORT;

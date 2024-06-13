@@ -139,7 +139,7 @@ const resetPassword = async (req, res) => {
       ...req.body,
     });
 
-    console.log(result);
+    // console.log(result);
     const decoded = await jwt.verify(result.token, process.env.PASSWORD_TOKEN);
     if (!decoded) throw new Error({ error: "Token has been expired" });
     const userId = decoded._id;
@@ -336,17 +336,25 @@ const adminGetUsers = async (req, res) => {
 };
 
 const adminCreateUser = async (req, res) => {
-  const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    role: req.body.role,
-    verified: true,
-  });
-  newUser
-    .save()
-    .then((user) => res.json(user))
-    .catch((err) => res.status(500).send(err));
+  try {
+    const userData = await createUserValidation.validateAsync(req.body);
+    if (userData.role === "super-admin") {
+      return res.status(400).send({
+        error: "you must not add super admin",
+      });
+    }
+    const newUser = new User({
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+      role: userData.role,
+      verified: true,
+    });
+    await newUser.save();
+    res.status(201).send({ message: "user has been added successfully" });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 };
 
 const adminGetPage = async (req, res) => {
@@ -421,50 +429,6 @@ const adminBlockUser = async (req, res) => {
 
 //SUBSCRIPTION PLAN
 
-// Create a new subscription plan
-const newPlan = async (req, res) => {
-  try {
-    const plan = await SubscriptionPlan.create(req.body);
-    res.status(201).json(plan);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-// Get all subscription plans
-const getAllPlans = async (req, res) => {
-  try {
-    const plans = await SubscriptionPlan.find();
-    res.json(plans);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// Update a subscription plan
-const updatePlan = async (req, res) => {
-  try {
-    const plan = await SubscriptionPlan.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(plan);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-// Delete a subscription plan
-const deletePlan = async (req, res) => {
-  try {
-    await SubscriptionPlan.findByIdAndDelete(req.params.id);
-    res.json({ message: "Subscription plan deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
 //ADMIN GET ALL MESSAGES
 
 const getAllMessages = async (req, res) => {
@@ -514,10 +478,6 @@ export {
   adminBlockUser,
   adminSendMsg,
   adminSendAlert,
-  newPlan,
-  getAllPlans,
-  updatePlan,
-  deletePlan,
   getAllMessages,
   getDailymessages,
 };

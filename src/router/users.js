@@ -23,10 +23,6 @@ import {
   adminSendMsg,
   adminSendAlert,
   adminGetPage,
-  newPlan,
-  getAllPlans,
-  updatePlan,
-  deletePlan,
   getAllMessages,
   getDailymessages,
 } from "../controller/user.js";
@@ -118,12 +114,12 @@ router.get("/", (req, res) => {
 router.post("/update-email", auth, updateEmail);
 
 router.get("/verify-new-email/:token", updateEmailAfterVerification);
-// ----------------------------
+// -----------------------
 //FOR ADMIN ONLY
 
 router.get("/admin-users", auth, isAdmin, adminGetUsers);
 
-router.post("/admin-create-user", auth, isAdmin, adminCreateUser);
+router.post("/admin-new-user", auth, isAdmin, adminCreateUser);
 
 router.get("/page/:pageId", isAdmin, adminGetPage);
 
@@ -132,16 +128,6 @@ router.put("/block/:userId", auth, isAdmin, adminBlockUser);
 router.post("/send-message/:userId", auth, isAdmin, adminSendMsg);
 
 router.post("/send-alert/:userId", auth, isAdmin, adminSendAlert);
-
-//SUBSCIPTION PLAN
-
-router.post("/new-plan", auth, isAdmin, newPlan);
-
-router.get("/all-plans", getAllPlans);
-
-router.patch("/:id", auth, isAdmin, updatePlan);
-
-router.delete("/:id", auth, isAdmin, deletePlan);
 
 //GET ALL MESSAGES
 
