@@ -20,14 +20,15 @@ const sendMessage = async (req, res) => {
 
 const getMessages = async (req, res) => {
   try {
-    const user = req.user;
-    if (user.role !== "admin") {
-      res.status(400).send({ error: "you're not an admin" });
-    }
     const messages = await getAllMessages();
-    res.send(messages);
+
+    if (!messages) {
+      return res.status(200).send({ message: "there is no messages" });
+    }
+    messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.send({ messages });
   } catch (err) {
-    res.status(500).send({ error: "internal server error" });
+    res.status(500).send({ error: err.message });
   }
 };
 

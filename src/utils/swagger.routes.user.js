@@ -487,7 +487,6 @@
  *               message: "Internal Server Error"
  */
 
-
 /**
  * @swagger
  * /user/auth/facebook:
@@ -534,12 +533,11 @@
  *               error: Internal Server Error
  */
 
-
 /**
  * @swagger
- * /admin-get-users:
+ * /admin-users:
  *   get:
- *     summary: Retrieve a list of users, sorted by their roles.
+ *     summary: Retrieve a list of users, filtered by their roles.
  *     description: This endpoint fetches all users from the database and returns them sorted by their roles. Premium users are listed first, followed by admin users, and then other users.
  *     tags:
  *       - Admin
@@ -548,9 +546,16 @@
  *         name: Authorization
  *         schema:
  *           type: string
- *         required: true
- *         description: Bearer token for accessing admin routes.
- *         example: "Bearer abcxyz123456"
+ *           required: true
+ *           description: Bearer token for accessing admin routes.
+ *           example: "Bearer abcxyz123456"
+ *       - in: query
+ *         name: role
+ *         schema:
+ *              type: string
+ *              require: true
+ *              description: filter users based on their role
+ *              example: role=user|admin|super-admin|premium
  *     responses:
  *       200:
  *         description: A list of users.
@@ -573,10 +578,87 @@
  *                     type: string
  *                     description: The email address of the user.
  *                     example: "john.doe@example.com"
+ *                   createdAt:
+ *                     type: date
+ *                     description: The date of creation email.
+ *                     example: 2024-02-23T20:06:41.437Z
+ *                   updatedAt:
+ *                     type: string
+ *                     description: The date of updating email.
+ *                     example: "2024-02-23T20:06:41.437Z"
+ *                   status:
+ *                     type: string
+ *                     description: the status of the user.
+ *                     example: 'blocked'
  *                   role:
  *                     type: string
  *                     description: The role of the user (e.g., admin, premium, user).
- *                     example: "premium"
+ *                     example: "user"
+ *       401:
+ *         description: Unauthorized access. Authentication is required.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Unauthorized"
+ *       403:
+ *         description: Forbidden. The user does not have the necessary permissions.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Forbidden"
+ *       500:
+ *         description: Internal server error. Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Internal Server Error"
+ */
+/**
+ * @swagger
+ * /message/admin:
+ *   get:
+ *     summary: Retrieve a list of messages, sorted by their dates by latest.
+ *     description: This endpoint fetches all users from the database and returns them sorted by their roles. Premium users are listed first, followed by admin users, and then other users.
+ *     tags:
+ *       - Admin
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: Bearer token for accessing admin routes.
+ *           example: "Bearer abcxyz123456"
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     description: The unique identifier of the user.
+ *                     example: "60d0fe4f5311236168a109ca"
+ *                   name:
+ *                     type: string
+ *                     description: The name of the user.
+ *                     example: "John Doe"
+ *                   email:
+ *                     type: string
+ *                     description: The email address of the user.
+ *                     example: "john.doe@example.com"
+ *                   Message:
+ *                     type: string
+ *                     description: The date of creation email.
+ *                     example: 2024-02-23T20:06:41.437Z
+ *                   createdAt:
+ *                     type: string
+ *                     description: The date of updating email.
+ *                     example: "2024-02-23T20:06:41.437Z"
  *       401:
  *         description: Unauthorized access. Authentication is required.
  *         content:
@@ -599,14 +681,20 @@
 
 /**
  * @swagger
- * /admin-create-user:
+ * /admin-new-user:
  *   post:
  *     summary: Create a new user.
  *     description: This endpoint allows an admin to create a new user. The user is automatically marked as verified upon creation.
  *     tags:
  *       - Admin
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: Bearer token for accessing admin routes.
+ *           example: "Bearer abcxyz123456"
  *     requestBody:
  *       required: true
  *       content:
@@ -636,28 +724,9 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: The unique identifier of the user.
- *                   example: "60d0fe4f5311236168a109ca"
- *                 name:
- *                   type: string
- *                   description: The name of the user.
- *                   example: "Jane Doe"
- *                 email:
- *                   type: string
- *                   description: The email address of the user.
- *                   example: "jane.doe@example.com"
- *                 role:
- *                   type: string
- *                   description: The role of the user.
- *                   example: "user"
- *                 verified:
- *                   type: boolean
- *                   description: Indicates whether the user is verified.
- *                   example: true
+ *              type: object
+ *              example:
+ *                  { message: user has been added successfully}
  *       400:
  *         description: Bad request. Invalid input.
  *         content:
@@ -825,14 +894,20 @@
 
 /**
  * @swagger
- * /new-plan:
+ * /plan/new:
  *   post:
  *     summary: Create a new subscription plan.
  *     description: This endpoint allows an admin to create a new subscription plan.
  *     tags:
  *       - Subscription Plans
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: headers
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: user's token.
+ *           example: Bearer abcxyz1223
  *     requestBody:
  *       required: true
  *       content:
@@ -902,7 +977,7 @@
 
 /**
  * @swagger
- * /all-plans:
+ * /plan:
  *   get:
  *     summary: Get all subscription plans.
  *     description: Retrieve a list of all available subscription plans.
@@ -952,10 +1027,9 @@
  *               message: "Internal Server Error"
  */
 
-
 /**
  * @swagger
- * /{id}:
+ * /plan/{id}:
  *   patch:
  *     summary: Update a subscription plan by its ID.
  *     description: This endpoint allows an admin to update details of an existing subscription plan.
@@ -964,6 +1038,13 @@
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: headers
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: user's token.
+ *           example: Bearer abcxyz1223
  *       - in: path
  *         name: id
  *         schema:
@@ -1046,7 +1127,7 @@
 
 /**
  * @swagger
- * /{id}:
+ * /plan/{id}:
  *   delete:
  *     summary: Delete a subscription plan by its ID.
  *     description: This endpoint allows an admin to delete a subscription plan by its ID.
@@ -1055,6 +1136,13 @@
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: headers
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: user's token.
+ *           example: Bearer abcxyz1223
  *       - in: path
  *         name: id
  *         schema:
@@ -1082,4 +1170,3 @@
  *             example:
  *               message: "Internal Server Error"
  */
-

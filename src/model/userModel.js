@@ -41,12 +41,13 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "premium"],
+      enum: ["user", "admin", "super-admin", "premium"],
       default: "user",
     },
-    blocked:{ 
-    type: Boolean,
-    default: false
+    status: {
+      type: String,
+      enum: ["blocked", "active"],
+      default: "active",
     },
     googleId: {
       type: String,
