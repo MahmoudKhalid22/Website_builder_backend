@@ -13,10 +13,14 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://zweb.nqfq.onrender.com/user/auth/google/callback",
+      callbackURL: "https://zweb.nqfq.onrender.com/user/auth/google/callback",   
+      // callbackURL:"https://localhost:5000/",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
+      console.log(profile,accessToken,refreshToken,request);
+
+      
       try {
         const existingUser = await User.findOne({ googleId: profile.id });
         if (existingUser) {
@@ -51,12 +55,13 @@ passport.use(
       profileFields: ["name", "picture"],
     },
     async function (accessToken, refreshToken, profile, cb) {
-      console.log(profile);
+      console.log(accessToken,refreshToken);
       try {
         const existingUser = await User.findOne({ facebookId: profile.id });
         if (existingUser) {
           const accessToken = await user.generateAuthToken();
           const refreshToken = await user.generateRefreshToken();
+          console.log(accessToken,refreshToken);
           return cb(null,{ existingUser, accessToken, refreshToken});
         }
         const user = new User({
@@ -71,6 +76,7 @@ passport.use(
       } catch (err) {
         cb(err);
       }
+      console.log(accessToken,refreshToken);
     }
   )
 );
