@@ -104,13 +104,12 @@ const updatePage = async (req, res) => {
   }
 };
 
-const deleteUserPages = async (userId, res) => {
+const deleteUserPages = async (req, res) => {
   try {
-    await Page.deleteMany({ owner: userId });
-    console.log("User's pages deleted successfully");
-    res.json({ message: "User's pages deleted successfully" });
+    const userId = req.params.userId;
+    await Page.deleteMany({ owner: userId }, { new: true });
+    res.json({ message: "User's pages have been deleted successfully" });
   } catch (err) {
-    console.error("Error deleting user's pages:", err.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

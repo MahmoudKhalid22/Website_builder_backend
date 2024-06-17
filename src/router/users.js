@@ -23,11 +23,15 @@ import {
   adminSendMsg,
   adminSendAlert,
   adminGetPage,
-  getAllMessages,
-  getDailymessages,
+  adminUnBlockUser,
+  adminGetPages,
+  deleteAdmin,
+  adminDeleteUserPage,
+  adminDeleteUser,
 } from "../controller/user.js";
 import { auth, authRefreshToken, isAdmin } from "../middleware/auth.js";
 import multer from "multer";
+import { deleteUserPages } from "../controller/page.js";
 
 // GENERAL USER
 router.post("/", createUser);
@@ -121,18 +125,24 @@ router.get("/admin-users", auth, isAdmin, adminGetUsers);
 
 router.post("/admin-new-user", auth, isAdmin, adminCreateUser);
 
-router.get("/page/:pageId", isAdmin, adminGetPage);
-
 router.put("/block/:userId", auth, isAdmin, adminBlockUser);
+
+router.put("/unblock/:userId", auth, isAdmin, adminUnBlockUser);
+
+router.get("/:userId/pages", auth, isAdmin, adminGetPages);
+
+router.get("/:userId/:pageId", auth, isAdmin, adminGetPage);
+
+router.delete("/:userId", auth, isAdmin, deleteUserPages);
+
+router.delete("/:userId/:pageId", auth, isAdmin, adminDeleteUserPage);
+
+router.delete("/admin/:userId", auth, isAdmin, adminDeleteUser);
 
 router.post("/send-message/:userId", auth, isAdmin, adminSendMsg);
 
 router.post("/send-alert/:userId", auth, isAdmin, adminSendAlert);
 
-//GET ALL MESSAGES
-
-router.get("/all-users-messages", auth, isAdmin, getAllMessages);
-
-router.get("/messages/daily", auth, isAdmin, getDailymessages);
+router.delete("/superadmin/:adminId", auth, deleteAdmin);
 
 export { router as userRouter };
