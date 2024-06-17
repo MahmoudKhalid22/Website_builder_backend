@@ -359,20 +359,28 @@ const adminCreateUser = async (req, res) => {
 
 const adminGetPage = async (req, res) => {
   const pageId = req.params.pageId;
-  const page = await Page.findById(pageId);
+  const userId = req.params.userId;
+  const page = await Page.findOne({ owner: userId, _id: pageId });
   try {
-    const user = await User.findById(page.owner);
-    if (!user) {
-      return res.status(404).send("User not found");
+    if (!page) {
+      return res.status(404).send({ message: "this user has no pages" });
     }
-
-    if (user.role !== "admin") {
-      return res.status(403).send("Unauthorized access");
-    }
-    res.send(page);
+    res.send({ page });
   } catch (error) {
-    console.log({ error: "Error fetching user" });
-    res.status(500).send("Server Error");
+    res.status(500).send({ error: "internal server error" });
+  }
+};
+const adminGetPages = async (req, res) => {
+  const pageId = req.params.pageId;
+  const userId = req.params.userId;
+  const page = await Page.findOne({ owner: userId, _id: pageId });
+  try {
+    if (!page) {
+      return res.status(404).send({ message: "this user has no pages" });
+    }
+    res.send({ page });
+  } catch (error) {
+    res.status(500).send({ error: "internal server error" });
   }
 };
 
@@ -411,19 +419,88 @@ const adminSendAlert = (req, res) => {
 };
 
 const adminBlockUser = async (req, res) => {
-  const userId = req.params.userId;
   try {
+    const userId = req.params.userId;
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "user is not found" });
     }
 
-    user.blocked = true;
+    user.status = "blocked";
     await user.save();
 
-    res.json({ message: "User blocked successfully" });
+    res.json({ message: "User has been blocked successfully" });
   } catch (err) {
-    res.status(500).json({ err: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const adminUnBlockUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "user is not found" });
+    }
+
+    user.status = "active";
+    await user.save();
+
+    res.json({ message: "User has been unblocked successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const deleteAdmin = async (req, res) => {
+  try {
+    const adminId = req.params.adminId;
+    const isSuperAdmin = req.user.role === "super-admin";
+    if (!isSuperAdmin) {
+      return res.status(400).send({ error: "you're not the super admin" });
+    }
+    const isAdmin = await User.findOne({ _id: adminId, role: "admin" });
+    if (!isAdmin) {
+      return res.status(400).send({ error: "this is not an admin" });
+    }
+    await User.deleteOne({ _id: adminId }, { new: true });
+    res.send({ message: "admin has been deleted!" });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+};
+
+const adminDeleteUserPage = async (req, res) => {
+  try {
+    const pageId = req.params.pageId;
+    const userId = req.params.userId;
+    const page = await Page.findByIdAndDelete(
+      { _id: pageId, owner: userId },
+      { new: true }
+    );
+
+    if (!page) {
+      return res.status(404).send({ error: "the page is not found" });
+    }
+
+    res.status(200).send({ message: "page has been deleted successfully" });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+};
+
+const adminDeleteUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findByIdAndDelete({ _id: userId }, { new: true });
+
+    if (!user) {
+      return res.status(404).send({ error: "user is not found" });
+    }
+
+    res.send({ message: "user has been deleted" });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
   }
 };
 
@@ -480,4 +557,9 @@ export {
   adminSendAlert,
   getAllMessages,
   getDailymessages,
+  adminUnBlockUser,
+  adminGetPages,
+  deleteAdmin,
+  adminDeleteUserPage,
+  adminDeleteUser,
 };
