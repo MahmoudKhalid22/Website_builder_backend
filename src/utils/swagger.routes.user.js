@@ -442,7 +442,7 @@
  *     summary: Google OAuth callback.
  *     description: This endpoint is called by Google after the user has authenticated. It handles the result and redirects accordingly.
  *     tags:
- *       - Authentication
+ *       - User
  *     parameters:
  *       - in: query
  *         name: code
@@ -492,7 +492,7 @@
  * /user/auth/facebook:
  *   get:
  *     tags:
- *       - OAuth2
+ *       - User
  *     summary: Authorize
  *     description: Redirects the user to Facebook's OAuth2 consent screen to authorize the application.
  *     responses:
