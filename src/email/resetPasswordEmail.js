@@ -5,7 +5,7 @@ dotenv.config();
 async function sendResetPassworEmail(email, token) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-  const resetPasswordLink = `https://zweb.up.railway.app//user/reset-password/${token}`;
+  const resetPasswordLink = `https://websitebuilderbackend-production-716e.up.railway.app/user/reset-password/${token}`;
 
   const msg = {
     to: email,
