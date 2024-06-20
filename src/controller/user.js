@@ -190,14 +190,15 @@ const uploadUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const name = await nameValidation.validateAsync(req.body);
-    const user = await User.findByIdAndUpdate(
-      { _id: result },
-      { name: name.name },
+    const result = await nameValidation.validateAsync(req.body);
+    const user = req.user;
+    const newName = await User.findByIdAndUpdate(
+      { _id: user._id },
+      { name: result.name },
       { new: true }
     );
 
-    res.send(user);
+    res.send({ newName: newName.name });
   } catch (err) {
     res.status(500).json({
       error: err.message,
