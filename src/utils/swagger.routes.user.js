@@ -348,13 +348,22 @@
  *             example: "Bearer abcxyz123456"
  *     tags:
  *       - User
+ *     requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          example:
+ *                              name: new username
  *     responses:
  *       200:
- *         description: Successfully updated user
+ *         description: Successfully updated username
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Me/properties/user'
+ *               schema:
+ *                    type: object
+ *                    example:
+ *                        {newName: new username}
  *       500:
  *         description: Internal server error
  *         content:
