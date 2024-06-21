@@ -132,26 +132,7 @@
  *                          type: string
  *                          example: the user has been deleted
  */
-/**
- * @swagger
- * /upload:
- *  post:
- *      tags:
- *              - User
- *      summary: upload the picture for the user
- *      descripition: if the user wants to upload a picture for the account
- *      parameters:
- *                - in: header
- *                  name: Authorization
- *                  schema:
- *                   type: string
- *                  required: true
- *                  description: Bearer token for user authentication
- *                  example: "Bearer abcxyz123456"
- *      requestFile:
- *
- *
- */
+
 /**
  * @swagger
  *  /user/me:
@@ -317,22 +298,74 @@
  */
 /**
  * @swagger
- * /upload:
+ * /user/upload:
  *  post:
- *      summary: upload the picture for the user
- *      descripition: if the user wants to upload a picture for the account
+ *      summary: Upload the picture for the user
+ *      description: If the user wants to upload a picture for the account
+ *      tags:
+ *          - User
  *      parameters:
- *                - in: header
- *                  name: Authorization
+ *          - in: header
+ *            name: Authorization
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: Bearer token for user authentication
+ *            example: "Bearer abcxyz123456"
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              multipart/form-data:
  *                  schema:
- *                   type: string
- *                  required: true
- *                  description: Bearer token for user authentication
- *                  example: "Bearer abcxyz123456"
- *      requestFile:
- *
- *
+ *                      type: object
+ *                      properties:
+ *                          file:
+ *                              type: string
+ *                              format: binary
+ *                              description: The file to upload
+ *      responses:
+ *          200:
+ *              description: Successfully uploaded the picture
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              url:
+ *                                  type: string
+ *                                  example: "url for displaying image"
+ *          400:
+ *              description: Bad request, invalid input
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  example: "Invalid file format"
+ *          401:
+ *              description: Unauthorized, invalid or missing token
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  example: "Unauthorized"
+ *          500:
+ *              description: Internal server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  example: "Something went wrong"
  */
+
 /**
  * @swagger
  * /user/update-username:

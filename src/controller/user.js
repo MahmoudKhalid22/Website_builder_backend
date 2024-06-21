@@ -178,11 +178,22 @@ const uploadUser = async (req, res) => {
       .toBuffer();
 
     const base64Data = buffer.toString("base64");
-    imgsrc = `data:${req.file.mimetype};base64,${base64Data}`;
-
+    const imgsrc = `data:${req.file.mimetype};base64,${base64Data}`;
     req.user.avatar = imgsrc;
     await req.user.save();
     res.send({ avatar: req.user.avatar });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+};
+
+const getAvatar = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).send({ error: "user is not found" });
+    }
+    res.send({ avatar: user.avatar });
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
@@ -563,4 +574,5 @@ export {
   deleteAdmin,
   adminDeleteUserPage,
   adminDeleteUser,
+  getAvatar,
 };
