@@ -37,7 +37,7 @@ const userSchema = new Schema(
       default: false,
     },
     avatar: {
-      type: Buffer,
+      type: String,
     },
     role: {
       type: String,
@@ -84,6 +84,7 @@ userSchema.methods.toJSON = function () {
   delete userObject.tokens;
   delete userObject.verified;
   delete userObject.__v;
+  delete userObject.avatar;
 
   return userObject;
 };

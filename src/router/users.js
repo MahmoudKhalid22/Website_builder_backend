@@ -12,6 +12,7 @@ import {
   updateUser,
   refreshToken,
   getUser,
+  getAvatar,
   logoutUser,
   updatePassword,
   updateEmail,
@@ -65,6 +66,8 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
+
+router.get("/avatar", auth, getAvatar);
 
 router.get("/me", auth, getUser);
 
