@@ -73,10 +73,10 @@ const verifyEmail = async (req, res) => {
 };
 
 const resendEmail = async (req, res) => {
-  const { id } = req.body;
+  const { email } = req.body;
   try {
-    const user = await User.findOne({ _id: id });
-    const email = user.email;
+    const user = await User.findOne({ email: email });
+    if (!user) return res.send({ error: "this user isn't found" });
     const token = jwt.sign(
       { _id: user._id.toString() },
       process.env.JWT_SECRET,
@@ -86,7 +86,6 @@ const resendEmail = async (req, res) => {
     sendVerificationEmail(email, token);
     res.status(201).json({
       message: "new email has been sent",
-      _id: user._id,
     });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -160,13 +159,10 @@ const resetPassword = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    await User.deleteOne({ _id: req.user._id }); // this to delete the user
-
-    await deleteUserPages(req.user._id); // to user's pages
-
+    await User.deleteOne({ _id: req.user._id });
     res.send({ message: "User and associated pages have been deleted" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -275,60 +271,60 @@ const updatePassword = async (req, res) => {
   }
 };
 
-let newEmail = "";
-const updateEmail = async (req, res) => {
-  try {
-    const email = await emailValidation.validateAsync(req.body);
+// let newEmail = "";
+// const updateEmail = async (req, res) => {
+//   try {
+//     const email = await emailValidation.validateAsync(req.body);
 
-    newEmail = email.newEmail;
+//     newEmail = email.newEmail;
 
-    const isValidEmail = validator.isEmail(newEmail);
+//     const isValidEmail = validator.isEmail(newEmail);
 
-    if (!isValidEmail)
-      return res
-        .status(400)
-        .send({ error: "the email provided is not correct" });
+//     if (!isValidEmail)
+//       return res
+//         .status(400)
+//         .send({ error: "the email provided is not correct" });
 
-    const isFound = await User.findOne({ email: newEmail });
-    if (isFound)
-      return res.send({ error: "this email is found, try another email" });
-    const user = req.user;
+//     const isFound = await User.findOne({ email: newEmail });
+//     if (isFound)
+//       return res.send({ error: "this email is found, try another email" });
+//     const user = req.user;
 
-    const token = await jwt.sign(
-      { id: user._id.toString() },
-      process.env.EMAIL_VERIFICATION_TOKEN,
-      { expiresIn: "10m" }
-    );
-    sendVerificationUpdatedEmail(newEmail, token);
-    res.send({
-      message: "email has been sent to you, please verify your new email",
-    });
-  } catch (err) {
-    res.status(500).send({ err: err.message });
-  }
-};
+//     const token = await jwt.sign(
+//       { id: user._id.toString() },
+//       process.env.EMAIL_VERIFICATION_TOKEN,
+//       { expiresIn: "10m" }
+//     );
+//     sendVerificationUpdatedEmail(newEmail, token);
+//     res.send({
+//       message: "email has been sent to you, please verify your new email",
+//     });
+//   } catch (err) {
+//     res.status(500).send({ err: err.message });
+//   }
+// };
 
-const updateEmailAfterVerification = async (req, res) => {
-  const validatedToken = req.params.token;
-  const token = tokenValidation.validateAsync({ token: validatedToken });
-  try {
-    const decoded = await jwt.verify(
-      token,
-      process.env.EMAIL_VERIFICATION_TOKEN
-    );
-    if (!decoded) {
-      return res.status(400).send({ error: "token has been expired" });
-    }
-    await User.updateOne(
-      { id: decoded._id },
-      { email: updateEmail },
-      { new: true }
-    );
-    res.send({ message: "Email has been updated" });
-  } catch (err) {
-    res.status(500).send({ err: err.message });
-  }
-};
+// const updateEmailAfterVerification = async (req, res) => {
+//   const validatedToken = req.params.token;
+//   const token = tokenValidation.validateAsync({ token: validatedToken });
+//   try {
+//     const decoded = await jwt.verify(
+//       token,
+//       process.env.EMAIL_VERIFICATION_TOKEN
+//     );
+//     if (!decoded) {
+//       return res.status(400).send({ error: "token has been expired" });
+//     }
+//     await User.updateOne(
+//       { id: decoded._id },
+//       { email: updateEmail },
+//       { new: true }
+//     );
+//     res.send({ message: "Email has been updated" });
+//   } catch (err) {
+//     res.status(500).send({ err: err.message });
+//   }
+// };
 
 const adminGetUsers = async (req, res) => {
   try {
@@ -558,8 +554,8 @@ export {
   getUser,
   logoutUser,
   updatePassword,
-  updateEmail,
-  updateEmailAfterVerification,
+  // updateEmail,
+  // updateEmailAfterVerification,
   resendEmail,
   adminGetUsers,
   adminCreateUser,

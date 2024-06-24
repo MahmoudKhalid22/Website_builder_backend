@@ -132,7 +132,101 @@
  *                          type: string
  *                          example: the user has been deleted
  */
+/**
+ * @swagger
+ * /user/upload:
+ *  post:
+ *      summary: Upload the picture for the user
+ *      description: If the user wants to upload a picture for the account
+ *      tags:
+ *          - User
+ *      parameters:
+ *          - in: header
+ *            name: Authorization
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: Bearer token for user authentication
+ *            example: "Bearer abcxyz123456"
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              multipart/form-data:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          file:
+ *                              type: string
+ *                              format: binary
+ *                              description: The file to upload
+ *      responses:
+ *          200:
+ *              description: Successfully uploaded the picture
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              url:
+ *                                  type: string
+ *                                  example: "url for displaying image"
+ *          400:
+ *              description: Bad request, invalid input
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  example: "Invalid file format"
+ *          401:
+ *              description: Unauthorized, invalid or missing token
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  example: "Unauthorized"
+ *          500:
+ *              description: Internal server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              error:
+ *                                  type: string
+ *                                  example: "Something went wrong"
+ */
 
+/**
+ * @swagger
+ *  /user/avatar:
+ *      get:
+ *          tags:
+ *              - User
+ *          summary: user gets his avatar
+ *          description: if the user wants to get his account's avatar so from this endpoint
+ *          parameters:
+ *                - in: header
+ *                  name: Authorization
+ *                  schema:
+ *                   type: string
+ *                  required: true
+ *                  description: Bearer token for user authentication
+ *                  example: "Bearer abcxyz123456"
+ *          responses:
+ *              "200":
+ *                 description: response of deleting user
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          example: {avatar: url for the image}
+ */
 /**
  * @swagger
  *  /user/me:
@@ -217,62 +311,7 @@
  *                          example:
  *                              {message: password has been updated}
  */
-/**
- * @swagger
- *  /user/update-email:
- *      post:
- *          tags:
- *              - User
- *          summary: update the user email
- *          description: if the user wants to update his account email
- *          parameters:
- *                - in: header
- *                  name: Authorization
- *                  schema:
- *                   type: string
- *                  required: true
- *                  description: Bearer token for user authentication
- *                  example: "Bearer abcxyz123456"
- *          requestBody:
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          example:
- *                              email: user@example.com
- *
- *          responses:
- *              "200":
- *                 description: response of deleting user
- *                 content:
- *                      application/json:
- *                         schema:
- *                          type: object
- *                          example:
- *                              {message: email has been sent to you, please verify your new email }
- */
-/**
- * @swagger
- * /user/verify-new-email/{token}:
- *  get:
- *      tags:
- *              - User
- *      summary: verify new email of the user
- *      description: we want to check if the user's email is true or not
- *      responses:
- *          "200":
- *              description: response of the verified email
- *              content:
- *                  application/json:
- *                      type: object
- *                      example: {message: email has been updated}
- *          "400":
- *              description: if the token expired or the token isn't true
- *              content:
- *                  application/json:
- *                      type: object
- *                      example: {error: the token has been expired}
- */
+
 /**
  * @swagger
  *  /user/delete:
@@ -298,76 +337,6 @@
  */
 /**
  * @swagger
- * /user/upload:
- *  post:
- *      summary: Upload the picture for the user
- *      description: If the user wants to upload a picture for the account
- *      tags:
- *          - User
- *      parameters:
- *          - in: header
- *            name: Authorization
- *            schema:
- *              type: string
- *            required: true
- *            description: Bearer token for user authentication
- *            example: "Bearer abcxyz123456"
- *      requestBody:
- *          required: true
- *          content:
- *              multipart/form-data:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          file:
- *                              type: string
- *                              format: binary
- *                              description: The file to upload
- *      responses:
- *          200:
- *              description: Successfully uploaded the picture
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              url:
- *                                  type: string
- *                                  example: "url for displaying image"
- *          400:
- *              description: Bad request, invalid input
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              error:
- *                                  type: string
- *                                  example: "Invalid file format"
- *          401:
- *              description: Unauthorized, invalid or missing token
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              error:
- *                                  type: string
- *                                  example: "Unauthorized"
- *          500:
- *              description: Internal server error
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              error:
- *                                  type: string
- *                                  example: "Something went wrong"
- */
-
-/**
- * @swagger
  * /user/update-username:
  *   put:
  *     summary: Update a user
@@ -381,22 +350,13 @@
  *             example: "Bearer abcxyz123456"
  *     tags:
  *       - User
- *     requestBody:
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          example:
- *                              name: new username
  *     responses:
  *       200:
- *         description: Successfully updated username
+ *         description: Successfully updated user
  *         content:
  *           application/json:
- *               schema:
- *                    type: object
- *                    example:
- *                        {newName: new username}
+ *             schema:
+ *               $ref: '#/components/schemas/Me/properties/user'
  *       500:
  *         description: Internal server error
  *         content:
@@ -448,7 +408,7 @@
  */
 /**
  * @swagger
- * /resend-email-verification:
+ * /user/resend-email-verification:
  *   post:
  *     tags:
  *       - User
@@ -475,6 +435,31 @@
  *         description: User not found. The provided ID does not correspond to any user.
  *       '500':
  *         description: Internal server error. Failed to resend email verification.
+ */
+
+/**
+ * @swagger
+ * /user/auth/google:
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Authorize
+ *     description: Redirects the user to Google's OAuth2 consent screen to authorize the application.
+ *     responses:
+ *       "302":
+ *         description: Redirect to Google's OAuth2 consent screen.
+ */
+/**
+ * @swagger
+ * /user/auth/facebook:
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Authorize
+ *     description: Redirects the user to Facebook's OAuth2 consent screen to authorize the application.
+ *     responses:
+ *       "302":
+ *         description: Redirect to Facebook's OAuth2 consent screen.
  */
 
 /**
@@ -540,993 +525,4 @@
  *     responses:
  *       "302":
  *         description: Redirect to Facebook's OAuth2 consent screen.
- */
-/**
- * @swagger
- * /user/pages/delete:
- *   delete:
- *     summary: Delete all user pages
- *     tags:
- *       - User
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Access token for authorization
- *           example: "Bearer abcxyz123456"
- *     responses:
- *       '200':
- *         description: User's pages deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: User's pages deleted successfully
- *       '500':
- *         description: Internal server error
- *         content:
- *           application/json:
- *             example:
- *               error: Internal Server Error
- */
-
-/**
- * @swagger
- * /user/admin-users:
- *   get:
- *     summary: Retrieve a list of users, filtered by their roles.
- *     description: This endpoint fetches all users from the database and returns them sorted by their roles. Premium users are listed first, followed by admin users, and then other users.
- *     tags:
- *       - Admin
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: query
- *         name: role
- *         schema:
- *              type: string
- *              require: true
- *              description: filter users based on their role
- *              example: role=user|admin|super-admin|premium
- *     responses:
- *       200:
- *         description: A list of users.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                     description: The unique identifier of the user.
- *                     example: "60d0fe4f5311236168a109ca"
- *                   name:
- *                     type: string
- *                     description: The name of the user.
- *                     example: "John Doe"
- *                   email:
- *                     type: string
- *                     description: The email address of the user.
- *                     example: "john.doe@example.com"
- *                   createdAt:
- *                     type: date
- *                     description: The date of creation email.
- *                     example: 2024-02-23T20:06:41.437Z
- *                   updatedAt:
- *                     type: string
- *                     description: The date of updating email.
- *                     example: "2024-02-23T20:06:41.437Z"
- *                   status:
- *                     type: string
- *                     description: the status of the user.
- *                     example: 'blocked'
- *                   role:
- *                     type: string
- *                     description: The role of the user (e.g., admin, premium, user).
- *                     example: "user"
- *       401:
- *         description: Unauthorized access. Authentication is required.
- *         content:
- *           application/json:
- *             example:
- *               error: "Unauthorized"
- *       403:
- *         description: Forbidden. The user does not have the necessary permissions.
- *         content:
- *           application/json:
- *             example:
- *               error: "Forbidden"
- *       500:
- *         description: Internal server error. Something went wrong on the server.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-/**
- * @swagger
- * /user/superadmin/{adminId}:
- *   delete:
- *     summary: superadmin can delete an admin.
- *     description: superadmin can delete a specific admin by his/her id.
- *     tags:
- *       - Super Admin
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: adminId
- *         schema:
- *              type: string
- *              require: true
- *              description: the id of and admin should be deleted
- *              example: abcxyz123
- *     responses:
- *       200:
- *         description: A list of users.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               example: {message: this admin has been deleted}
- *       401:
- *         description: Unauthorized access. Authentication is required.
- *         content:
- *           application/json:
- *             example:
- *               error: "Unauthorized"
- *       403:
- *         description: Forbidden. The user does not have the necessary permissions.
- *         content:
- *           application/json:
- *             example:
- *               error: "Forbidden"
- *       500:
- *         description: Internal server error. Something went wrong on the server.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /message/admin:
- *   get:
- *     summary: Retrieve a list of messages, sorted by their dates by latest.
- *     description: This endpoint fetches all users from the database and returns them sorted by their roles. Premium users are listed first, followed by admin users, and then other users.
- *     tags:
- *       - Admin
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *     responses:
- *       200:
- *         description: A list of users.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                     description: The unique identifier of the user.
- *                     example: "60d0fe4f5311236168a109ca"
- *                   name:
- *                     type: string
- *                     description: The name of the user.
- *                     example: "John Doe"
- *                   email:
- *                     type: string
- *                     description: The email address of the user.
- *                     example: "john.doe@example.com"
- *                   Message:
- *                     type: string
- *                     description: The date of creation email.
- *                     example: 2024-02-23T20:06:41.437Z
- *                   createdAt:
- *                     type: string
- *                     description: The date of updating email.
- *                     example: "2024-02-23T20:06:41.437Z"
- *       401:
- *         description: Unauthorized access. Authentication is required.
- *         content:
- *           application/json:
- *             example:
- *               error: "Unauthorized"
- *       403:
- *         description: Forbidden. The user does not have the necessary permissions.
- *         content:
- *           application/json:
- *             example:
- *               error: "Forbidden"
- *       500:
- *         description: Internal server error. Something went wrong on the server.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /user/admin-new-user:
- *   post:
- *     summary: Create a new user.
- *     description: This endpoint allows an admin to create a new user. The user is automatically marked as verified upon creation.
- *     tags:
- *       - Admin
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The name of the user.
- *                 example: "Jane Doe"
- *               email:
- *                 type: string
- *                 description: The email of the user.
- *                 example: "jane.doe@example.com"
- *               password:
- *                 type: string
- *                 description: The password for the user.
- *                 example: "password123"
- *               role:
- *                 type: string
- *                 description: The role assigned to the user (e.g., user, admin, premium).
- *                 example: "user"
- *     responses:
- *       201:
- *         description: User successfully created.
- *         content:
- *           application/json:
- *             schema:
- *              type: object
- *              example:
- *                  { message: user has been added successfully}
- *       400:
- *         description: Bad request. Invalid input.
- *         content:
- *           application/json:
- *             example:
- *               error: "Invalid user data"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /user/{userId}/pages:
- *   get:
- *     summary: Retrieve all pages for the uesr.
- *     description: This endpoint allows an admin to retrieve a page's details by its ID. The page can only be accessed if the owner is an admin.
- *     tags:
- *       - Admin
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *           required: true
- *           description: The unique identifier of the page.
- *           example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: Successfully retrieved the page.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: The unique identifier of the page.
- *                   example: "60d0fe4f5311236168a109cb"
- *                 title:
- *                   type: string
- *                   description: The title of the page.
- *                   example: "Page Title"
- *                 content:
- *                   type: string
- *                   description: The content of the page.
- *                   example: "This is the content of the page."
- *                 owner:
- *                   type: string
- *                   description: The ID of the user who owns the page.
- *                   example: "60d0fe4f5311236168a109ca"
- *       404:
- *         description: User or page not found.
- *         content:
- *           application/json:
- *             example:
- *               error: "User not found"
- *       403:
- *         description: Unauthorized access. The user is not an admin.
- *         content:
- *           application/json:
- *             example:
- *               error: "Unauthorized access"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Server Error"
- */
-/**
- * @swagger
- * /user/{userId}/{pageId}:
- *   get:
- *     summary: Retrieve a specific page for a specific user by its ID.
- *     description: This endpoint allows an admin to retrieve a page's details by its ID. The page can only be accessed if the owner is an admin.
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: pageId
- *         schema:
- *           type: string
- *           required: true
- *           description: The unique identifier of the page.
- *           example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: Successfully retrieved the page.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: The unique identifier of the page.
- *                   example: "60d0fe4f5311236168a109cb"
- *                 title:
- *                   type: string
- *                   description: The title of the page.
- *                   example: "Page Title"
- *                 content:
- *                   type: string
- *                   description: The content of the page.
- *                   example: "This is the content of the page."
- *                 owner:
- *                   type: string
- *                   description: The ID of the user who owns the page.
- *                   example: "60d0fe4f5311236168a109ca"
- *       404:
- *         description: User or page not found.
- *         content:
- *           application/json:
- *             example:
- *               error: "User not found"
- *       403:
- *         description: Unauthorized access. The user is not an admin.
- *         content:
- *           application/json:
- *             example:
- *               error: "Unauthorized access"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Server Error"
- */
-
-/**
- * @swagger
- * /user/block/{userId}:
- *   put:
- *     summary: Block a user by their ID.
- *     description: This endpoint allows an admin to block a user by setting their `blocked` status to true.
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: The unique identifier of the user to be blocked.
- *         example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: User blocked successfully.
- *         content:
- *           application/json:
- *             example:
- *               message: "User blocked successfully"
- *       404:
- *         description: User not found.
- *         content:
- *           application/json:
- *             example:
- *               error: "User not found"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-/**
- * @swagger
- * /user/unblock/{userId}:
- *   put:
- *     summary: Block a user by their ID.
- *     description: This endpoint allows an admin to block a user by setting their `blocked` status to true.
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *           required: true
- *           description: The unique identifier of the user to be blocked.
- *           example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: User has been unblocked successfully.
- *         content:
- *           application/json:
- *             example:
- *               message: "User blocked successfully"
- *       404:
- *         description: User not found.
- *         content:
- *           application/json:
- *             example:
- *               error: "User not found"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-/**
- * @swagger
- * /user/{userId}/pages:
- *   delete:
- *     summary: delete all pages of the user.
- *     description: take the id of the user and delete all his pages.
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *           required: true
- *           description: The unique identifier of the user to be blocked.
- *           example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: User has been unblocked successfully.
- *         content:
- *           application/json:
- *             example:
- *               message: "pages have been deleted"
- *       404:
- *         description: User not found.
- *         content:
- *           application/json:
- *             example:
- *               error: "user has no pages"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-/**
- * @swagger
- * /user/{userId}/{pageId}:
- *   delete:
- *     summary: delete specific page of the user.
- *     description: take the id of the user and delete all his pages.
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *           required: true
- *           description: The unique identifier of the user.
- *           example: "60d0fe4f5311236168a109ca"
- *       - in: path
- *         name: pageId
- *         schema:
- *           type: string
- *           required: true
- *           description: The unique identifier of the page to be deleted.
- *           example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: User has been unblocked successfully.
- *         content:
- *           application/json:
- *             example:
- *               message: "page has been deleted"
- *       404:
- *         description: User not found.
- *         content:
- *           application/json:
- *             example:
- *               error: "user has no pages"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-/**
- * @swagger
- * /user/admin/{userId}:
- *   delete:
- *     summary: delete specific account of the user.
- *     description: take the id of the user and delete all his pages.
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: Bearer token for accessing admin routes.
- *           example: "Bearer abcxyz123456"
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *           required: true
- *           description: The unique identifier of the user.
- *           example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: User has been unblocked successfully.
- *         content:
- *           application/json:
- *             example:
- *               message: "user has been deleted"
- *       404:
- *         description: User not found.
- *         content:
- *           application/json:
- *             example:
- *               error: "user has no pages"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /user/send-alert/{userId}:
- *   post:
- *     summary: Send an alert to a user.
- *     description: This endpoint allows an admin to send an alert to a user identified by their userId.
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: userId
- *         schema:
- *           type: string
- *         required: true
- *         description: The unique identifier of the user to whom the alert will be sent.
- *         example: "60d0fe4f5311236168a109ca"
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               alertMessage:
- *                 type: string
- *                 description: The alert message to be sent to the user.
- *                 example: "This is an important alert."
- *     responses:
- *       200:
- *         description: Alert sent to user.
- *         content:
- *           application/json:
- *             example:
- *               message: "Alert sent to user"
- *       403:
- *         description: Unauthorized access. The user is not an admin.
- *         content:
- *           application/json:
- *             example:
- *               error: "Unauthorized"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               error: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /plan/new:
- *   post:
- *     summary: Create a new subscription plan.
- *     description: This endpoint allows an admin to create a new subscription plan.
- *     tags:
- *       - Subscription Plans
- *     parameters:
- *       - in: headers
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: user's token.
- *           example: Bearer abcxyz1223
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The name of the subscription plan.
- *                 example: "Premium Plan"
- *               price:
- *                 type: number
- *                 description: The price of the subscription plan.
- *                 example: 29.99
- *               description:
- *                 type: string
- *                 description: A brief description of the subscription plan.
- *                 example: "Access to premium features and content."
- *     responses:
- *       201:
- *         description: Subscription plan created successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: The unique identifier of the plan.
- *                   example: "60d0fe4f5311236168a109ca"
- *                 name:
- *                   type: string
- *                   description: The name of the plan.
- *                   example: "Premium Plan"
- *                 price:
- *                   type: number
- *                   description: The price of the plan.
- *                   example: 29.99
- *                 description:
- *                   type: string
- *                   description: A brief description of the plan.
- *                   example: "Access to premium features and content."
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                   description: The timestamp when the plan was created.
- *                   example: "2023-06-12T18:30:00Z"
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *                   description: The timestamp when the plan was last updated.
- *                   example: "2023-06-12T18:30:00Z"
- *       400:
- *         description: Invalid request data.
- *         content:
- *           application/json:
- *             example:
- *               message: "Validation error: Plan price is required."
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               message: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /plan:
- *   get:
- *     summary: Get all subscription plans.
- *     description: Retrieve a list of all available subscription plans.
- *     tags:
- *       - Subscription Plans
- *     responses:
- *       200:
- *         description: A list of subscription plans.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                     description: The unique identifier of the plan.
- *                     example: "60d0fe4f5311236168a109ca"
- *                   name:
- *                     type: string
- *                     description: The name of the plan.
- *                     example: "Premium Plan"
- *                   price:
- *                     type: number
- *                     description: The price of the plan.
- *                     example: 29.99
- *                   description:
- *                     type: string
- *                     description: A brief description of the plan.
- *                     example: "Access to premium features and content."
- *                   createdAt:
- *                     type: string
- *                     format: date-time
- *                     description: The timestamp when the plan was created.
- *                     example: "2023-06-12T18:30:00Z"
- *                   updatedAt:
- *                     type: string
- *                     format: date-time
- *                     description: The timestamp when the plan was last updated.
- *                     example: "2023-06-12T18:30:00Z"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               message: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /plan/{id}:
- *   patch:
- *     summary: Update a subscription plan by its ID.
- *     description: This endpoint allows an admin to update details of an existing subscription plan.
- *     tags:
- *       - Subscription Plans
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: headers
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: user's token.
- *           example: Bearer abcxyz1223
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The unique identifier of the subscription plan to update.
- *         example: "60d0fe4f5311236168a109ca"
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The new name of the subscription plan.
- *                 example: "Standard Plan"
- *               price:
- *                 type: number
- *                 description: The new price of the subscription plan.
- *                 example: 19.99
- *               description:
- *                 type: string
- *                 description: The new description of the subscription plan.
- *                 example: "Access to standard features and content."
- *     responses:
- *       200:
- *         description: Subscription plan updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   description: The unique identifier of the updated plan.
- *                   example: "60d0fe4f5311236168a109ca"
- *                 name:
- *                   type: string
- *                   description: The updated name of the plan.
- *                   example: "Standard Plan"
- *                 price:
- *                   type: number
- *                   description: The updated price of the plan.
- *                   example: 19.99
- *                 description:
- *                   type: string
- *                   description: The updated description of the plan.
- *                   example: "Access to standard features and content."
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                   description: The timestamp when the plan was created.
- *                   example: "2023-06-12T18:30:00Z"
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *                   description: The timestamp when the plan was last updated.
- *                   example: "2023-06-12T18:30:00Z"
- *       400:
- *         description: Invalid request data.
- *         content:
- *           application/json:
- *             example:
- *               message: "Validation error: Invalid price."
- *       404:
- *         description: Subscription plan not found.
- *         content:
- *           application/json:
- *             example:
- *               message: "Plan not found"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               message: "Internal Server Error"
- */
-
-/**
- * @swagger
- * /plan/{id}:
- *   delete:
- *     summary: Delete a subscription plan by its ID.
- *     description: This endpoint allows an admin to delete a subscription plan by its ID.
- *     tags:
- *       - Subscription Plans
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: headers
- *         name: Authorization
- *         schema:
- *           type: string
- *           required: true
- *           description: user's token.
- *           example: Bearer abcxyz1223
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The unique identifier of the subscription plan to delete.
- *         example: "60d0fe4f5311236168a109ca"
- *     responses:
- *       200:
- *         description: Subscription plan deleted successfully.
- *         content:
- *           application/json:
- *             example:
- *               message: "Subscription plan deleted"
- *       404:
- *         description: Subscription plan not found.
- *         content:
- *           application/json:
- *             example:
- *               message: "Plan not found"
- *       500:
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             example:
- *               message: "Internal Server Error"
  */

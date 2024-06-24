@@ -15,8 +15,8 @@ import {
   getAvatar,
   logoutUser,
   updatePassword,
-  updateEmail,
-  updateEmailAfterVerification,
+  // updateEmail,
+  // updateEmailAfterVerification,
   resendEmail,
   adminGetUsers,
   adminCreateUser,
@@ -118,9 +118,9 @@ router.get("/", (req, res) => {
   );
 });
 
-router.post("/update-email", auth, updateEmail);
+// router.post("/update-email", auth, updateEmail);
 
-router.get("/verify-new-email/:token", updateEmailAfterVerification);
+// router.get("/verify-new-email/:token", updateEmailAfterVerification);
 // -----------------------
 //FOR ADMIN ONLY
 

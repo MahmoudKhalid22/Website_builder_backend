@@ -20,6 +20,7 @@ async function sendVerificationEmail(email, token) {
 
   try {
     await sgMail.send(msg);
+    console.log("email sent");
   } catch (err) {
     console.error(err.message);
   }

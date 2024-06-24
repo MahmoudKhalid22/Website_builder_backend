@@ -54,7 +54,7 @@ const authRefreshToken = async (req, res, next) => {
 
     next();
   } catch (e) {
-    res.status(500).send("please Authenticate");
+    res.status(500).send({ error: e.message });
   }
 };
 

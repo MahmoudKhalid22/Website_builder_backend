@@ -151,6 +151,10 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.post("deleteOne", async function (next) {
+  await Page.deleteMany({ ownerId: this._id });
+});
+
 const User = new mongoose.model("User", userSchema);
 
 export { User };
