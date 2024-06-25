@@ -63,6 +63,8 @@ const userSchema = new Schema(
         },
       },
     ],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
   },
   {
     timestamps: true,
@@ -116,7 +118,7 @@ userSchema.methods.generateResetPasswordToken = async function () {
     process.env.PASSWORD_TOKEN,
     { expiresIn: "1h" }
   );
-  user.tokens = user.tokens.concat({ token });
+  user.resetPasswordToken = token;
   await user.save();
   return token;
 };

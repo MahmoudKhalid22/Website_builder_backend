@@ -119,7 +119,7 @@ const forgetPassword = async (req, res) => {
       return res.status(404).send({ error: "user isn't found" });
     }
     const resetToken = await user.generateResetPasswordToken();
-    sendResetPassworEmail(req.body.email, resetToken);
+    sendResetPassworEmail(req.body.email, resetToken, user.name);
 
     res.send({
       message:
@@ -138,7 +138,6 @@ const resetPassword = async (req, res) => {
       ...req.body,
     });
 
-    // console.log(result);
     const decoded = await jwt.verify(result.token, process.env.PASSWORD_TOKEN);
     if (!decoded) throw new Error({ error: "Token has been expired" });
     const userId = decoded._id;
