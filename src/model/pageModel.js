@@ -1,7 +1,14 @@
 import mongoose from "mongoose";
 
 const pageSchema = new mongoose.Schema({
-  navBar: {
+  templateInfo: {
+    id: Number,
+    title: String,
+    description: String,
+    imgUrl: String,
+  },
+
+  navbar: {
     imgUrl: {
       type: String,
     },
@@ -60,19 +67,14 @@ const pageSchema = new mongoose.Schema({
       },
     ],
   },
-  feature: {
+  features: {
     title: { type: String },
     description: { type: String },
     phone: { type: String },
     buttonText: { type: String },
-    icons: [
-      {
-        icon: { type: String },
-      },
-      {
-        icon: { type: String },
-      },
-    ],
+    icons: {
+      type: Array,
+    },
     imgUrl: { type: String },
   },
   testimonials: {
