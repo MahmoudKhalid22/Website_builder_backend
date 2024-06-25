@@ -28,9 +28,9 @@ const auth = async (req, res, next) => {
     res.status(500).send({ message: "please Authenticate" });
   }
 };
-const secretKey = process.env.secretKey;
-const expiresIn = process.env.expiresIn;
-const refreshExpiresIn = process.env.refreshExpiresIn;
+// const secretKey = process.env.secretKey;
+// const expiresIn = process.env.expiresIn;
+// const refreshExpiresIn = process.env.refreshExpiresIn;
 const authRefreshToken = async (req, res, next) => {
   try {
     const tokenBeforeValidation = req
@@ -42,6 +42,7 @@ const authRefreshToken = async (req, res, next) => {
     });
 
     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET_KEY);
+
     const user = await User.findOne({
       _id: decoded._id,
       "tokens.token": token,
