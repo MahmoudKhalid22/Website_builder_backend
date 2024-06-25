@@ -12,6 +12,7 @@ import {
   updateUser,
   refreshToken,
   getUser,
+  getAvatar,
   logoutUser,
   updatePassword,
   updateEmail,
@@ -23,27 +24,24 @@ import {
   adminSendMsg,
   adminSendAlert,
   adminGetPage,
-  newPlan,
-  getAllPlans,
-  updatePlan,
-  deletePlan,
-  getAllMessages,
-  getDailymessages
+  adminUnBlockUser,
+  adminGetPages,
+  deleteAdmin,
+  adminDeleteUserPage,
+  adminDeleteUser,
 } from "../controller/user.js";
 import { auth, authRefreshToken, isAdmin } from "../middleware/auth.js";
 import multer from "multer";
+import { deleteUserPages } from "../controller/page.js";
 
+// GENERAL USER
 router.post("/", createUser);
 router.get("/verify/:token", verifyEmail);
-
 router.post("/login", loginUser);
-router.post("/forget-password", forgetPassword);
-
-router.post("/reset-password/:token", resetPassword);
-
-router.delete("/delete", auth, deleteUser);
 router.put("/update-username", auth, updateUser);
+router.delete("/delete", auth, deleteUser);
 router.get("/refresh-token", authRefreshToken, refreshToken);
+
 const upload = multer({
   limits: {
     fileSize: 1500000,
@@ -68,6 +66,22 @@ router.post(
   uploadUser,
   (error, req, res, next) => res.status(500).json({ error: error.message })
 );
+
+router.get("/avatar", auth, getAvatar);
+
+router.get("/me", auth, getUser);
+
+router.get("/logout-user", auth, logoutUser);
+
+router.post("/update-password", auth, updatePassword);
+
+router.post("/resend-email", resendEmail);
+
+// UNDER TESTING
+
+router.post("/forget-password", forgetPassword);
+
+router.post("/reset-password/:token", resetPassword);
 // oauth with google
 router.get(
   "/auth/google",
@@ -104,47 +118,34 @@ router.get("/", (req, res) => {
   );
 });
 
-router.get("/me", auth, getUser);
-
-router.get("/logout-user", auth, logoutUser);
-
-router.post("/update-password", auth, updatePassword);
-
 router.post("/update-email", auth, updateEmail);
 
 router.get("/verify-new-email/:token", updateEmailAfterVerification);
-
-router.post("/resend-email", resendEmail);
-
+// -----------------------
 //FOR ADMIN ONLY
 
-router.get("/admin-get-users" , auth, isAdmin, adminGetUsers);
+router.get("/admin-users", auth, isAdmin, adminGetUsers);
 
-router.post("/admin-create-user", auth, isAdmin, adminCreateUser);
+router.post("/admin-new-user", auth, isAdmin, adminCreateUser);
 
-router.get('/page/:pageId', isAdmin, adminGetPage );
+router.put("/block/:userId", auth, isAdmin, adminBlockUser);
 
-router.put('/block/:userId', auth, isAdmin, adminBlockUser);
+router.put("/unblock/:userId", auth, isAdmin, adminUnBlockUser);
 
-router.post('/send-message/:userId', auth, isAdmin, adminSendMsg);
+router.get("/:userId/pages", auth, isAdmin, adminGetPages);
 
-router.post('/send-alert/:userId', auth, isAdmin, adminSendAlert);
+router.get("/:userId/:pageId", auth, isAdmin, adminGetPage);
 
-//SUBSCIPTION PLAN
+router.delete("/:userId", auth, isAdmin, deleteUserPages);
 
-router.post('/new-plan', auth, isAdmin, newPlan);
+router.delete("/:userId/:pageId", auth, isAdmin, adminDeleteUserPage);
 
-router.get('/all-plans', getAllPlans);
+router.delete("/admin/:userId", auth, isAdmin, adminDeleteUser);
 
-router.patch('/:id', auth, isAdmin, updatePlan);
+router.post("/send-message/:userId", auth, isAdmin, adminSendMsg);
 
-router.delete('/:id', auth, isAdmin, deletePlan);
+router.post("/send-alert/:userId", auth, isAdmin, adminSendAlert);
 
-//GET ALL MESSAGES
-
-router.get('/all-users-messages', auth, isAdmin, getAllMessages);
-
-router.get('/messages/daily', auth, isAdmin, getDailymessages);
-
+router.delete("/superadmin/:adminId", auth, deleteAdmin);
 
 export { router as userRouter };

@@ -37,16 +37,17 @@ const userSchema = new Schema(
       default: false,
     },
     avatar: {
-      type: Buffer,
+      type: String,
     },
     role: {
       type: String,
-      enum: ["user", "admin", "premium"],
+      enum: ["user", "admin", "super-admin", "premium"],
       default: "user",
     },
-    blocked:{ 
-    type: Boolean,
-    default: false
+    status: {
+      type: String,
+      enum: ["blocked", "active"],
+      default: "active",
     },
     googleId: {
       type: String,
@@ -83,6 +84,7 @@ userSchema.methods.toJSON = function () {
   delete userObject.tokens;
   delete userObject.verified;
   delete userObject.__v;
+  delete userObject.avatar;
 
   return userObject;
 };

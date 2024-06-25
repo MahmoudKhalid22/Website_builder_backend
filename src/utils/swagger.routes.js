@@ -132,15 +132,16 @@
  *                          type: string
  *                          example: the user has been deleted
  */
+
 /**
  * @swagger
- * /upload:
- *  post:
- *      tags:
+ *  /user/avatar:
+ *      get:
+ *          tags:
  *              - User
- *      summary: upload the picture for the user
- *      descripition: if the user wants to upload a picture for the account
- *      parameters:
+ *          summary: user gets his avatar
+ *          description: if the user wants to get his account's avatar so from this endpoint
+ *          parameters:
  *                - in: header
  *                  name: Authorization
  *                  schema:
@@ -148,9 +149,14 @@
  *                  required: true
  *                  description: Bearer token for user authentication
  *                  example: "Bearer abcxyz123456"
- *      requestFile:
- *
- *
+ *          responses:
+ *              "200":
+ *                 description: response of deleting user
+ *                 content:
+ *                      application/json:
+ *                         schema:
+ *                          type: object
+ *                          example: {avatar: url for the image}
  */
 /**
  * @swagger
@@ -317,24 +323,6 @@
  */
 /**
  * @swagger
- * /upload:
- *  post:
- *      summary: upload the picture for the user
- *      descripition: if the user wants to upload a picture for the account
- *      parameters:
- *                - in: header
- *                  name: Authorization
- *                  schema:
- *                   type: string
- *                  required: true
- *                  description: Bearer token for user authentication
- *                  example: "Bearer abcxyz123456"
- *      requestFile:
- *
- *
- */
-/**
- * @swagger
  * /user/update-username:
  *   put:
  *     summary: Update a user
@@ -440,7 +428,7 @@
  * /user/auth/google:
  *   get:
  *     tags:
- *       - OAuth2
+ *       - User
  *     summary: Authorize
  *     description: Redirects the user to Google's OAuth2 consent screen to authorize the application.
  *     responses:
@@ -452,7 +440,7 @@
  * /user/auth/facebook:
  *   get:
  *     tags:
- *       - OAuth2
+ *       - User
  *     summary: Authorize
  *     description: Redirects the user to Facebook's OAuth2 consent screen to authorize the application.
  *     responses:
