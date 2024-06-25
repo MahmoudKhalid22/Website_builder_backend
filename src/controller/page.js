@@ -34,6 +34,7 @@ const getPages = async (req, res) => {
         title: page.title,
       })
     );
+    res.send({ pages: result });
   } catch (err) {
     res.json({ error: err.message });
   }

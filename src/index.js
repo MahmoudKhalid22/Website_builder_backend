@@ -6,7 +6,6 @@ import session from "express-session";
 import path, { dirname } from "path";
 import { connection } from "./db/dbConnection.js";
 import { userRouter } from "./router/users.js";
-import { adminRouter } from "./router/admin.js";
 import { pageRouter } from "./router/pages.js";
 import { messageRouter } from "./router/message.js";
 import { planRouter } from "./router/plan.js";
