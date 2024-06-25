@@ -6,8 +6,7 @@ const newPage = async (req, res) => {
     const savedPage = await page.save();
     res.json({ message: "Page created successfully", savedPage });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
