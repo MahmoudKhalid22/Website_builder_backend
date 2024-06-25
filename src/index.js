@@ -16,7 +16,8 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import hpp from "hpp";
 // import MongoDBStore from "connect-mongodb-session";
-
+import { limiter } from "./middleware/rateLimit.js"; // Adjust the import path as per your directory structure
+import { hppMiddleware } from "./middleware/hpp.js"; // Adjust the import path as per your directory structure
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -48,6 +49,11 @@ app.use("/page", pageRouter);
 app.use("/message", messageRouter);
 app.use("/plan", planRouter);
 // app.use("/admin", adminRouter , userRouter);
+// Apply rate limiting middleware to all routes or specific routes
+app.use("/api/", limiter); // Adjust the path as per your API routes
+
+// Apply hppMiddleware to all routes or specific routes
+app.use(hppMiddleware); // Protects against HTTP parameter pollution
 
 const PORT = process.env.PORT;
 
