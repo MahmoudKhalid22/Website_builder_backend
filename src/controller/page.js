@@ -27,7 +27,14 @@ const getPages = async (req, res) => {
   try {
     const { _id } = userId;
     const pages = await Page.find({ owner: _id });
-    res.send(pages);
+    const result = [];
+    pages.map((page) =>
+      result.push({
+        _id: page._id,
+        title: page.title,
+      })
+    );
+    res.send({ pages: result });
   } catch (err) {
     res.json({ error: err.message });
   }

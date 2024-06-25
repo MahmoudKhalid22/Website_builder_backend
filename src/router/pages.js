@@ -11,12 +11,16 @@ import {
 } from "../controller/page.js";
 import { auth } from "../middleware/auth.js";
 
+// NEW PAGE
 router.post("/", auth, newPage);
 
+// GET USER PAGES
 router.get("/pages", auth, getPages);
 
 router.get("/:id", auth, getPage);
+
 router.delete("/:id", auth, deletePage);
+
 router.delete("/:id", auth, deleteUserPages);
 
 router.patch("/update/:id", auth, updatePage);

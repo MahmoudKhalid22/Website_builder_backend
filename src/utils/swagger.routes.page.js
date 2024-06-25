@@ -36,6 +36,87 @@
 
 /**
  * @swagger
+ * /page/pages:
+ *   get:
+ *     summary: get user pages
+ *     tags:
+ *       - Page
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: Access token for authorization
+ *           example: "Bearer abcxyz123456"
+ *     responses:
+ *       '200':
+ *         description: Page returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 pages:
+ *                   type: array
+ *                   example:  [{_id:123, title: flower}]
+ *       '404':
+ *         description: Page not found or unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Page not found or you are not authorized to delete it
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Internal Server Error
+ */
+/**
+ * @swagger
+ * /page/{id}:
+ *   get:
+ *     summary: get user pages
+ *     tags:
+ *       - Page
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: Access token for authorization
+ *           example: "Bearer abcxyz123456"
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the page to update
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Page returned successfully
+ *         content:
+ *           application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Page'
+ *       '404':
+ *         description: Page not found or unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Page not found or you are not authorized to delete it
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Internal Server Error
+ */
+
+/**
+ * @swagger
  * /page/update/{pageId}:
  *   put:
  *     summary: Update a page
@@ -128,4 +209,36 @@
  *               error: Internal Server Error
  */
 
-
+/**
+ * @swagger
+ * /user/pages/delete:
+ *   delete:
+ *     summary: Delete all user pages
+ *     tags:
+ *       - Page
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *           required: true
+ *           description: Access token for authorization
+ *           example: "Bearer abcxyz123456"
+ *     responses:
+ *       '200':
+ *         description: User's pages deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User's pages deleted successfully
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Internal Server Error
+ */

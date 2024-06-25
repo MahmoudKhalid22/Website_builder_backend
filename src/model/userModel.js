@@ -63,6 +63,8 @@ const userSchema = new Schema(
         },
       },
     ],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
   },
   {
     timestamps: true,
@@ -116,7 +118,7 @@ userSchema.methods.generateResetPasswordToken = async function () {
     process.env.PASSWORD_TOKEN,
     { expiresIn: "1h" }
   );
-  user.tokens = user.tokens.concat({ token });
+  user.resetPasswordToken = token;
   await user.save();
   return token;
 };
@@ -149,6 +151,10 @@ userSchema.pre("save", async function (next) {
     await bcrypt.hash(this.password, 10);
   }
   next();
+});
+
+userSchema.post("deleteOne", async function (next) {
+  await Page.deleteMany({ ownerId: this._id });
 });
 
 const User = new mongoose.model("User", userSchema);
