@@ -30,7 +30,7 @@ const getPages = async (req, res) => {
     pages.map((page) =>
       result.push({
         _id: page._id,
-        title: page.title,
+        templateInfo: page.templateInfo,
       })
     );
     res.send({ pages: result });
