@@ -154,7 +154,7 @@ const pageSchema = new mongoose.Schema({
       },
     ],
   },
-  statistic: {
+  statistics: {
     statistics: [
       {
         title: { type: String },
