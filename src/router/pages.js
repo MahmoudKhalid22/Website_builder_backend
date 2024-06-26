@@ -21,8 +21,8 @@ router.get("/:id", auth, getPage);
 
 router.delete("/:id", auth, deletePage);
 
-router.delete("/:id", auth, deleteUserPages);
-
 router.patch("/update/:id", auth, updatePage);
+
+router.delete("/delete/pages", auth, deleteUserPages);
 
 export { router as pageRouter };

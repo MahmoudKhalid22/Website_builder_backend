@@ -15,6 +15,9 @@ const getPage = async (req, res) => {
   const userId = req.user;
   try {
     const page = await Page.findOne({ _id: pageId, owner: userId });
+    if (!page) {
+      return res.status(404).send({ error: "the page isn't found" });
+    }
     res.send(page);
   } catch (err) {
     res.json({ error: err.message });
@@ -55,7 +58,7 @@ const deletePage = async (req, res) => {
       });
     }
 
-    res.json({ message: "Page deleted successfully" });
+    res.json({ message: "Page has been deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -65,16 +68,18 @@ const updatePage = async (req, res) => {
     const pageId = req.params.id;
     const userId = req.user._id;
 
-    const updateObject = { $set: {} };
+    const updates = Object.keys(req.body);
+
     const fieldsToUpdate = [
-      "navBar",
+      "templateInfo",
+      "navbar",
       "hero",
       "services",
-      "feature",
+      "features",
       "testimonials",
       "logos",
       "projects",
-      "statistic",
+      "statistics",
       "items",
       "team",
       "pricing",
@@ -112,11 +117,11 @@ const updatePage = async (req, res) => {
 
 const deleteUserPages = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.user._id;
     await Page.deleteMany({ owner: userId }, { new: true });
     res.json({ message: "User's pages have been deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: err.message });
   }
 };
 

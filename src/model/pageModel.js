@@ -392,6 +392,9 @@ const pageSchema = new mongoose.Schema({
       templateColors: { type: Array },
     },
   },
+  colors: {
+    templateColors: Array,
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
