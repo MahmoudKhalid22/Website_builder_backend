@@ -118,7 +118,7 @@
 /**
  * @swagger
  * /page/update/{pageId}:
- *   put:
+ *   patch:
  *     summary: Update a page
  *     description: Update a page owned by the authenticated user
  *     tags:
@@ -164,7 +164,7 @@
  */
 /**
  * @swagger
- * /page/delete/{id}:
+ * /page/{id}:
  *   delete:
  *     summary: Delete a page
  *     tags:
@@ -211,7 +211,7 @@
 
 /**
  * @swagger
- * /user/pages/delete:
+ * /page/delete/pages:
  *   delete:
  *     summary: Delete all user pages
  *     tags:
