@@ -117,7 +117,7 @@ const updatePage = async (req, res) => {
 
 const deleteUserPages = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.params.userId;
     await Page.deleteMany({ owner: userId }, { new: true });
     res.json({ message: "User's pages have been deleted successfully" });
   } catch (err) {
