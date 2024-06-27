@@ -21,7 +21,6 @@ import {
   adminGetUsers,
   adminCreateUser,
   adminBlockUser,
-  adminSendMsg,
   adminSendAlert,
   adminGetPage,
   adminUnBlockUser,
@@ -128,21 +127,19 @@ router.get("/admin-users", auth, isAdmin, adminGetUsers);
 
 router.post("/admin-new-user", auth, isAdmin, adminCreateUser);
 
-router.put("/block/:userId", auth, isAdmin, adminBlockUser);
-
-router.put("/unblock/:userId", auth, isAdmin, adminUnBlockUser);
+router.delete("/admin-delete-user/:ID", auth, isAdmin, adminDeleteUser);
 
 router.get("/:userId/pages", auth, isAdmin, adminGetPages);
 
 router.get("/:userId/:pageId", auth, isAdmin, adminGetPage);
 
-router.delete("/:userId", auth, isAdmin, deleteUserPages);
-
 router.delete("/:userId/:pageId", auth, isAdmin, adminDeleteUserPage);
 
-router.delete("/admin/:userId", auth, isAdmin, adminDeleteUser);
+router.delete("/:userId", auth, isAdmin, deleteUserPages);
 
-router.post("/send-message/:userId", auth, isAdmin, adminSendMsg);
+router.put("/block/:userId", auth, isAdmin, adminBlockUser);
+
+router.put("/unblock/:userId", auth, isAdmin, adminUnBlockUser);
 
 router.post("/send-alert/:userId", auth, isAdmin, adminSendAlert);
 

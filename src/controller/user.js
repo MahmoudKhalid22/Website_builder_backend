@@ -22,6 +22,7 @@ import {
   updatePasswordValidation,
   emailValidation,
 } from "../middleware/user.model.validation.js";
+import { sendAlertEmail } from "../email/alert.js";
 
 const createUser = async (req, res) => {
   try {
@@ -29,7 +30,9 @@ const createUser = async (req, res) => {
 
     const isExisting = await User.findOne({ email: result.email });
     if (isExisting) throw new Error("Email address already in use");
-
+    if (result.role === "admin") {
+      return res.status(400).send({ error: "the role shouldn't be admin" });
+    }
     const user = await new User(result);
 
     await createImageFromName(req.body.name);
@@ -328,6 +331,15 @@ const updatePassword = async (req, res) => {
 const adminGetUsers = async (req, res) => {
   try {
     const query = req.query.role;
+    const limit = req.query.limit || 10;
+    const offset = req.query.offset || 0;
+
+    if (limit && (limit < 1 || limit > 100)) {
+      return res
+        .status(400)
+        .send({ error: "Invalid limit. Must be between 1 and 100." });
+    }
+
     const users = await User.find({ role: query });
 
     if (!users) {
@@ -335,7 +347,12 @@ const adminGetUsers = async (req, res) => {
         .status(200)
         .send({ message: "there is no users match this role" });
     }
-    res.json({ users });
+
+    const startIndex = +offset;
+    const endIndex = +offset + +limit;
+    const paginatedUsers = users.slice(startIndex, endIndex);
+
+    res.json({ users: paginatedUsers, allUsers: users.length });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
@@ -378,51 +395,36 @@ const adminGetPage = async (req, res) => {
   }
 };
 const adminGetPages = async (req, res) => {
-  const pageId = req.params.pageId;
   const userId = req.params.userId;
-  const page = await Page.findOne({ owner: userId, _id: pageId });
+  const pages = await Page.find({ owner: userId });
+  const result = [];
   try {
-    if (!page) {
+    if (!pages) {
       return res.status(404).send({ message: "this user has no pages" });
     }
-    res.send({ page });
+    for (const page of pages) {
+      result.push({
+        _id: page._id,
+        templateInfo: page.templateInfo,
+      });
+    }
+    res.send({ pages: result });
   } catch (error) {
     res.status(500).send({ error: "internal server error" });
   }
 };
 
-const adminSendMsg = (req, res) => {
-  const isAdmin = req.user.role === "admin";
+const adminSendAlert = async (req, res) => {
+  try {
+    const userId = req.params.userId;
 
-  if (!isAdmin) {
-    return res.status(403).send("Unauthorized");
+    const user = await User.findOne({ _id: userId });
+    if (!user) return res.status(404).send({ error: "the user is not found" });
+    sendAlertEmail(user.email, user.name);
+    res.send({ message: "Alert have been sent to user" });
+  } catch (err) {
+    res.status(500).send({ error: "internal server error" });
   }
-
-  const userId = req.params.userId;
-
-  res.redirect("/message");
-
-  // Here you would implement the logic to send a message to the user with the given userId
-  // Example: Send message to user with ID userId
-  // sendMessageToUser(userId, req.body.message);
-  res.send("Message sent to user");
-};
-
-const adminSendAlert = (req, res) => {
-  const isAdmin = req.user && req.user.role === "admin";
-
-  if (!isAdmin) {
-    return res.status(403).send("Unauthorized");
-  }
-
-  const userId = req.params.userId;
-  // const userId = req.body.userId;
-
-  // Here you would implement the logic to send an alert to the user with the given userId
-  // Example: Send alert to user with ID userId
-  // sendAlertToUser(userId, req.body.alertMessage);
-
-  res.send("Alert sent to user"); // Send a response indicating that the alert was sent
 };
 
 const adminBlockUser = async (req, res) => {
@@ -497,8 +499,7 @@ const adminDeleteUserPage = async (req, res) => {
 
 const adminDeleteUser = async (req, res) => {
   try {
-    const userId = req.params.userId;
-
+    const userId = req.params.ID;
     const user = await User.findByIdAndDelete({ _id: userId }, { new: true });
 
     if (!user) {
@@ -507,6 +508,7 @@ const adminDeleteUser = async (req, res) => {
 
     res.send({ message: "user has been deleted" });
   } catch (err) {
+    console.log(err.message);
     res.status(500).send({ error: err.message });
   }
 };
@@ -560,7 +562,6 @@ export {
   adminCreateUser,
   adminGetPage,
   adminBlockUser,
-  adminSendMsg,
   adminSendAlert,
   getAllMessages,
   getDailymessages,
