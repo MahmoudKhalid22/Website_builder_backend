@@ -93,7 +93,7 @@ const updatePage = async (req, res) => {
     );
 
     if (!isValidUpdates) {
-      res.status(400).send({ error: "No valid updates" });
+      return res.status(400).send({ error: "No valid updates" });
     }
 
     const page = await Page.findOne({

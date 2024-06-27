@@ -3,8 +3,9 @@ import Plan from "../model/subPlan.js";
 // Create a new subscription plan
 const newPlan = async (req, res) => {
   try {
+    console.log(req.body);
     const { name, price, description } = req.body;
-    if (!name || !price || !description) {
+    if (!name || typeof price === "undefined" || !description) {
       return res.status(400).send({
         error: "you must enter all details (name, price, description)",
       });
@@ -29,9 +30,28 @@ const getAllPlans = async (req, res) => {
 // Update a subscription plan
 const updatePlan = async (req, res) => {
   try {
-    const plan = await Plan.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+    const updates = Object.keys(req.body);
+    const fieldsToUpdate = ["name", "price", "description"];
+
+    const isValidUpdates = updates.every((update) =>
+      fieldsToUpdate.includes(update)
+    );
+
+    if (!isValidUpdates) {
+      return res.status(400).send({ error: "No valid updates" });
+    }
+
+    const plan = await Plan.findOne({
+      _id: req.params.id,
     });
+    if (!plan) {
+      return res.status(404).send({ error: "the plan is not found" });
+    }
+    updates.forEach((update) => {
+      plan[update] = req.body[update];
+    });
+    await plan.save();
+
     res.json({ plan });
   } catch (err) {
     res.status(400).json({ error: err.message });

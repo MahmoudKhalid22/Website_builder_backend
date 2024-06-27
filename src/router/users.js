@@ -129,6 +129,8 @@ router.post("/admin-new-user", auth, isAdmin, adminCreateUser);
 
 router.delete("/admin-delete-user/:ID", auth, isAdmin, adminDeleteUser);
 
+router.delete("/superadmin/:adminId", auth, deleteAdmin);
+
 router.get("/:userId/pages", auth, isAdmin, adminGetPages);
 
 router.get("/:userId/:pageId", auth, isAdmin, adminGetPage);
@@ -142,7 +144,5 @@ router.put("/block/:userId", auth, isAdmin, adminBlockUser);
 router.put("/unblock/:userId", auth, isAdmin, adminUnBlockUser);
 
 router.post("/send-alert/:userId", auth, isAdmin, adminSendAlert);
-
-router.delete("/superadmin/:adminId", auth, deleteAdmin);
 
 export { router as userRouter };
