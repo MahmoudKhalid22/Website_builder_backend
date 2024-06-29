@@ -29,7 +29,7 @@ import {
   adminDeleteUserPage,
   adminDeleteUser,
 } from "../controller/user.js";
-import { auth, authRefreshToken, isAdmin } from "../middleware/auth.js";
+import { auth, authRefreshToken, isAdmin } from "../middleware/index.js";
 import multer from "multer";
 import { deleteUserPages } from "../controller/page.js";
 

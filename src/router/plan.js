@@ -5,7 +5,7 @@ import {
   updatePlan,
   deletePlan,
 } from "../controller/plan.js";
-import { isAdmin, auth } from "../middleware/auth.js";
+import { isAdmin, auth } from "../middleware/index.js";
 
 const router = Router();
 
