@@ -43,7 +43,7 @@ const createUser = async (req, res) => {
       { expiresIn: "10m" }
     );
 
-    sendVerificationEmail(req.body.email, token);
+    // sendVerificationEmail(req.body.email, token);
     res.status(201).json({
       message: "User created successfully. Check your email for verification.",
     });
@@ -101,13 +101,13 @@ const loginUser = async (req, res) => {
 
     const user = await User.findByCredentials(result.email, result.password);
     if (!user.verified) {
-      return res.send("you must verify your email first");
+      return res.send({ error: "you must verify your email first" });
     }
     const accessToken = await user.generateAuthToken();
     const refreshToken = await user.generateRefreshToken();
     res.send({ user, accessToken, refreshToken });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -220,6 +220,7 @@ const refreshToken = async (req, res) => {
     const accessToken = await user.generateAuthToken();
     res.send({ accessToken });
   } catch (err) {
+    console.log(err.message);
     res.status(500).json({
       error: err.message,
     });

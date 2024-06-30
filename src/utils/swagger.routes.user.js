@@ -350,6 +350,16 @@
  *             example: "Bearer abcxyz123456"
  *     tags:
  *       - User
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: new name of the user
  *     responses:
  *       200:
  *         description: Successfully updated user
@@ -421,11 +431,9 @@
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               email:
  *                 type: string
- *                 description: The unique identifier of the user to whom the verification email will be resent.
- *             required:
- *               - id
+ *                 description: email of the user
  *     responses:
  *       '200':
  *         description: Email verification resent successfully.

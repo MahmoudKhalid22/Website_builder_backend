@@ -9,7 +9,7 @@ import {
   deletePage,
   deleteUserPages,
 } from "../controller/page.js";
-import { auth } from "../middleware/auth.js";
+import { auth } from "../middleware/index.js";
 
 // NEW PAGE
 router.post("/", auth, newPage);
