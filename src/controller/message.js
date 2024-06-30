@@ -12,7 +12,9 @@ const sendMessage = async (req, res) => {
     }
     const msg = new Message(req.body);
     await saveInDB(msg);
-    res.send({ message: "Your message has been sent successfully" });
+    res
+      .status(201)
+      .send({ message: "Your message has been sent successfully" });
   } catch (err) {
     res.status(500).send({ error: "internal server error" });
   }

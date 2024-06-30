@@ -43,7 +43,7 @@ const createUser = async (req, res) => {
       { expiresIn: "10m" }
     );
 
-    // sendVerificationEmail(req.body.email, token);
+    sendVerificationEmail(req.body.email, token);
     res.status(201).json({
       message: "User created successfully. Check your email for verification.",
     });
