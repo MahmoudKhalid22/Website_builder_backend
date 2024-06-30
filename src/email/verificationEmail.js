@@ -4,7 +4,6 @@ dotenv.config();
 
 async function sendVerificationEmail(email, token) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
   const verificationLink = `https://websitebuilderbackend-production-716e.up.railway.app/user/verify/${token}`;
 
   const msg = {

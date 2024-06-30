@@ -3,6 +3,9 @@ import app from "../src/app";
 import { User } from "../src/model/userModel";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import sgMail from "@sendgrid/mail";
+
+jest.mock("@sendgrid/mail"); // Mocking the entire module
 
 const userOneId = new mongoose.Types.ObjectId();
 const userOne = {
@@ -45,13 +48,16 @@ test("Should Sign up a new user", async () => {
 // TEST LOGIN USER
 
 test("Should Login Existing User", async () => {
-  await request(app)
+  const response = await request(app)
     .post("/user/login")
     .send({
       email: userOne.email,
       password: userOne.password,
     })
     .expect(200);
+
+  const user = await User.findById(response.body.user._id);
+  expect(user).not.toBeNull();
 });
 
 test("Should fail login when credentails are bad", async () => {
@@ -125,18 +131,19 @@ test("should update user password", async () => {
 
 // 10. TEST UPDATE USERNAME
 test("should update user name", async () => {
-  await request(app)
+  const response = await request(app)
     .put("/user/update-username")
     .set("Authorization", `Bearer ${userOne.tokens[0].accessToken}`)
     .send({
       name: "eng mahmoud",
     })
     .expect(200);
+  expect(response.body.newName).toBe("eng mahmoud");
 });
 
 // 11. TEST GET REFRESH TOKEN
 test("should get refresh token", async () => {
-  await request(app)
+  const response = await request(app)
     .get("/user/refresh-token")
     .set("Authorization", `Bearer ${userOne.tokens[0].refreshToken}`)
     .send()
