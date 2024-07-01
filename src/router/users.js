@@ -1,5 +1,6 @@
 import { Router } from "express";
-import passport, { Passport } from "passport";
+// import passport, { Passport } from "passport";
+import passport from 'passport';
 const router = Router();
 import {
   createUser,
@@ -80,6 +81,7 @@ router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
+
 router.get(
   "/auth/facebook",
   passport.authenticate("facebook", { scope: ["email"] })
@@ -96,9 +98,14 @@ router.get(
     failureRedirect: "/",
   })
 );
-router.get("/facebook", passport.authenticate("facebook"), (req, res) => {
-  res.redirect("/user/welcome");
-});
+
+router.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", {
+    successRedirect: "/user/welcome",
+    failureRedirect: "/",
+  })
+);
 
 router.get("/logout", (req, res) => {
   req.logout();

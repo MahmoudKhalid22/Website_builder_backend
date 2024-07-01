@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import passport from "passport";
-import session from "express-session";
+import session from 'express-session';
+import passport from 'passport';
 import path, { dirname } from "path";
 import { connection } from "./db/dbConnection.js";
 import { userRouter } from "./router/users.js";
@@ -12,7 +12,7 @@ import { messageRouter } from "./router/message.js";
 import { planRouter } from "./router/plan.js";
 
 import { docs } from "./utils/swagger.js";
-// import "./controller/OAUTH.js";
+import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import hpp from "hpp";

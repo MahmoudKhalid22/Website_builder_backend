@@ -13,20 +13,16 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://zweb.nqfq.onrender.com/user/auth/google/callback",   
-      // callbackURL:"https://localhost:5000/",
+      callbackURL: "http://localhost:5000/user/auth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
-      console.log(profile,accessToken,refreshToken,request);
-
-      
       try {
         const existingUser = await User.findOne({ googleId: profile.id });
         if (existingUser) {
-          const accessToken = await user.generateAuthToken();
-          const refreshToken = await user.generateRefreshToken();
-          return done(null,{ existingUser, accessToken, refreshToken});
+          const accessToken = await existingUser.generateAuthToken();
+          const refreshToken = await existingUser.generateRefreshToken();
+          return done(null, { existingUser, accessToken, refreshToken });
         }
         const user = new User({
           name: profile.displayName,
@@ -37,7 +33,7 @@ passport.use(
         await user.save();
         const accessToken = await user.generateAuthToken();
         const refreshToken = await user.generateRefreshToken();
-        return done(null,{ existingUser, accessToken, refreshToken});
+        return done(null, { user, accessToken, refreshToken });
       } catch (err) {
         done(err);
       }
@@ -45,24 +41,21 @@ passport.use(
   )
 );
 
-
 passport.use(
   new FacebookStrategy(
     {
       clientID: FACEBOOK_CLIENT_ID,
       clientSecret: FACEBOOK_CLIENT_SECRET,
-      callbackURL: "/user/facebook",
-      profileFields: ["name", "picture"],
+      callbackURL: "http://localhost:5000/user/auth/facebook/callback",
+      profileFields: ["id", "emails", "name"],
     },
     async function (accessToken, refreshToken, profile, cb) {
-      console.log(accessToken,refreshToken);
       try {
         const existingUser = await User.findOne({ facebookId: profile.id });
         if (existingUser) {
-          const accessToken = await user.generateAuthToken();
-          const refreshToken = await user.generateRefreshToken();
-          console.log(accessToken,refreshToken);
-          return cb(null,{ existingUser, accessToken, refreshToken});
+          const accessToken = await existingUser.generateAuthToken();
+          const refreshToken = await existingUser.generateRefreshToken();
+          return cb(null, { existingUser, accessToken, refreshToken });
         }
         const user = new User({
           name: profile.name.givenName + " " + profile.name.familyName,
@@ -72,20 +65,18 @@ passport.use(
         await user.save();
         const accessToken = await user.generateAuthToken();
         const refreshToken = await user.generateRefreshToken();
-        return cb(null,{ existingUser, accessToken, refreshToken});
+        return cb(null, { user, accessToken, refreshToken });
       } catch (err) {
         cb(err);
       }
-      console.log(accessToken,refreshToken);
     }
   )
 );
 
-
-passport.serializeUser(function(user, callback) {
+passport.serializeUser((user, callback) => {
   callback(null, user);
 });
 
-passport.deserializeUser(function(user, callback) {
+passport.deserializeUser((user, callback) => {
   callback(null, user);
 });
