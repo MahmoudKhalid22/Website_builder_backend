@@ -28,7 +28,7 @@ async function sendAlertEmail(email, username) {
     await sgMail.send(msg);
     console.log("email sent");
   } catch (err) {
-    console.error(err.message);
+    console.log(err.message);
   }
 }
 

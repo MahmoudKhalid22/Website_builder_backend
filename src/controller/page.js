@@ -2,9 +2,14 @@ import { Page } from "../model/pageModel.js";
 
 const newPage = async (req, res) => {
   try {
+    if (req.user.role === "admin") {
+      return res
+        .status(400)
+        .send({ error: "admin is not authorized to create page" });
+    }
     const page = new Page({ ...req.body, owner: req.user._id });
     const savedPage = await page.save();
-    res.json({ message: "Page created successfully", savedPage });
+    res.status(201).json({ message: "Page created successfully", savedPage });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
