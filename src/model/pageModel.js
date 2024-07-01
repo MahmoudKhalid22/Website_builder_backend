@@ -367,16 +367,18 @@ const pageSchema = new mongoose.Schema({
         url: { type: String },
       },
     ],
-    items: [
+    footerSections: [
       {
-        title: { type: String },
-        links: { type: Array },
-      },
-      {
-        title: { type: String },
-        links: { type: Array },
+        title: String,
+        links: [
+          {
+            title: String,
+            url: String,
+          },
+        ],
       },
     ],
+
     contacts: [
       {
         value: { type: String },
@@ -388,9 +390,6 @@ const pageSchema = new mongoose.Schema({
         value: { type: String },
       },
     ],
-    colors: {
-      templateColors: { type: Array },
-    },
   },
   colors: {
     templateColors: Array,

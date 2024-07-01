@@ -3,7 +3,6 @@ import Plan from "../model/subPlan.js";
 // Create a new subscription plan
 const newPlan = async (req, res) => {
   try {
-    console.log(req.body);
     const { name, price, description } = req.body;
     if (!name || typeof price === "undefined" || !description) {
       return res.status(400).send({
