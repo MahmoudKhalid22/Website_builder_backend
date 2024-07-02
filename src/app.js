@@ -11,7 +11,7 @@ import { messageRouter } from "./router/message.js";
 import { planRouter } from "./router/plan.js";
 
 import { docs } from "./utils/swagger.js";
-// import "./controller/OAUTH.js";
+import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import hpp from "hpp";

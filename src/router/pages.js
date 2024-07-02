@@ -17,7 +17,7 @@ router.post("/", auth, newPage);
 // GET USER PAGES
 router.get("/pages", auth, getPages);
 
-router.get("/:id", auth, getPage);
+router.get("/:id", getPage);
 
 router.delete("/:id", auth, deletePage);
 
