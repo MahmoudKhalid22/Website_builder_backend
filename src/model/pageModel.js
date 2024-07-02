@@ -76,6 +76,8 @@ const pageSchema = new mongoose.Schema({
       type: Array,
     },
     imgUrl: { type: String },
+    number: String,
+    date: String,
   },
   testimonials: {
     title: { type: String },
