@@ -16,8 +16,9 @@ const newPage = async (req, res) => {
 };
 
 const getPage = async (req, res) => {
-  const pageId = req.params.id;
-  const userId = req.user;
+  const pageId = req.params.pageId;
+
+  const userId = req.params.userId;
   try {
     const page = await Page.findOne({ _id: pageId, owner: userId });
     if (!page) {
