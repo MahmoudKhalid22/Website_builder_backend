@@ -2,19 +2,33 @@ import { Page } from "../model/pageModel.js";
 
 const newPage = async (req, res) => {
   try {
+    if (req.user.role === "admin") {
+      return res
+        .status(400)
+        .send({ error: "admin is not authorized to create page" });
+    }
+    if (req.user.status === "blocked"){
+      return res
+      .status(400)
+      .send({ error: "user is blocked" })
+    }
     const page = new Page({ ...req.body, owner: req.user._id });
     const savedPage = await page.save();
-    res.json({ message: "Page created successfully", savedPage });
+    res.status(201).json({ message: "Page created successfully", savedPage });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
 const getPage = async (req, res) => {
-  const pageId = req.params.id;
-  const userId = req.user;
+  const pageId = req.params.pageId;
+
+  const userId = req.params.userId;
   try {
     const page = await Page.findOne({ _id: pageId, owner: userId });
+    if (!page) {
+      return res.status(404).send({ error: "the page isn't found" });
+    }
     res.send(page);
   } catch (err) {
     res.json({ error: err.message });
@@ -30,7 +44,7 @@ const getPages = async (req, res) => {
     pages.map((page) =>
       result.push({
         _id: page._id,
-        title: page.title,
+        templateInfo: page.templateInfo,
       })
     );
     res.send({ pages: result });
@@ -44,6 +58,11 @@ const deletePage = async (req, res) => {
   const userId = req.user._id;
 
   try {
+    if (req.user.status === "blocked"){
+      return res
+      .status(400)
+      .send({ error: "user is blocked" })
+    }
     const deletedPage = await Page.findOneAndDelete({
       _id: pageId,
       owner: userId,
@@ -55,26 +74,33 @@ const deletePage = async (req, res) => {
       });
     }
 
-    res.json({ message: "Page deleted successfully" });
+    res.json({ message: "Page has been deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 const updatePage = async (req, res) => {
   try {
+    if (req.user.status === "blocked"){
+      return res
+      .status(400)
+      .send({ error: "user is blocked" })
+    }
     const pageId = req.params.id;
     const userId = req.user._id;
 
-    const updateObject = { $set: {} };
+    const updates = Object.keys(req.body);
+
     const fieldsToUpdate = [
-      "navBar",
+      "templateInfo",
+      "navbar",
       "hero",
       "services",
-      "feature",
+      "features",
       "testimonials",
       "logos",
       "projects",
-      "statistic",
+      "statistics",
       "items",
       "team",
       "pricing",
@@ -88,7 +114,7 @@ const updatePage = async (req, res) => {
     );
 
     if (!isValidUpdates) {
-      res.status(400).send({ error: "No valid updates" });
+      return res.status(400).send({ error: "No valid updates" });
     }
 
     const page = await Page.findOne({
@@ -116,7 +142,7 @@ const deleteUserPages = async (req, res) => {
     await Page.deleteMany({ owner: userId }, { new: true });
     res.json({ message: "User's pages have been deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: err.message });
   }
 };
 

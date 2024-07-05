@@ -21,7 +21,7 @@ async function sendVerificationUpdatedEmail(email, token) {
   try {
     await sgMail.send(msg);
   } catch (err) {
-    console.error(err.message);
+    console.log(err.message);
   }
 }
 

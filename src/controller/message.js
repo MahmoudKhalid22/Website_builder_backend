@@ -12,7 +12,9 @@ const sendMessage = async (req, res) => {
     }
     const msg = new Message(req.body);
     await saveInDB(msg);
-    res.send({ message: "Your message has been sent successfully" });
+    res
+      .status(201)
+      .send({ message: "Your message has been sent successfully" });
   } catch (err) {
     res.status(500).send({ error: "internal server error" });
   }
@@ -21,7 +23,6 @@ const sendMessage = async (req, res) => {
 const getMessages = async (req, res) => {
   try {
     const { limit = 10 } = req.query;
-
     if (limit && (limit < 1 || limit > 100)) {
       return res
         .status(400)
@@ -37,8 +38,7 @@ const getMessages = async (req, res) => {
     messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     const startIndex = req.query.offset || 0; // Use offset for retrieving specific number of messages
-    const endIndex = startIndex + limit;
-
+    const endIndex = Number(startIndex) + Number(limit);
     const paginatedMessages = messages.slice(startIndex, endIndex);
 
     res.send({ messages: paginatedMessages, total: messages.length });

@@ -21,7 +21,6 @@ import {
   adminGetUsers,
   adminCreateUser,
   adminBlockUser,
-  adminSendMsg,
   adminSendAlert,
   adminGetPage,
   adminUnBlockUser,
@@ -30,7 +29,7 @@ import {
   adminDeleteUserPage,
   adminDeleteUser,
 } from "../controller/user.js";
-import { auth, authRefreshToken, isAdmin } from "../middleware/auth.js";
+import { auth, authRefreshToken, isAdmin } from "../middleware/index.js";
 import multer from "multer";
 import { deleteUserPages } from "../controller/page.js";
 
@@ -77,8 +76,6 @@ router.post("/update-password", auth, updatePassword);
 
 router.post("/resend-email", resendEmail);
 
-// UNDER TESTING
-
 router.post("/forget-password", forgetPassword);
 
 router.post("/reset-password/:token", resetPassword);
@@ -103,9 +100,14 @@ router.get(
     failureRedirect: "/",
   })
 );
-router.get("/facebook", passport.authenticate("facebook"), (req, res) => {
-  res.redirect("/user/welcome");
-});
+
+router.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", {
+    successRedirect: "/user/welcome",
+    failureRedirect: "/",
+  })
+);
 
 router.get("/logout", (req, res) => {
   req.logout();
@@ -128,24 +130,22 @@ router.get("/admin-users", auth, isAdmin, adminGetUsers);
 
 router.post("/admin-new-user", auth, isAdmin, adminCreateUser);
 
-router.put("/block/:userId", auth, isAdmin, adminBlockUser);
+router.delete("/admin-delete-user/:ID", auth, isAdmin, adminDeleteUser);
 
-router.put("/unblock/:userId", auth, isAdmin, adminUnBlockUser);
+router.delete("/superadmin/:adminId", auth, deleteAdmin);
 
 router.get("/:userId/pages", auth, isAdmin, adminGetPages);
 
 router.get("/:userId/:pageId", auth, isAdmin, adminGetPage);
 
-router.delete("/:userId", auth, isAdmin, deleteUserPages);
-
 router.delete("/:userId/:pageId", auth, isAdmin, adminDeleteUserPage);
 
-router.delete("/admin/:userId", auth, isAdmin, adminDeleteUser);
+router.delete("/:userId", auth, isAdmin, deleteUserPages);
 
-router.post("/send-message/:userId", auth, isAdmin, adminSendMsg);
+router.put("/block/:userId", auth, isAdmin, adminBlockUser);
+
+router.put("/unblock/:userId", auth, isAdmin, adminUnBlockUser);
 
 router.post("/send-alert/:userId", auth, isAdmin, adminSendAlert);
-
-router.delete("/superadmin/:adminId", auth, deleteAdmin);
 
 export { router as userRouter };

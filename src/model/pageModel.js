@@ -6,6 +6,22 @@ const pageSchema = new mongoose.Schema({
     title: String,
     description: String,
     imgUrl: String,
+    selectedSections: {
+      navbarIndexSelected: Number,
+      heroIndexSelected: Number,
+      featuresIndexSelected: Number,
+      projectsIndexSelected: Number,
+      servicesIndexSelected: Number,
+      contactIndexSelected: Number,
+      teamIndexSelected: Number,
+      testimonialsIndexSelected: Number,
+      statisticsIndexSelected: Number,
+      logosIndexSelected: Number,
+      itemsIndexSelected: Number,
+      pricingIndexSelected: Number,
+      ctaIndexSelected: Number,
+      footerIndexSelected: Number,
+    },
   },
 
   navbar: {
@@ -76,6 +92,8 @@ const pageSchema = new mongoose.Schema({
       type: Array,
     },
     imgUrl: { type: String },
+    number: String,
+    date: String,
   },
   testimonials: {
     title: { type: String },
@@ -154,7 +172,7 @@ const pageSchema = new mongoose.Schema({
       },
     ],
   },
-  statistic: {
+  statistics: {
     statistics: [
       {
         title: { type: String },
@@ -367,16 +385,18 @@ const pageSchema = new mongoose.Schema({
         url: { type: String },
       },
     ],
-    items: [
+    footerSections: [
       {
-        title: { type: String },
-        links: { type: Array },
-      },
-      {
-        title: { type: String },
-        links: { type: Array },
+        title: String,
+        links: [
+          {
+            title: String,
+            url: String,
+          },
+        ],
       },
     ],
+
     contacts: [
       {
         value: { type: String },
@@ -388,9 +408,9 @@ const pageSchema = new mongoose.Schema({
         value: { type: String },
       },
     ],
-    colors: {
-      templateColors: { type: Array },
-    },
+  },
+  colors: {
+    templateColors: Array,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

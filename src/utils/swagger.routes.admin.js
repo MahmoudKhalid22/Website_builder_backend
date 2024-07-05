@@ -21,6 +21,20 @@
  *              require: true
  *              description: filter users based on their role
  *              example: role=user|admin|super-admin|premium
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *              type: string
+ *              require: true
+ *              description: limit the number of retrieved users
+ *              example: limit=10
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *              type: string
+ *              require: true
+ *              description: begin from which number you want users
+ *              example: offset=15
  *     responses:
  *       200:
  *         description: A list of users.
@@ -145,6 +159,14 @@
  *           required: true
  *           description: Bearer token for accessing admin routes.
  *           example: "Bearer abcxyz123456"
+ *       - in: query
+ *         name: limit
+ *         description: the limit of messages that you want ( the number )
+ *         example: limit=5
+ *       - in: query
+ *         name: offset
+ *         description: the number of messages that you want to start from
+ *         example: offset=5
  *     responses:
  *       200:
  *         description: A list of users.
@@ -581,7 +603,7 @@
  */
 /**
  * @swagger
- * /user/admin/{userId}:
+ * /user/admin-delete-user/{userId}:
  *   delete:
  *     summary: delete specific account of the user.
  *     description: take the id of the user and delete all his pages.
