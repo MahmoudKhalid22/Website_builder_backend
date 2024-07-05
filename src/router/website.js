@@ -2,27 +2,27 @@ import { Router } from "express";
 const router = Router();
 
 import {
-  getPage,
-  getPages,
-  newPage,
-  updatePage,
-  deletePage,
-  deleteUserPages,
-} from "../controller/page.js";
+  deleteUserWebsite,
+  deleteWebsite,
+  getWebsite,
+  getWebsites,
+  newWebsite,
+  updateWebsite,
+} from "../controller/website.js";
 import { auth } from "../middleware/index.js";
 
 // NEW PAGE
-router.post("/", auth, newPage);
+router.post("/", auth, newWebsite);
 
 // GET USER PAGES
-router.get("/websites", auth, getPages);
+router.get("/websites", auth, getWebsites);
 
-router.get("/:userId/:pageId", getPage);
+router.get("/:userId/:pageId", getWebsite);
 
-router.delete("/:id", auth, deletePage);
+router.delete("/:id", auth, deleteWebsite);
 
-router.patch("/update/:id", auth, updatePage);
+router.patch("/update/:id", auth, updateWebsite);
 
-router.delete("/delete/websites", auth, deleteUserPages);
+router.delete("/delete/websites", auth, deleteUserWebsite);
 
 export { router as websiteRouter };
