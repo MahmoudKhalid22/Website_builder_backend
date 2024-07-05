@@ -15,6 +15,7 @@ import "./controller/OAUTH.js";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import hpp from "hpp";
+import { websiteRouter } from "./router/website.js";
 // import MongoDBStore from "connect-mongodb-session";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +48,7 @@ app.use("/user", userRouter);
 app.use("/page", pageRouter);
 app.use("/message", messageRouter);
 app.use("/plan", planRouter);
+app.use("/website", websiteRouter);
 // app.use("/admin", adminRouter , userRouter);
 
 docs(app);
