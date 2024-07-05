@@ -76,8 +76,6 @@ router.post("/update-password", auth, updatePassword);
 
 router.post("/resend-email", resendEmail);
 
-// UNDER TESTING
-
 router.post("/forget-password", forgetPassword);
 
 router.post("/reset-password/:token", resetPassword);
