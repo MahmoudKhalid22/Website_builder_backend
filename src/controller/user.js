@@ -355,7 +355,6 @@ const adminGetUsers = async (req, res) => {
 
     res.json({ users: paginatedUsers, allUsers: users.length });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
