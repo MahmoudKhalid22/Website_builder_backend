@@ -11,6 +11,7 @@ import {
   sendResetPassworEmail,
 } from '../email/verificationEmail';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import {
   createUserValidation,
   loginValidation,
@@ -18,6 +19,7 @@ import {
   tokenValidation,
 } from '../middleware/user.model.validation';
 
+// Mock dependencies
 jest.mock('../model/userModel');
 jest.mock('../email/verificationEmail');
 jest.mock('../middleware/user.model.validation');
