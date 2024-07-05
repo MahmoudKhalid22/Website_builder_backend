@@ -139,7 +139,7 @@ const resetPassword = async (req, res) => {
       ...req.body,
     });
 
-    console.log(result);
+    // console.log(result);
     const decoded = await jwt.verify(result.token, process.env.PASSWORD_TOKEN);
     if (!decoded) throw new Error({ error: 'Token has been expired' });
     const userId = decoded._id;
@@ -176,13 +176,18 @@ const uploadUser = async (req, res) => {
       .resize({ width: 300, height: 300 })
       .png()
       .toBuffer();
-    req.user.avatar = buffer;
+
+    const base64Data = buffer.toString('base64');
+    imgsrc = `data:${req.file.mimetype};base64,${base64Data}`;
+
+    req.user.avatar = imgsrc;
     await req.user.save();
     res.send('avatar has been added');
   } catch (err) {
-    res.status(500).send({ err: err.message });
+    res.status(500).send({ error: err.message });
   }
 };
+
 const updateUser = async (req, res) => {
   try {
     const name = await nameValidation.validateAsync(req.body);
@@ -489,10 +494,6 @@ const getDailymessages = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
-function Sayhello() {
-  return 'hello jest';
-}
-module.exports = Sayhello;
 
 export {
   createUser,
@@ -516,10 +517,11 @@ export {
   adminBlockUser,
   adminSendMsg,
   adminSendAlert,
-  newPlan,
-  getAllPlans,
-  updatePlan,
-  deletePlan,
   getAllMessages,
   getDailymessages,
+  adminUnBlockUser,
+  adminGetPages,
+  deleteAdmin,
+  adminDeleteUserPage,
+  adminDeleteUser,
 };

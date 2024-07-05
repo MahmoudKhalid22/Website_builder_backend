@@ -3,7 +3,7 @@
  *  /message:
  *      post:
  *          tags:
- *              - Generic User
+ *              - Messages
  *          requestBody:
  *              content:
  *                  application/json:

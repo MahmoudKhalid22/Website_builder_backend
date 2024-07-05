@@ -23,5 +23,15 @@ const messageSchema = mongoose.Schema(
   }
 );
 
+messageSchema.methods.toJSON = function () {
+  const message = this;
+  const messageObj = message.toObject();
+
+  delete messageObj.updatedAt;
+  delete messageObj.__v;
+
+  return messageObj;
+};
+
 const Message = mongoose.model("Message", messageSchema);
 export default Message;

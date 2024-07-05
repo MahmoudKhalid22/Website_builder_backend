@@ -440,7 +440,7 @@
  * /user/auth/google:
  *   get:
  *     tags:
- *       - OAuth2
+ *       - User
  *     summary: Authorize
  *     description: Redirects the user to Google's OAuth2 consent screen to authorize the application.
  *     responses:
@@ -452,7 +452,7 @@
  * /user/auth/facebook:
  *   get:
  *     tags:
- *       - OAuth2
+ *       - User
  *     summary: Authorize
  *     description: Redirects the user to Facebook's OAuth2 consent screen to authorize the application.
  *     responses:
