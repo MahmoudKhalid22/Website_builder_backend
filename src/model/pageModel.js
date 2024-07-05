@@ -6,6 +6,22 @@ const pageSchema = new mongoose.Schema({
     title: String,
     description: String,
     imgUrl: String,
+    selectedSections: {
+      navbarIndexSelected: Number,
+      heroIndexSelected: Number,
+      featuresIndexSelected: Number,
+      projectsIndexSelected: Number,
+      servicesIndexSelected: Number,
+      contactIndexSelected: Number,
+      teamIndexSelected: Number,
+      testimonialsIndexSelected: Number,
+      statisticsIndexSelected: Number,
+      logosIndexSelected: Number,
+      itemsIndexSelected: Number,
+      pricingIndexSelected: Number,
+      ctaIndexSelected: Number,
+      footerIndexSelected: Number,
+    },
   },
 
   navbar: {
