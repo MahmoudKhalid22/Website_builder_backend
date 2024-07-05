@@ -17,7 +17,8 @@ import cors from "cors";
 import hpp from "hpp";
 import { websiteRouter } from "./router/website.js";
 // import MongoDBStore from "connect-mongodb-session";
-
+import { limiter } from "./middleware/rateLimit.js";
+import { hppMiddleware } from "./middleware/hpp.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -50,6 +51,8 @@ app.use("/message", messageRouter);
 app.use("/plan", planRouter);
 app.use("/website", websiteRouter);
 // app.use("/admin", adminRouter , userRouter);
+app.use("/api/", limiter);
+app.use(hppMiddleware);
 
 docs(app);
 connection();
