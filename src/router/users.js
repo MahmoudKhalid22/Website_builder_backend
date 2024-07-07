@@ -98,18 +98,29 @@ router.get("/welcome", (req, res) => {
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/user/welcome",
     failureRedirect: "/",
-  })
+  }),
+  (req, res) => {
+    const user = req.user;
+    const userJson = encodeURIComponent(JSON.stringify(user));
+    res.redirect(`https://websitebuilderbackend-production-716e.up.railway.app/redirect?user=${userJson}`);
+  }
 );
 
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: "/user/welcome",
     failureRedirect: "/",
-  })
+  }),
+  (req, res) => {
+    const user = req.user;
+    const userJson = encodeURIComponent(JSON.stringify(user));
+    res.redirect(`https://websitebuilderbackend-production-716e.up.railway.app/redirect?user=${userJson}`);
+  }
 );
+
+
+
 
 router.get("/logout", (req, res) => {
   req.logout();

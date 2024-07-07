@@ -32,6 +32,7 @@ passport.use(
           name: profile.displayName,
           email: profile.emails[0].value,
           googleId: profile.id,
+          avatar: profile.photos[0].value, 
           verified: true,
         });
         await user.save();
@@ -66,8 +67,10 @@ passport.use(
         }
         const user = new User({
           name: profile.name.givenName + " " + profile.name.familyName,
+          email: profile.emails ? profile.emails[0].value : "",
           facebookId: profile.id,
-          verified: true,
+          avatar: profile.photos[0].value, 
+          verified: true
         });
         await user.save();
         const accessToken = await user.generateAuthToken();
