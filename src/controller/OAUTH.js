@@ -23,6 +23,7 @@ passport.use(
       
       try {
         const existingUser = await User.findOne({ googleId: profile.id });
+        console.log(existingUser);
         if (existingUser) {
           const accessToken = await user.generateAuthToken();
           const refreshToken = await user.generateRefreshToken();
@@ -32,11 +33,13 @@ passport.use(
           name: profile.displayName,
           email: profile.emails[0].value,
           googleId: profile.id,
+          avatar: profile.photos[0].value, 
           verified: true,
         });
         await user.save();
         const accessToken = await user.generateAuthToken();
-        const refreshToken = await user.generateRefreshToken();
+        const refreshToken = await user.generateRefreshToken();  
+        console.log(user);
         return done(null,{ existingUser, accessToken, refreshToken});
       } catch (err) {
         done(err);
@@ -66,8 +69,10 @@ passport.use(
         }
         const user = new User({
           name: profile.name.givenName + " " + profile.name.familyName,
+          email: profile.emails ? profile.emails[0].value : "",
           facebookId: profile.id,
-          verified: true,
+          avatar: profile.photos[0].value, 
+          verified: true
         });
         await user.save();
         const accessToken = await user.generateAuthToken();
@@ -89,3 +94,4 @@ passport.serializeUser(function(user, callback) {
 passport.deserializeUser(function(user, callback) {
   callback(null, user);
 });
+

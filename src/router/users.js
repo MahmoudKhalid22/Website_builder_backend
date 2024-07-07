@@ -96,18 +96,30 @@ router.get("/welcome", (req, res) => {
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/user/welcome",
     failureRedirect: "/",
-  })
+  }),
+  (req, res) => {
+    const user = req.user;
+    console.log(user);
+    const userJson = encodeURIComponent(JSON.stringify(user));
+    console.log(userJson);
+    res.redirect(`http://localhost:3000?user=${userJson}`);
+  }
 );
 
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: "/user/welcome",
     failureRedirect: "/",
-  })
+  }),
+  (req, res) => {
+    const user = req.user;
+    const userJson = encodeURIComponent(JSON.stringify(user));
+    res.redirect(`http://localhost:3000?user=${userJson}`);
+  }
 );
+
+
 
 router.get("/logout", (req, res) => {
   req.logout();
