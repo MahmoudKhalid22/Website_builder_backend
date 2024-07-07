@@ -6,173 +6,200 @@ const pageSchema = new mongoose.Schema({
     title: String,
     description: String,
     imgUrl: String,
+    selectedSections: {
+      navbarIndexSelected: Number,
+      heroIndexSelected: Number,
+      featuresIndexSelected: Number,
+      projectsIndexSelected: Number,
+      servicesIndexSelected: Number,
+      contactIndexSelected: Number,
+      teamIndexSelected: Number,
+      testimonialsIndexSelected: Number,
+      statisticsIndexSelected: Number,
+      logosIndexSelected: Number,
+      itemsIndexSelected: Number,
+      pricingIndexSelected: Number,
+      ctaIndexSelected: Number,
+      footerIndexSelected: Number,
+    },
   },
 
   navbar: {
-    imgUrl: {
-      type: String,
-    },
-    links: {
-      type: [
-        {
-          title: String,
-          url: String,
-        },
-        {
-          title: String,
-          url: String,
-        },
-        {
-          title: String,
-          url: String,
-        },
-        {
-          title: String,
-          url: String,
-        },
-        {
-          title: String,
-          url: String,
-        },
-        {
-          title: String,
-          url: String,
-        },
-      ],
-    },
+    imgUrl: String,
+    email: String,
+    buttonText: String,
+    icon: String,
+    searchIcon: String,
+    shoppingIcon: String,
+    title: String,
+    subtitle: String,
+    description: String,
+    icons: Array,
+    links: [
+      {
+        title: String,
+        url: String,
+        imgUrl: String,
+      },
+    ],
+    dropDown: [
+      {
+        title: String,
+        url: String,
+      },
+    ],
   },
   hero: {
-    title: { type: String },
-    description: { type: String },
-    buttonText: { type: String },
-    icon: { type: String },
-    imgUrl: { type: String },
+    title: String,
+    description: String,
+    subtitle: String,
+    text: String,
+    imgUrl: String,
+    imageUrl: String,
+    videoUrl: String,
+    icon: String,
+    buttonText: String,
+    buttonIcon: String,
+    linkText: String,
+    duration: String,
+    inputPlaceholder: String,
+    jop: String,
+    icons: Array,
+    imgs: Array,
+    buttons: [
+      {
+        buttonText: String,
+        url: String,
+      },
+    ],
+    heros: [
+      {
+        title: String,
+        description: String,
+        subtitle: String,
+        imgUrl: String,
+        icon: String,
+        start: String,
+        end: String,
+        count: String,
+      },
+    ],
   },
   services: {
+    title: String,
+    subtitle: String,
+    description: String,
+    buttonText: String,
+    imgUrl: String,
+    icon: String,
     services: [
       {
-        title: { type: String },
-        description: { type: String },
-        icon: { type: String },
-      },
-      {
-        icon: { type: String },
-        title: { type: String },
-        description: { type: String },
-      },
-      {
-        icon: { type: String },
-        title: { type: String },
-        description: { type: String },
+        title: String,
+        description: String,
+        icon: String,
+        linkText: String,
+        buttonText: String,
+        imgUrl: String,
+        value: String,
+        price: Number,
+        items: Array,
       },
     ],
   },
   features: {
-    title: { type: String },
-    description: { type: String },
-    phone: { type: String },
-    buttonText: { type: String },
-    icons: {
-      type: Array,
-    },
-    imgUrl: { type: String },
-    number: String,
+    title: String,
+    subtitle: String,
+    description: String,
+    text: String,
+    imgUrl: String,
+    buttonText: String,
+    phone: String,
+    discount: String,
+    percentage: String,
     date: String,
+    icons: Array,
+    imgs: Array,
+    features: [
+      {
+        title: String,
+        description: String,
+        icon: String,
+        imgUrl: String,
+        number: String,
+        date: String,
+        name: String,
+      },
+    ],
   },
   testimonials: {
-    title: { type: String },
+    title: String,
+    description: String,
+    subtitle: String,
+    imgUrl: String,
+    buttonText: String,
+    imgs: Array,
+    icons: Array,
     testimonials: [
       {
-        imgUrl: { type: String },
-        name: { type: String },
-        location: { type: String },
-        opinion: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        name: { type: String },
-        location: { type: String },
-        opinion: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        name: { type: String },
-        location: { type: String },
-        opinion: { type: String },
+        name: String,
+        location: String,
+        imgUrl: String,
+        opinion: String,
+        title: String,
+        role: String,
+        description: String,
+        subtitle: String,
+        star: String,
       },
     ],
   },
   logos: {
     companies: [
       {
-        imgUrl: { type: String },
-        url: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        url: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        url: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        url: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        url: { type: String },
+        imgUrl: String,
+        url: String,
+        title: String,
       },
     ],
   },
   projects: {
-    title: { type: String },
-    description: { type: String },
+    title: String,
+    description: String,
+    subtitle: String,
+    imgUrl: String,
+    icon: String,
+    buttonText: String,
+    linkText: String,
+    categories: Array,
     projects: [
       {
-        imgUrl: { type: String },
-        title: { type: String },
-        description: { type: String },
-        icon: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        title: { type: String },
-        description: { type: String },
-        icon: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        title: { type: String },
-        description: { type: String },
-        icon: { type: String },
-      },
-      {
-        imgUrl: { type: String },
-        title: { type: String },
-        description: { type: String },
-        icon: { type: String },
+        title: String,
+        description: String,
+        subtitle: String,
+        imgUrl: String,
+        icon: String,
+        name: String,
+        price: String,
+        buttonText: String,
+        space: String,
+        category: String,
+        url: String,
+        link: String,
+        icons: [
+          {
+            icon: String,
+            title: String,
+          },
+        ],
       },
     ],
   },
   statistics: {
     statistics: [
       {
-        title: { type: String },
-        value: { type: String },
-      },
-      {
-        title: { type: String },
-        value: { type: String },
-      },
-      {
-        title: { type: String },
-        value: { type: String },
-      },
-      {
-        title: { type: String },
-        value: { type: String },
+        title: String,
+        value: String,
+        imgUrl: String,
       },
     ],
   },
@@ -207,171 +234,249 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   team: {
-    title: { type: String },
+    title: String,
+    subtitle: String,
+    description: String,
+    buttonText: String,
     members: [
       {
-        name: { type: String },
-        email: { type: String },
-        location: { type: String },
-        imgUrl: { type: String },
+        memberId: String,
+        name: String,
+        jop: String,
+        email: String,
+        location: String,
+        imgUrl: String,
+        destinationImage: String,
+        travelerImage: String,
+        rating: String,
+        icon: String,
+        socialLink: String,
         medias: [
           {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
+            icon: String,
+            url: String,
           },
         ],
-        email: { type: String },
-      },
-      {
-        name: { type: String },
-        location: { type: String },
-        imgUrl: { type: String },
-        mediaIcons: [
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-        ],
-        email: { type: String },
-      },
-      {
-        name: { type: String },
-        location: { type: String },
-        imgUrl: { type: String },
-        mediaIcons: [
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-        ],
-        email: { type: String },
-      },
-      {
-        name: { type: String },
-        location: { type: String },
-        imgUrl: { type: String },
-        mediaIcons: [
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-          {
-            icon: { type: String },
-            url: { type: String },
-          },
-        ],
-        email: { type: String },
       },
     ],
   },
   pricing: {
-    title: { type: String },
-    description: { type: String },
+    title: String,
+    subtitle: String,
+    text: String,
+    description: String,
+    buttonText: String,
+    imgUrl: String,
+    imgs: Array,
     plans: [
       {
-        title: { type: String },
-        price: { type: Number },
-        timeUnit: { type: String },
-        moneyUnit: { type: String },
-        features: { type: Array },
-        buttonText: { type: String },
-        icon: { type: String },
-      },
-      {
-        plan: { type: String },
-        price: { type: Number },
-        timeUnit: { type: String },
-        moneyUnit: { type: String },
-        features: { type: Array },
-        buttonText: { type: String },
-        icon: { type: String },
-      },
-      {
-        plan: { type: String },
-        price: { type: Number },
-        timeUnit: { type: String },
-        moneyUnit: { type: String },
-        features: { type: Array },
-        buttonText: { type: String },
-        icon: { type: String },
+        title: String,
+        subtitle: String,
+        description: String,
+        price: String,
+        currencySymbol: String,
+        timeUnit: String,
+        buttonText: String,
+        icon: String,
+        features: Array,
       },
     ],
   },
-  cta: {
-    title: { type: String },
-    description: { type: String },
-    buttonText: { type: String },
-    icon: { type: String },
-  },
-  footer: {
-    imgUrl: { type: String },
-    description: { type: String },
 
+  cta: {
+    title: String,
+    subtitle: String,
+    description: String,
+    text: String,
+    email: String,
+    buttonText: String,
+    icon: String,
+    inputPlaceholder: String,
+    googleButton: {
+      buttonText: String,
+      buttonIcon: String,
+    },
+    appleButton: {
+      buttonText: String,
+      buttonIcon: String,
+    },
+    imgs: Array,
+    educations: [
+      {
+        imgUrl: String,
+        title: String,
+        description: String,
+        year: String,
+      },
+    ],
+    experiences: [
+      {
+        imgUrl: String,
+        title: String,
+        description: String,
+        year: String,
+      },
+    ],
+    items: [
+      {
+        title: String,
+        subtitle: String,
+        date: String,
+        description: String,
+        category: String,
+      },
+    ],
+  },
+  contact: {
+    title: String,
+    subtitle: String,
+    description: String,
+    email: String,
+    phone: String,
+    imgUrl: String,
+    icon: String,
+    buttonText: String,
+    linkText: String,
+    name: String,
+    address: String,
+    subject: String,
+    message: String,
+    contacts: [
+      {
+        type: String,
+        phone: String,
+        address: String,
+        email: String,
+        buttonText: String,
+        imgUrl: String,
+      },
+    ],
+  },
+  blogs: {
+    title: String,
+    description: String,
+    subtitle: String,
+    imgUrl: String,
+    buttonText: String,
+    linkText: String,
+    blogs: [
+      {
+        title: String,
+        description: String,
+        subtitle: String,
+        imgUrl: String,
+        date: String,
+      },
+    ],
+  },
+
+  header: {
+    imgUrl: String,
+    buttonText: String,
+  },
+
+  reservation: {
+    title: String,
+    buttonText: String,
+    imgUrl: String,
+    shape: String,
+  },
+
+  about: {
+    title: String,
+    subtitle: String,
+    description: String,
+    buttonText: String,
+    buttonIcon: String,
+    linkText: String,
+    imgUrl: String,
+    icon: String,
+    imgs: Array,
+    details: Array,
+    abouts: [
+      {
+        title: String,
+        value: Number,
+      },
+    ],
+    buttons: [
+      {
+        buttonText: String,
+        icon: String,
+        url: String,
+      },
+    ],
+  },
+
+  gallery: {
+    gallery: [
+      {
+        imgUrl: String,
+        title: String,
+      },
+    ],
+  },
+
+  offers: {
+    title: String,
+    buttonText: String,
+    offers: [
+      {
+        title: String,
+        description: String,
+        discount: String,
+        imgUrl: String,
+      },
+    ],
+  },
+
+  reviews: {
+    title: String,
+    description: String,
+    subtitle: String,
+    imgUrl: String,
+    icon: String,
+    reviews: Array,
+    logos: Array,
+  },
+
+  products: {
+    title: String,
+    subtitle: String,
+    icon: String,
+    rateIcon: String,
+    products: [
+      {
+        title: String,
+        items: [
+          {
+            itemId: String,
+            title: String,
+            price: String,
+            imgUrl: String,
+          },
+        ],
+      },
+    ],
+  },
+
+  footer: {
+    imgUrl: String,
+    description: String,
+    title: String,
+    subtitle: String,
+    icon: String,
+    links: Array,
     medias: [
       {
-        icon: { type: String },
-        url: { type: String },
-      },
-      {
-        icon: { type: String },
-        url: { type: String },
-      },
-      {
-        icon: { type: String },
-        url: { type: String },
-      },
-      {
-        icon: { type: String },
-        url: { type: String },
+        icon: String,
+        url: String,
       },
     ],
     footerSections: [
       {
         title: String,
+        url: String,
         links: [
           {
             title: String,
@@ -380,22 +485,20 @@ const pageSchema = new mongoose.Schema({
         ],
       },
     ],
-
     contacts: [
       {
-        value: { type: String },
-      },
-      {
-        value: { type: String },
-      },
-      {
-        value: { type: String },
+        title: String,
+        value: String,
+        icon: String,
+        url: String,
       },
     ],
   },
+
   colors: {
     templateColors: Array,
   },
+
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

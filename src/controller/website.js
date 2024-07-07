@@ -1,6 +1,6 @@
-import { Page } from "../model/pageModel.js";
+import { WebSite } from "../model/website.js";
 
-const newPage = async (req, res) => {
+const newWebsite = async (req, res) => {
   try {
     if (req.user.role === "admin") {
       return res
@@ -10,7 +10,7 @@ const newPage = async (req, res) => {
     if (req.user.status === "blocked") {
       return res.status(400).send({ error: "user is blocked" });
     }
-    const page = new Page({ ...req.body, owner: req.user._id });
+    const page = new WebSite({ ...req.body, owner: req.user._id });
     const savedPage = await page.save();
     res.status(201).json({ message: "Page created successfully", savedPage });
   } catch (error) {
@@ -18,12 +18,12 @@ const newPage = async (req, res) => {
   }
 };
 
-const getPage = async (req, res) => {
+const getWebsite = async (req, res) => {
   const pageId = req.params.pageId;
 
   const userId = req.params.userId;
   try {
-    const page = await Page.findOne({ _id: pageId, owner: userId });
+    const page = await WebSite.findOne({ _id: pageId, owner: userId });
     if (!page) {
       return res.status(404).send({ error: "the page isn't found" });
     }
@@ -33,11 +33,11 @@ const getPage = async (req, res) => {
   }
 };
 
-const getPages = async (req, res) => {
+const getWebsites = async (req, res) => {
   const userId = req.user;
   try {
     const { _id } = userId;
-    const pages = await Page.find({ owner: _id });
+    const pages = await WebSite.find({ owner: _id });
     const result = [];
     pages.map((page) =>
       result.push({
@@ -51,7 +51,7 @@ const getPages = async (req, res) => {
   }
 };
 
-const deletePage = async (req, res) => {
+const deleteWebsite = async (req, res) => {
   const pageId = req.params.id;
   const userId = req.user._id;
 
@@ -59,7 +59,7 @@ const deletePage = async (req, res) => {
     if (req.user.status === "blocked") {
       return res.status(400).send({ error: "user is blocked" });
     }
-    const deletedPage = await Page.findOneAndDelete({
+    const deletedPage = await WebSite.findOneAndDelete({
       _id: pageId,
       owner: userId,
     });
@@ -75,7 +75,7 @@ const deletePage = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-const updatePage = async (req, res) => {
+const updateWebsite = async (req, res) => {
   try {
     if (req.user.status === "blocked") {
       return res.status(400).send({ error: "user is blocked" });
@@ -120,7 +120,7 @@ const updatePage = async (req, res) => {
       return res.status(400).send({ error: "No valid updates" });
     }
 
-    const page = await Page.findOne({
+    const page = await WebSite.findOne({
       _id: pageId,
       owner: userId,
     });
@@ -139,14 +139,21 @@ const updatePage = async (req, res) => {
   }
 };
 
-const deleteUserPages = async (req, res) => {
+const deleteUserWebsite = async (req, res) => {
   try {
     const userId = req.params.userId;
-    await Page.deleteMany({ owner: userId }, { new: true });
+    await WebSite.deleteMany({ owner: userId }, { new: true });
     res.json({ message: "User's pages have been deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export { newPage, getPages, getPage, updatePage, deletePage, deleteUserPages };
+export {
+  newWebsite,
+  getWebsites,
+  getWebsite,
+  updateWebsite,
+  deleteWebsite,
+  deleteUserWebsite,
+};
