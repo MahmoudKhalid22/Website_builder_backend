@@ -23,6 +23,7 @@ passport.use(
       
       try {
         const existingUser = await User.findOne({ googleId: profile.id });
+        console.log(existingUser);
         if (existingUser) {
           const accessToken = await user.generateAuthToken();
           const refreshToken = await user.generateRefreshToken();
@@ -37,7 +38,8 @@ passport.use(
         });
         await user.save();
         const accessToken = await user.generateAuthToken();
-        const refreshToken = await user.generateRefreshToken();
+        const refreshToken = await user.generateRefreshToken();  
+        console.log(user);
         return done(null,{ existingUser, accessToken, refreshToken});
       } catch (err) {
         done(err);
@@ -92,3 +94,4 @@ passport.serializeUser(function(user, callback) {
 passport.deserializeUser(function(user, callback) {
   callback(null, user);
 });
+

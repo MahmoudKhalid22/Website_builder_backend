@@ -102,8 +102,10 @@ router.get(
   }),
   (req, res) => {
     const user = req.user;
+    console.log(user);
     const userJson = encodeURIComponent(JSON.stringify(user));
-    res.redirect(`https://websitebuilderbackend-production-716e.up.railway.app/redirect?user=${userJson}`);
+    console.log(userJson);
+    res.redirect(`http://localhost:3000?user=${userJson}`);
   }
 );
 
@@ -115,10 +117,9 @@ router.get(
   (req, res) => {
     const user = req.user;
     const userJson = encodeURIComponent(JSON.stringify(user));
-    res.redirect(`https://websitebuilderbackend-production-716e.up.railway.app/redirect?user=${userJson}`);
+    res.redirect(`http://localhost:3000?user=${userJson}`);
   }
 );
-
 
 
 
