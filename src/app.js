@@ -29,7 +29,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
 app.use(cors());
 app.use(hpp());
-
+app.use(limiter());
 // const store = new MongoDBStore({
 //   uri: process.env.MONGODB_URL,
 // });
