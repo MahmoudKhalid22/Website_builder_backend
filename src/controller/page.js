@@ -7,10 +7,8 @@ const newPage = async (req, res) => {
         .status(400)
         .send({ error: "admin is not authorized to create page" });
     }
-    if (req.user.status === "blocked"){
-      return res
-      .status(400)
-      .send({ error: "user is blocked" })
+    if (req.user.status === "blocked") {
+      return res.status(400).send({ error: "user is blocked" });
     }
     const page = new Page({ ...req.body, owner: req.user._id });
     const savedPage = await page.save();
@@ -58,10 +56,8 @@ const deletePage = async (req, res) => {
   const userId = req.user._id;
 
   try {
-    if (req.user.status === "blocked"){
-      return res
-      .status(400)
-      .send({ error: "user is blocked" })
+    if (req.user.status === "blocked") {
+      return res.status(400).send({ error: "user is blocked" });
     }
     const deletedPage = await Page.findOneAndDelete({
       _id: pageId,
@@ -81,10 +77,8 @@ const deletePage = async (req, res) => {
 };
 const updatePage = async (req, res) => {
   try {
-    if (req.user.status === "blocked"){
-      return res
-      .status(400)
-      .send({ error: "user is blocked" })
+    if (req.user.status === "blocked") {
+      return res.status(400).send({ error: "user is blocked" });
     }
     const pageId = req.params.id;
     const userId = req.user._id;
@@ -105,6 +99,15 @@ const updatePage = async (req, res) => {
       "team",
       "pricing",
       "cta",
+      "contact",
+      "blogs",
+      "header",
+      "reservation",
+      "about",
+      "gallery",
+      "offers",
+      "reviews",
+      "products",
       "footer",
       "colors",
     ];
