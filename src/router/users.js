@@ -89,9 +89,6 @@ router.get(
   passport.authenticate("facebook", { scope: ["email"] })
 );
 
-router.get("/welcome", (req, res) => {
-  res.send("your auth success");
-});
 
 router.get(
   "/auth/google/callback",
@@ -100,12 +97,18 @@ router.get(
   }),
   (req, res) => {
     const user = req.user;
-    console.log(user);
     const userJson = encodeURIComponent(JSON.stringify(user));
-    console.log(userJson);
     res.redirect(`http://localhost:3000?user=${userJson}`);
   }
 );
+
+router.get("/welcome", (req, res) => {
+  res.send("your auth success");
+});
+
+// router.get('/allMovies',(req,res)=>{
+//   res.send('hello')
+// });
 
 router.get(
   "/auth/facebook/callback",
