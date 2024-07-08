@@ -361,7 +361,7 @@ const pageSchema = new mongoose.Schema({
     message: String,
     contacts: [
       {
-        type: String,
+        _type: String,
         phone: String,
         address: String,
         email: String,
