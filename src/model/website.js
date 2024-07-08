@@ -536,7 +536,7 @@ const websiteSchema = new mongoose.Schema({
   },
 
   owner: {
-    _type: mongoose.Schema._Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
