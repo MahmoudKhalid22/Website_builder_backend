@@ -13,8 +13,8 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      // callbackURL: "https://websitebuilderbackend-production-716e.up.railway.app/user/auth/google/callback",
-      callbackURL: "http://localhost:5000/user/auth/google/callback",
+      callbackURL: "https://websitebuilderbackend-production-716e.up.railway.app/user/auth/google/callback",
+      // callbackURL: "http://localhost:5000/user/auth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
@@ -22,7 +22,6 @@ passport.use(
         let user = await User.findOne({ googleId: profile.id });
         if (user) {
           user.tokens = [{ accessToken, refreshToken }];
-          console.log(user);
           user.accessToken = accessToken;
           user.refreshToken = refreshToken;
           await user.save();
