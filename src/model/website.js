@@ -359,16 +359,7 @@ const websiteSchema = new mongoose.Schema({
     address: String,
     subject: String,
     message: String,
-    contacts: [
-      {
-        type: String,
-        phone: String,
-        address: String,
-        email: String,
-        buttonText: String,
-        imgUrl: String,
-      },
-    ],
+    contacts: Array,
   },
   blogs: {
     sectionId: String,
@@ -416,7 +407,7 @@ const websiteSchema = new mongoose.Schema({
     buttonIcon: String,
     linkText: String,
     imgUrl: String,
-    icon: String,
+    icon: mongoose.Schema.Types.Mixed,
     imgs: Array,
     details: Array,
     abouts: [
