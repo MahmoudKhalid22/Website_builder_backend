@@ -213,9 +213,9 @@ const pageSchema = new mongoose.Schema({
   },
   items: {
     sectionId: String,
+    title: String,
     subtitle: String,
     imgs: Array,
-    title: String ,
     description: { type: String },
     items: [
       {
@@ -439,13 +439,13 @@ const pageSchema = new mongoose.Schema({
         value: Number,
       },
     ],
-    icon: [
-      {
-        text: String,
-        linkText: Number,
-        imgUrl: Number,
-      },
-    ],
+
+    icon: {
+      text: String,
+      linkText: Number,
+      imgUrl: Number,
+    },
+  
     buttons: [
       {
         buttonText: String,
