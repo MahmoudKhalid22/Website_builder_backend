@@ -79,6 +79,9 @@ router.post("/resend-email", resendEmail);
 router.post("/forget-password", forgetPassword);
 
 router.post("/reset-password/:token", resetPassword);
+
+
+
 // oauth with google
 router.get(
   "/auth/google",
@@ -97,8 +100,11 @@ router.get(
   }),
   (req, res) => {
     const user = req.user;
-    const userJson = encodeURIComponent(JSON.stringify(user));
-    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}`)
+    const accessToken = user.accessToken;
+    const refreshToken = req.user.refreshToken;
+    const userJson = JSON.stringify(user);
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}&accessToken=${accessToken}`)
+    // res.redirect(`http://localhost:5000/user/welcome/?user=${userJson}&accessToken=${accessToken}`);
   }
 );
 
@@ -107,6 +113,12 @@ router.get("/welcome", (req, res) => {
 });
 
 
+router.get("/",(req,res)=>{
+  const user = req.query?.user;
+  console.log(JSON.parse(user))
+  res.send('hello'+user)
+})
+
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
@@ -114,9 +126,11 @@ router.get(
   }),
   (req, res) => {
     const user = req.user;
-    const userJson = encodeURIComponent(JSON.stringify(user));
-    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}`);
-    // res.redirect(`http://localhost:3000?user=${userJson}`);
+    const accessToken = user.accessToken;
+    const refreshToken = req.user.refreshToken;
+    const userJson = JSON.stringify(user);
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}&accessToken=${accessToken}`)
+    // res.redirect(`http://localhost:5000/user/welcome/?user=${userJson}&accessToken=${accessToken}`);
   }
 );
 
