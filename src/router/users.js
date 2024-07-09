@@ -79,6 +79,9 @@ router.post("/resend-email", resendEmail);
 router.post("/forget-password", forgetPassword);
 
 router.post("/reset-password/:token", resetPassword);
+
+
+
 // oauth with google
 router.get(
   "/auth/google",
@@ -89,25 +92,49 @@ router.get(
   passport.authenticate("facebook", { scope: ["email"] })
 );
 
-router.get("/welcome", (req, res) => {
-  res.send("your auth success");
-});
 
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/user/welcome",
-    failureRedirect: "/",
-  })
+    failureRedirect: "/user",
+  }),
+  (req, res) => {
+    const user = req.user;
+    const accessToken = user.accessToken;
+    const refreshToken = req.user.refreshToken;
+    const userJson = JSON.stringify(user);
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}&accessToken=${accessToken}`)
+    // res.redirect(`http://localhost:5000/user/welcome/?user=${userJson}&accessToken=${accessToken}`);
+  }
 );
+
+router.get("/welcome", (req, res) => {
+  res.send("your auth success");
+});
+
+
+router.get("/",(req,res)=>{
+  const user = req.query?.user;
+  console.log(JSON.parse(user))
+  res.send('hello'+user)
+})
 
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: "/user/welcome",
-    failureRedirect: "/",
-  })
+    failureRedirect: "/user",
+  }),
+  (req, res) => {
+    const user = req.user;
+    const accessToken = user.accessToken;
+    const refreshToken = req.user.refreshToken;
+    const userJson = JSON.stringify(user);
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}&accessToken=${accessToken}`)
+    // res.redirect(`http://localhost:5000/user/welcome/?user=${userJson}&accessToken=${accessToken}`);
+  }
 );
+
+
 
 router.get("/logout", (req, res) => {
   req.logout();

@@ -213,8 +213,9 @@ const pageSchema = new mongoose.Schema({
   },
   items: {
     sectionId: String,
-
-    title: { type: String },
+    title: String,
+    subtitle: String,
+    imgs: Array,
     description: { type: String },
     items: [
       {
@@ -269,6 +270,12 @@ const pageSchema = new mongoose.Schema({
             url: String,
           },
         ],
+      },
+    ],
+    medias: [
+      {
+        icon: String,
+        url: String,
       },
     ],
   },
@@ -409,12 +416,23 @@ const pageSchema = new mongoose.Schema({
     icon: { type: mongoose.Schema.Types.Mixed },
     imgs: Array,
     details: Array,
+    numbers: Array,
+    sign: Array,
+    type: Array,
+    typeOfExpericnce: Array,
     abouts: [
       {
         title: String,
         value: Number,
       },
     ],
+
+    icon: {
+      text: String,
+      linkText: Number,
+      imgUrl: Number,
+    },
+
     buttons: [
       {
         buttonText: String,
