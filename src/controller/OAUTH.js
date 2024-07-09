@@ -13,8 +13,8 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://websitebuilderbackend-production-716e.up.railway.app/user/auth/google/callback",
-      // callbackURL: "http://localhost:5000/user/auth/google/callback",
+      // callbackURL: "https://websitebuilderbackend-production-716e.up.railway.app/user/auth/google/callback",
+      callbackURL: "http://localhost:5000/user/auth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
@@ -23,8 +23,10 @@ passport.use(
         if (user) {
           user.tokens = [{ accessToken, refreshToken }];
           console.log(user);
+          user.accessToken = accessToken;
+          user.refreshToken = refreshToken;
           await user.save();
-          return done(null, user);
+          return done(null, user );
         } else {
           user = new User({
             name: profile.displayName,
@@ -33,7 +35,8 @@ passport.use(
             verified: true,
             tokens: [{ accessToken, refreshToken }],
           });
-          console.log(user);
+          user.accessToken = accessToken;
+          user.refreshToken = refreshToken;
           await user.save();
           return done(null, user);
         }
@@ -78,15 +81,20 @@ passport.use(
     {
       clientID: FACEBOOK_CLIENT_ID,
       clientSecret: FACEBOOK_CLIENT_SECRET,
-      callbackURL: "/user/facebook",
+      callbackURL: "https://websitebuilderbackend-production-716e.up.railway.app/user/auth/facebook/callback",
+      // callbackURL: "http://localhost:5000/user/auth/google/callback",
+
       profileFields: ["name", "picture"],
     },
 
     async function (accessToken, refreshToken, profile, done) {
+      console.log(accessToken);
       try {
         let user = await User.findOne({ facebookId: profile.id });
         if (user) {
           user.tokens = [{ accessToken, refreshToken }];
+          user.accessToken = accessToken;
+          user.refreshToken = refreshToken;
           await user.save();
           return done(null, user);
         } else {
@@ -98,6 +106,8 @@ passport.use(
             verified: true,
             tokens: [{ accessToken, refreshToken }],
           });
+          user.accessToken = accessToken;
+          user.refreshToken = refreshToken;
           await user.save();
           return done(null, user);
         }
@@ -143,11 +153,12 @@ passport.use(
 // );
 
 
-passport.serializeUser(function (user, done) {
+
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async function (id, done) {
+passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
     done(null, user);
@@ -155,6 +166,7 @@ passport.deserializeUser(async function (id, done) {
     done(err);
   }
 });
+
 
 // passport.serializeUser(function(user, callback) {
 //   callback(null, user);
