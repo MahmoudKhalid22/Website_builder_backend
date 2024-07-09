@@ -50,6 +50,7 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   hero: {
+    sectionId: String,
     title: String,
     description: String,
     subtitle: String,
@@ -86,6 +87,7 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   services: {
+    sectionId: String,
     title: String,
     subtitle: String,
     description: String,
@@ -107,6 +109,7 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   features: {
+    sectionId: String,
     title: String,
     subtitle: String,
     description: String,
@@ -132,6 +135,7 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   testimonials: {
+    sectionId: String,
     title: String,
     description: String,
     subtitle: String,
@@ -154,6 +158,7 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   logos: {
+    sectionId: String,
     companies: [
       {
         imgUrl: String,
@@ -163,6 +168,7 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   projects: {
+    sectionId: String,
     title: String,
     description: String,
     subtitle: String,
@@ -195,6 +201,8 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   statistics: {
+    sectionId: String,
+
     statistics: [
       {
         title: String,
@@ -204,6 +212,8 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   items: {
+    sectionId: String,
+
     title: { type: String },
     description: { type: String },
     items: [
@@ -234,13 +244,15 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   team: {
+    sectionId: String,
+
     title: String,
     subtitle: String,
     description: String,
     buttonText: String,
     members: [
       {
-        memberId: String,
+        membersectionId: String,
         name: String,
         jop: String,
         email: String,
@@ -261,6 +273,8 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   pricing: {
+    sectionId: String,
+
     title: String,
     subtitle: String,
     text: String,
@@ -284,6 +298,8 @@ const pageSchema = new mongoose.Schema({
   },
 
   cta: {
+    sectionId: String,
+
     title: String,
     subtitle: String,
     description: String,
@@ -328,6 +344,8 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   contact: {
+    sectionId: String,
+
     title: String,
     subtitle: String,
     description: String,
@@ -353,6 +371,8 @@ const pageSchema = new mongoose.Schema({
     ],
   },
   blogs: {
+    sectionId: String,
+
     title: String,
     description: String,
     subtitle: String,
@@ -371,11 +391,15 @@ const pageSchema = new mongoose.Schema({
   },
 
   header: {
+    sectionId: String,
+
     imgUrl: String,
     buttonText: String,
   },
 
   reservation: {
+    sectionId: String,
+
     title: String,
     buttonText: String,
     imgUrl: String,
@@ -383,6 +407,8 @@ const pageSchema = new mongoose.Schema({
   },
 
   about: {
+    sectionId: String,
+
     title: String,
     subtitle: String,
     description: String,
@@ -409,6 +435,8 @@ const pageSchema = new mongoose.Schema({
   },
 
   gallery: {
+    sectionId: String,
+
     gallery: [
       {
         imgUrl: String,
@@ -418,6 +446,8 @@ const pageSchema = new mongoose.Schema({
   },
 
   offers: {
+    sectionId: String,
+
     title: String,
     buttonText: String,
     offers: [
@@ -431,6 +461,8 @@ const pageSchema = new mongoose.Schema({
   },
 
   reviews: {
+    sectionId: String,
+
     title: String,
     description: String,
     subtitle: String,
@@ -441,6 +473,8 @@ const pageSchema = new mongoose.Schema({
   },
 
   products: {
+    sectionId: String,
+
     title: String,
     subtitle: String,
     icon: String,
@@ -450,7 +484,7 @@ const pageSchema = new mongoose.Schema({
         title: String,
         items: [
           {
-            itemId: String,
+            itemsectionId: String,
             title: String,
             price: String,
             imgUrl: String,
@@ -461,6 +495,8 @@ const pageSchema = new mongoose.Schema({
   },
 
   footer: {
+    sectionId: String,
+
     imgUrl: String,
     description: String,
     title: String,

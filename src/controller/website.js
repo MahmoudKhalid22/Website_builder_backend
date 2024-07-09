@@ -12,7 +12,12 @@ const newWebsite = async (req, res) => {
     }
     const page = new WebSite({ ...req.body, owner: req.user._id });
     const savedPage = await page.save();
-    res.status(201).json({ message: "Page created successfully", savedPage });
+    res
+      .status(201)
+      .json({
+        message: "Your website has been created successfully",
+        savedPage,
+      });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
