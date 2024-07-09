@@ -89,33 +89,34 @@ router.get(
   passport.authenticate("facebook", { scope: ["email"] })
 );
 
-router.get("/welcome", (req, res) => {
-  res.send("your auth success");
-});
 
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/",
+    failureRedirect: "/user",
   }),
   (req, res) => {
     const user = req.user;
-    console.log(user);
     const userJson = encodeURIComponent(JSON.stringify(user));
-    console.log(userJson);
-    res.redirect(`http://localhost:3000?user=${userJson}`);
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}`)
   }
 );
+
+router.get("/welcome", (req, res) => {
+  res.send("your auth success");
+});
+
 
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
-    failureRedirect: "/",
+    failureRedirect: "/user",
   }),
   (req, res) => {
     const user = req.user;
     const userJson = encodeURIComponent(JSON.stringify(user));
-    res.redirect(`http://localhost:3000?user=${userJson}`);
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}`);
+    // res.redirect(`http://localhost:3000?user=${userJson}`);
   }
 );
 

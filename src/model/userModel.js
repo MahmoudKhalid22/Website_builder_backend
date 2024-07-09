@@ -3,6 +3,8 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Page } from "./pageModel.js";
+// import { type } from "os";
+// import { string } from "joi";
 
 const userSchema = new Schema(
   {
