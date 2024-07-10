@@ -27,7 +27,6 @@
 
 
 
-
 import jwt from 'jsonwebtoken';
 import { User } from '../model/userModel.js';
 import axios from 'axios';
@@ -36,7 +35,6 @@ import { OAuth2Client } from 'google-auth-library';
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = "https://websitebuilderbackend-production-716e.up.railway.app/user/auth/google/callback";
-const oAuth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
 // Function to verify Google access token
 async function verifyGoogleToken(accessToken) {
@@ -45,6 +43,16 @@ async function verifyGoogleToken(accessToken) {
     return response.data;
   } catch (error) {
     throw new Error('Invalid Google access token');
+  }
+}
+
+// Function to verify Facebook access token
+async function verifyFacebookToken(accessToken) {
+  try {
+    const response = await axios.get(`https://graph.facebook.com/me?access_token=${accessToken}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Invalid Facebook access token');
   }
 }
 
@@ -75,6 +83,18 @@ const auth = async (req, res, next) => {
         const newAccessToken = await refreshGoogleToken(user);
         req.token = newAccessToken;
       }
+    } else if (token.startsWith('EA')) { // Assuming Facebook access tokens start with 'EA'
+      // Handle Facebook access token
+      try {
+        const facebookUser = await verifyFacebookToken(token);
+        user = await User.findOne({ facebookId: facebookUser.id });
+
+        if (!user) {
+          throw new Error('User not found');
+        }
+      } catch (error) {
+        throw new Error('Invalid Facebook access token');
+      }
     } else {
       // Handle your JWT token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -93,5 +113,5 @@ const auth = async (req, res, next) => {
   }
 };
 
+export { auth };
 
-export {auth};
