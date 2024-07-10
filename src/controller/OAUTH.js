@@ -101,7 +101,7 @@ passport.use(
             name: profile.name.givenName + " " + profile.name.familyName,
             email: profile.emails ? profile.emails[0].value : "",
             facebookId: profile.id,
-            avatar: profile.photos[0].value,
+            // avatar: profile.photos[0].value,
             verified: true,
             tokens: [{ accessToken, refreshToken }],
           });
