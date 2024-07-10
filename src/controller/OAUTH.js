@@ -81,9 +81,9 @@ passport.use(
       clientID: FACEBOOK_CLIENT_ID,
       clientSecret: FACEBOOK_CLIENT_SECRET,
       callbackURL: "https://websitebuilderbackend-production-716e.up.railway.app/user/auth/facebook/callback",
-      // callbackURL: "http://localhost:5000/user/auth/google/callback",
+      // callbackURL: "http://localhost:5000/user/auth/facebook/callback",
 
-      profileFields: ["name", "picture"],
+      profileFields: ['id', 'emails', 'name', "picture"],
     },
 
     async function (accessToken, refreshToken, profile, done) {
