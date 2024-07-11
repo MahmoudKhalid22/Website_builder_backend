@@ -101,9 +101,9 @@ router.get(
   (req, res) => {
     const user = req.user;
     const accessToken = user.accessToken;
-    const refreshToken = req.user.refreshToken;
+    const refreshToken = user.generateRefreshToken();
     const userJson = JSON.stringify(user);
-    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}&accessToken=${accessToken}`)
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/designs/?user=${userJson}&accessToken=${accessToken}`)
     // res.redirect(`http://localhost:5000/user/welcome/?user=${userJson}&accessToken=${accessToken}`);
   }
 );
@@ -129,7 +129,7 @@ router.get(
     const accessToken = user.accessToken;
     const refreshToken = req.user.refreshToken;
     const userJson = JSON.stringify(user);
-    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/?user=${userJson}&accessToken=${accessToken}`)
+    res.redirect(`https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/designs/?user=${userJson}&accessToken=${accessToken}&refreshToken=${refreshToken}`)
     // res.redirect(`http://localhost:5000/user/welcome/?user=${userJson}&accessToken=${accessToken}`);
   }
 );
