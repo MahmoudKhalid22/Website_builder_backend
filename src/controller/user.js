@@ -65,9 +65,9 @@ const verifyEmail = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
-    res
-      .status(200)
-      .json({ message: "Your email has been verified, go back to login." });
+    res.redirect(
+      "https://zagwebbuilder-git-main-m2001saids-projects.vercel.app/en/success-verified"
+    );
   } catch (err) {
     res.status(400).json({ error: "Invalid or expired token." });
   }
@@ -139,7 +139,7 @@ const resetPassword = async (req, res) => {
       ...req.body,
     });
 
-    const decoded = await jwt.verify(result.token, process.env.PASSWORD_TOKEN);
+    const decoded = jwt.verify(result.token, process.env.PASSWORD_TOKEN);
     if (!decoded) throw new Error({ error: "Token has been expired" });
     const userId = decoded._id;
     const hashedPassword = await bcrypt.hash(result.password, 8);
